@@ -3,4 +3,11 @@ package model.effects;
 public class Effect {
     private String name;
     public int duration;
+    private EffectType type;
+
+    public Effect(String name, int duration, EffectType type) {
+        this.name = name;
+        this.duration = duration;
+        this.type = type;
+    }
 }
