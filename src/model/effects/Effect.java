@@ -10,4 +10,21 @@ public class Effect {
         this.duration = duration;
         this.type = type;
     }
+
+    public EffectType getType() {
+        return type;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public String getName() {
+        return name;
+    }
+
 }
