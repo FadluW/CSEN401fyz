@@ -10,17 +10,17 @@ import java.util.ArrayList;
 public class Champion {
     private String name;
     private int maxHP;
-    private int currentHP;
-    private int mana;
-    private int maxActionPointsPerTurn;
-    private int currentActionPoints;
+    public int currentHP;
+    public int mana;
+    public int maxActionPointsPerTurn;
+    public int currentActionPoints;
     private int attackRange;
-    private int attackDamage;
-    private int speed;
+    public int attackDamage;
+    public int speed;
     private ArrayList<Ability> abilities;
     private ArrayList<Effect> appliedEffects;
-    private Condition condition;
-    private Point location;
+    public Condition condition;
+    public Point location;
 
     public Point getLocation() {
         return location;
