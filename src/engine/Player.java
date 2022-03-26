@@ -11,7 +11,7 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
-        team = new ArrayList<>();
+        team = new ArrayList<Champion>();
     }
 
     public ArrayList<Champion> getTeam() {
