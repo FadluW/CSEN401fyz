@@ -1,7 +1,5 @@
 package model.abilities;
 
-import model.effects.Effect;
-
 public class DamagingAbility extends Ability{
     private int damageAmount;
 

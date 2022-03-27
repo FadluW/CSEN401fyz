@@ -77,6 +77,14 @@ public class Champion {
     public void setMaxActionPointsPerTurn(int maxActionPointsPerTurn) {
         this.maxActionPointsPerTurn = maxActionPointsPerTurn;
     }
+    
+    public void setMana(int mana) {
+        this.mana = mana;
+    }
+    
+    public void setCurrentActionPoints(int currentActionPoints) {
+        this.currentActionPoints = currentActionPoints;
+    }
 
     public int getMana() {
         return mana;
@@ -87,7 +95,9 @@ public class Champion {
     }
 
     public void setCurrentHP(int currentHP) {
-        this.currentHP = currentHP;
+    	// Ensure that new HP does not exceed initial max HP
+    	if (currentHP > this.maxHP) return;
+        this.currentHP = (currentHP < 0) ? 0 : currentHP;
     }
 
     public int getMaxHP() {
@@ -112,6 +122,6 @@ public class Champion {
         currentActionPoints = maxActions;
         abilities = new ArrayList<Ability>();
         appliedEffects = new ArrayList<Effect>();
-        location = new Point();
+        //location = new Point();
     }
 }

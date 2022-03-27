@@ -16,12 +16,13 @@ public class Cover {
     }
 
     public void setCurrentHP(int currentHP) {
+    	if (currentHP < 0) return;
         this.currentHP = currentHP;
     }
 
     public Cover(int x, int y){
         Random random = new Random();
-        currentHP = random.nextInt(1000-100) + 100;
+        currentHP = random.nextInt(899) + 101;
         location = new Point(x,y);
     }
 
