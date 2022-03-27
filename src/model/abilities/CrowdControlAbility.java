@@ -11,7 +11,6 @@ public class CrowdControlAbility extends Ability{
 
     public CrowdControlAbility(String name, int cost, int baseCooldown, int castRange, AreaOfEffect area, int required, Effect effect) {
     	super(name, cost, baseCooldown, castRange, area, required);
-    	System.out.println();
         this.effect = effect;
     }
 }

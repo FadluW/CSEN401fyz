@@ -42,7 +42,6 @@ public class Ability {
     }
 
     public Ability(String name, int cost, int baseCooldown, int castRange, AreaOfEffect area, int required) {
-        System.out.println("Super: " + baseCooldown);
     	this.name = name;
         this.manaCost = cost;
         this.baseCooldown = baseCooldown;

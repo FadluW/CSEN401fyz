@@ -102,7 +102,6 @@ public class Game {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-//    	System.out.println(availableAbilities.get(0));
 //    	
 //    	try {
 //			loadChampions("Champions.csv");
@@ -110,7 +109,6 @@ public class Game {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-//    	System.out.println(availableChampions.get(0));
 //
 //    }
     
@@ -119,8 +117,7 @@ public class Game {
     	for(int i=0; i<5; i++) {
     		int randX = random.nextInt(3) + 1;
     		int randY = random.nextInt(5);
-    		
-    		//System.out.println(randX + " " + randY);
+			
     		while(board[randX][randY] != null) {
     			randX = random.nextInt(3) + 1;
         		randY = random.nextInt(5);
