@@ -1,12 +1,12 @@
 package exceptions;
 
-public class UnallowedMovementException extends GameActionException{
+public class UnAllowedMovementException extends GameActionException{
 
-	public UnallowedMovementException() {
+	public UnAllowedMovementException() {
 		super();
 	}
 
-	public UnallowedMovementException(String message) {
+	public UnAllowedMovementException(String message) {
 		super(message);
 	}
 

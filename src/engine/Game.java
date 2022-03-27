@@ -6,6 +6,8 @@ import model.world.*;
 
 import java.awt.Point;
 import java.io.BufferedReader;
+//import java.io.File;
+//import java.io.FileDescriptor;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Random;
@@ -55,54 +57,47 @@ public class Game {
         availableAbilities = new ArrayList<Ability>();
         firstLeaderAbilityUsed = false;
         secondLeaderAbilityUsed = false;
-        turnOrder = new PriorityQueue(6);
-//        try {
-//			loadAbilities("Abilities.csv");
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//        try {
-//			loadChampions("Champions.csv");
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+        turnOrder = new PriorityQueue(6); 
         placeChampions();
-        placeCovers();
+		placeCovers();
     }
     
     private void placeChampions() {
     	ArrayList<Champion> firstTeam = firstPlayer.getTeam();
     	ArrayList<Champion> secondTeam = secondPlayer.getTeam();
-    	
+
     	for(int i=0; i<3; i++) {
-    		Point positionFirst = new Point(0, i+1);
-    		if (i < firstTeam.size()) { 
-    			((Champion) (firstTeam.get(i))).setLocation(positionFirst);
-    			board[0][i + 1] = (Champion) (firstTeam.get(i));
-    		}
-    		Point positionSecond = new Point(4, i+1);
-    		if (i < secondTeam.size()) {
-    			((Champion) (secondTeam.get(i))).setLocation(positionSecond);
-    			board[4][i + 1] = (Champion) (secondTeam.get(i));
-    		}
+			Point positionFirst = new Point(0, i + 1);
+			if (i < firstTeam.size()) {
+				((Champion) (firstTeam.get(i))).setLocation(positionFirst);
+				board[0][i + 1] = (Champion) (firstTeam.get(i));
+			}
+			Point positionSecond = new Point(4, i + 1);
+			if (i < secondTeam.size()) {
+				((Champion) (secondTeam.get(i))).setLocation(positionSecond);
+				board[4][i + 1] = (Champion) (secondTeam.get(i));
+			}
+		}
+    	for(int i=1; i<4; i++) {
+    		Point positionFirst = new Point(4,i);
+    		(firstPlayer.getTeam().get(i-1)).setLocation(positionFirst);
+    		Point positionSecond = new Point(0,i);
+    		(secondPlayer.getTeam().get(i-1)).setLocation(positionSecond);
     	}
-    	
     }
     
 //    public static void main(String[] args) {
 //    	Player p1 = new Player("ya3");
 //    	Player p2 = new Player("Joey Boy");
 //    	Game game = new Game(p1,p2);
-//    	
+//
 //    	try {
 //			loadAbilities("Abilities.csv");
 //		} catch (Exception e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-//    	
+//
 //    	try {
 //			loadChampions("Champions.csv");
 //		} catch (Exception e) {
@@ -117,7 +112,7 @@ public class Game {
     	for(int i=0; i<5; i++) {
     		int randX = random.nextInt(3) + 1;
     		int randY = random.nextInt(5);
-			
+
     		while(board[randX][randY] != null) {
     			randX = random.nextInt(3) + 1;
         		randY = random.nextInt(5);
@@ -127,7 +122,7 @@ public class Game {
     	}
     }
     
-    public static void loadAbilities(String filePath) throws Exception {
+    public static void loadAbilities(String filePath )throws Exception {
     	BufferedReader br = new BufferedReader(new FileReader(filePath));
     	String line;
     	Ability ability=null;
@@ -181,8 +176,7 @@ public class Game {
         			ability = new CrowdControlAbility(abilityDetails[1],Integer.parseInt(abilityDetails[2]),
         					Integer.parseInt(abilityDetails[4]),Integer.parseInt(abilityDetails[3]),AreaOfEffect.valueOf(abilityDetails[5]),
         					Integer.parseInt(abilityDetails[6]),effect);
-    		}
-    		
+    		}	
     		availableAbilities.add(ability);
     	}
     	br.close();
@@ -193,7 +187,7 @@ public class Game {
     	String line;
 		Champion champion = null;
 		while ((line = br.readLine()) != null) {
-			String[] championDetails = line.split(","); 
+			String[] championDetails = line.split(",");
     		switch(championDetails[0]){
     			case "A":
     				champion = new AntiHero(championDetails[1],Integer.parseInt(championDetails[2]),
@@ -214,7 +208,6 @@ public class Game {
 //    		for(int i=0; i<3; i++) {
 //    			availableAbilities
 //    		}
-    		
     		availableChampions.add(champion);
 //    		line = br.readLine();
 //    		championDetails = line.split(",");
