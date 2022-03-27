@@ -6,8 +6,6 @@ import model.world.*;
 
 import java.awt.Point;
 import java.io.BufferedReader;
-//import java.io.File;
-//import java.io.FileDescriptor;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Random;
@@ -57,72 +55,52 @@ public class Game {
         availableAbilities = new ArrayList<Ability>();
         firstLeaderAbilityUsed = false;
         secondLeaderAbilityUsed = false;
-        turnOrder = new PriorityQueue(6); 
+        turnOrder = new PriorityQueue(6);
         placeChampions();
-		placeCovers();
+        placeCovers();
     }
     
     private void placeChampions() {
+    	// Fetch both teams
     	ArrayList<Champion> firstTeam = firstPlayer.getTeam();
     	ArrayList<Champion> secondTeam = secondPlayer.getTeam();
-
+    	
     	for(int i=0; i<3; i++) {
-			Point positionFirst = new Point(0, i + 1);
-			if (i < firstTeam.size()) {
-				((Champion) (firstTeam.get(i))).setLocation(positionFirst);
-				board[0][i + 1] = (Champion) (firstTeam.get(i));
-			}
-			Point positionSecond = new Point(4, i + 1);
-			if (i < secondTeam.size()) {
-				((Champion) (secondTeam.get(i))).setLocation(positionSecond);
-				board[4][i + 1] = (Champion) (secondTeam.get(i));
-			}
-		}
-    	for(int i=1; i<4; i++) {
-    		Point positionFirst = new Point(4,i);
-    		(firstPlayer.getTeam().get(i-1)).setLocation(positionFirst);
-    		Point positionSecond = new Point(0,i);
-    		(secondPlayer.getTeam().get(i-1)).setLocation(positionSecond);
+    		// Place down a champion from the first team if they still have any
+    		if (i < firstTeam.size()) { 
+    			Point positionFirst = new Point(0, i+1);
+    			((Champion) (firstTeam.get(i))).setLocation(positionFirst);
+    			board[0][i + 1] = (Champion) (firstTeam.get(i));
+    		}
+    		// Place down a champion from the second team if they still have any
+    		if (i < secondTeam.size()) {
+    			Point positionSecond = new Point(4, i+1);
+    			((Champion) (secondTeam.get(i))).setLocation(positionSecond);
+    			board[4][i + 1] = (Champion) (secondTeam.get(i));
+    		}
     	}
+    	
     }
-    
-//    public static void main(String[] args) {
-//    	Player p1 = new Player("ya3");
-//    	Player p2 = new Player("Joey Boy");
-//    	Game game = new Game(p1,p2);
-//
-//    	try {
-//			loadAbilities("Abilities.csv");
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//    	try {
-//			loadChampions("Champions.csv");
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//    }
     
     private void placeCovers() {
     	Random random = new Random();
     	for(int i=0; i<5; i++) {
     		int randX = random.nextInt(3) + 1;
     		int randY = random.nextInt(5);
-
+			
+    		// Loop until an empty slot on the game board is found
     		while(board[randX][randY] != null) {
     			randX = random.nextInt(3) + 1;
         		randY = random.nextInt(5);
     		}
+    		
+    		// Place down the cover
     		Cover cover = new Cover(randX, randY);
     		board[randX][randY] = cover;
     	}
     }
     
-    public static void loadAbilities(String filePath )throws Exception {
+    public static void loadAbilities(String filePath) throws Exception {
     	BufferedReader br = new BufferedReader(new FileReader(filePath));
     	String line;
     	Ability ability=null;
@@ -140,7 +118,7 @@ public class Game {
         					Integer.parseInt(abilityDetails[4]),Integer.parseInt(abilityDetails[3]),
         					AreaOfEffect.valueOf(abilityDetails[5]),Integer.parseInt(abilityDetails[6]),Integer.parseInt(abilityDetails[7]));
     				break;
-    			default:
+    			case "CC":
     				switch(abilityDetails[7]){
     					case "Disarm":
     						effect = new Disarm(Integer.parseInt(abilityDetails[8]));
@@ -176,7 +154,8 @@ public class Game {
         			ability = new CrowdControlAbility(abilityDetails[1],Integer.parseInt(abilityDetails[2]),
         					Integer.parseInt(abilityDetails[4]),Integer.parseInt(abilityDetails[3]),AreaOfEffect.valueOf(abilityDetails[5]),
         					Integer.parseInt(abilityDetails[6]),effect);
-    		}	
+    		}
+    		
     		availableAbilities.add(ability);
     	}
     	br.close();
@@ -187,7 +166,7 @@ public class Game {
     	String line;
 		Champion champion = null;
 		while ((line = br.readLine()) != null) {
-			String[] championDetails = line.split(",");
+			String[] championDetails = line.split(","); 
     		switch(championDetails[0]){
     			case "A":
     				champion = new AntiHero(championDetails[1],Integer.parseInt(championDetails[2]),
@@ -199,18 +178,26 @@ public class Game {
         					Integer.parseInt(championDetails[3]),Integer.parseInt(championDetails[4]),
         					Integer.parseInt(championDetails[5]),Integer.parseInt(championDetails[6]),Integer.parseInt(championDetails[7]));
     				break;
-    			default:
+    			case "V":
     				champion = new Villain(championDetails[1],Integer.parseInt(championDetails[2]),
         					Integer.parseInt(championDetails[3]),Integer.parseInt(championDetails[4]),
         					Integer.parseInt(championDetails[5]),Integer.parseInt(championDetails[6]),Integer.parseInt(championDetails[7]));
     		}
-//    		loadAbilities("./Abilities.csv");
-//    		for(int i=0; i<3; i++) {
-//    			availableAbilities
-//    		}
+    		
+    		// Obtain this champion's abilities reference
+    		ArrayList<Ability> champAbilities = champion.getAbilities();
+    		// Loop 3 times to load champion's abilities
+    		for (int i = 0; i < 3; i++) {
+    			// Loop through all abilities until matching name found
+    	        for (int j = 0; j < availableAbilities.size(); j++) {
+    	        	if (((Ability) availableAbilities.get(j)).getName().equals(championDetails[i + 8])) {
+    	        		champAbilities.add((Ability) availableAbilities.get(j));
+    	        		break;
+    	        	}
+    	        }
+    		}
+    		
     		availableChampions.add(champion);
-//    		line = br.readLine();
-//    		championDetails = line.split(",");
     	}
 		br.close();
     }

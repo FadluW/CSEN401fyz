@@ -40,7 +40,7 @@ public class M1PublicTests {
 	String gameExceptionPath = "exceptions.GameActionException";
 	String notYourTurnExceptionPath = "exceptions.NotYourTurnException";
 	String leaderAbilityAlreadyUsedExceptionPath = "exceptions.LeaderAbilityAlreadyUsedException";
-	String unallowedMovementExceptionPath = "exceptions.UnAllowedMovementException";
+	String unallowedMovementExceptionPath = "exceptions.UnallowedMovementException";
 
 	String gamePath = "engine.Game";
 	String playerPath = "engine.Player";

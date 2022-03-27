@@ -108,8 +108,7 @@ public class Champion {
         return name;
     }
 
-    public Champion(String name, int maxHP, int mana, int maxActions, int speed, int attackRange,
-                    int attackDamage){
+    public Champion(String name, int maxHP, int mana, int maxActions, int speed, int attackRange, int attackDamage) {
         this.name = name;
         this.maxHP = maxHP;
         this.mana = mana;
@@ -122,6 +121,6 @@ public class Champion {
         currentActionPoints = maxActions;
         abilities = new ArrayList<Ability>();
         appliedEffects = new ArrayList<Effect>();
-        //location = new Point();
+        
     }
 }
