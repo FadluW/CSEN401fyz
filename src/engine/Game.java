@@ -22,6 +22,8 @@ public class Game {
     private PriorityQueue turnOrder;
     private final static int BOARDHEIGHT= 5;
     private final static int BOARDWIDTH= 5;
+    private final static int NUMCOVERS=5;
+    private final static int MAXCHAMPS= 6;
 
     public static int getBoardwidth() {
         return BOARDWIDTH;
@@ -32,7 +34,7 @@ public class Game {
     }
 
     public PriorityQueue getTurnOrder() {
-        return turnOrder;
+    	return turnOrder;
     }
 
     public static ArrayList<Ability> getAvailableAbilities() {
@@ -55,7 +57,7 @@ public class Game {
         availableAbilities = new ArrayList<Ability>();
         firstLeaderAbilityUsed = false;
         secondLeaderAbilityUsed = false;
-        turnOrder = new PriorityQueue(6);
+        turnOrder = new PriorityQueue(MAXCHAMPS);
         placeChampions();
         placeCovers();
     }
@@ -65,7 +67,7 @@ public class Game {
     	ArrayList<Champion> firstTeam = firstPlayer.getTeam();
     	ArrayList<Champion> secondTeam = secondPlayer.getTeam();
     	
-    	for(int i=0; i<3; i++) {
+    	for(int i=0; i<MAXCHAMPS/2; i++) {
     		// Place down a champion from the first team if they still have any
     		if (i < firstTeam.size()) { 
     			Point positionFirst = new Point(0, i+1);
@@ -84,7 +86,7 @@ public class Game {
     
     private void placeCovers() {
     	Random random = new Random();
-    	for(int i=0; i<5; i++) {
+    	for(int i=0; i<NUMCOVERS; i++) {
     		int randX = random.nextInt(3) + 1;
     		int randY = random.nextInt(5);
 			
@@ -99,6 +101,7 @@ public class Game {
     		board[randX][randY] = cover;
     	}
     }
+    
     
     public static void loadAbilities(String filePath) throws Exception {
     	BufferedReader br = new BufferedReader(new FileReader(filePath));
@@ -217,4 +220,39 @@ public class Game {
     public Player getFirstPlayer() {
         return firstPlayer;
     }
+//   public static void main(String[] args) {
+// 	Player p1 = new Player("ya3");
+// 	Player p2 = new Player("Joey Boy");
+// 	Game game = new Game(p1,p2);
+// 	Champion ch = new Champion("Fadl", 50, 50, 50, 100,50 , 50);
+// 	Champion ch1 = new Champion("Joey", 50, 50, 50, 101,50 , 50);
+// 	Champion ch2 = new Champion("Zeina", 50, 50, 50, 98,50 , 50);
+// 	Champion ch3 = new Champion("Youssef", 50, 50, 50, 100,50 , 50);
+// 	PriorityQueue p = game.getTurnOrder();
+// 	p.insert(ch1);
+// 	p.insert(ch2);
+// 	p.insert(ch3);
+// 	p.insert(ch);
+// 	while(!(p.isEmpty())) {
+// 		System.out.println(((Champion)p.remove()).getSpeed());
+// 	}
+	
+	
+//	try {
+//		loadAbilities("Abilities.csv");
+//	} catch (Exception e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+//	//System.out.println(availableAbilities.get(0));
+//	
+//	try {
+//		loadChampions("Champions.csv");
+//	} catch (Exception e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+//	//System.out.println(availableChampions.get(0));
+
+}
 }

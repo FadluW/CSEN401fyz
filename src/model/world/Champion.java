@@ -7,7 +7,7 @@ import model.effects.Effect;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Champion {
+public class Champion implements Comparable{
     private String name;
     private int maxHP;
     private int currentHP;
@@ -21,6 +21,22 @@ public class Champion {
     private ArrayList<Effect> appliedEffects;
     private Condition condition;
     private Point location;
+    
+    public Champion(String name, int maxHP, int mana, int maxActions, int speed, int attackRange, int attackDamage) {
+        this.name = name;
+        this.maxHP = maxHP;
+        this.mana = mana;
+        this.maxActionPointsPerTurn = maxActions;
+        this.speed = speed;
+        this.attackRange = attackRange;
+        this.attackDamage = attackDamage;
+        condition = Condition.ACTIVE;
+        currentHP = maxHP;
+        currentActionPoints = maxActions;
+        abilities = new ArrayList<Ability>();
+        appliedEffects = new ArrayList<Effect>();
+        
+    }
 
     public Point getLocation() {
         return location;
@@ -96,8 +112,9 @@ public class Champion {
 
     public void setCurrentHP(int currentHP) {
     	// Ensure that new HP does not exceed initial max HP
-    	if (currentHP > this.maxHP) return;
-        this.currentHP = (currentHP < 0) ? 0 : currentHP;
+    	if (currentHP > this.maxHP) this.currentHP=this.maxHP ;
+    	else
+    		this.currentHP = (currentHP < 0) ? 0 : currentHP;
     }
 
     public int getMaxHP() {
@@ -108,19 +125,16 @@ public class Champion {
         return name;
     }
 
-    public Champion(String name, int maxHP, int mana, int maxActions, int speed, int attackRange, int attackDamage) {
-        this.name = name;
-        this.maxHP = maxHP;
-        this.mana = mana;
-        this.maxActionPointsPerTurn = maxActions;
-        this.speed = speed;
-        this.attackRange = attackRange;
-        this.attackDamage = attackDamage;
-        condition = Condition.ACTIVE;
-        currentHP = maxHP;
-        currentActionPoints = maxActions;
-        abilities = new ArrayList<Ability>();
-        appliedEffects = new ArrayList<Effect>();
-        
-    }
+	public int compareTo(Object o) {
+		Champion champion = (Champion) o;
+		if(this.speed<champion.getSpeed())
+			return 1;
+		if(this.speed>champion.getSpeed())
+			return -1;
+		return 0;
+	}
+
+    
+
+	
 }
