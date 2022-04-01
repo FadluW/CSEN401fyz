@@ -133,7 +133,6 @@ public class Champion implements Comparable{
 			return -1;
 		return 0;
 	}
-
     
 
 	
