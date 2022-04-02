@@ -222,9 +222,9 @@ public class Game {
 
 
 //   public static void main(String[] args) {
-//		Player p1 = new Player("ya3");
-//		Player p2 = new Player("Joey Boy");
-//		Champion ch = new Champion("Fadl", 50, 50, 50, 100,50 , 50);
+//		Player p1 = new Player("Player 1");
+//		Player p2 = new Player("Player 2");
+//		Champion ch = new Champion("Fadlu", 50, 50, 50, 100,50 , 50);
 //		Champion ch1 = new Champion("Joey", 50, 50, 50, 101,50 , 50);
 //		Champion ch2 = new Champion("Zeina", 50, 50, 50, 98,50 , 50);
 //		Champion ch3 = new Champion("Youssef", 50, 50, 50, 120,50 , 50);
@@ -235,15 +235,15 @@ public class Game {
 //		team2.add(ch2);
 //		team2.add(ch3);
 //		Game game = new Game(p1,p2);
-////		PriorityQueue p = game.getTurnOrder();
-////		p.insert(ch1);
-////		p.insert(ch2);
-////		p.insert(ch3);
-////		p.insert(ch);
-////		game.placeChampions();
-////		while(!(p.isEmpty())) {
-////			System.out.println(((Champion)p.remove()).getSpeed());
-////		}
+//		PriorityQueue p = game.getTurnOrder();
+//		p.insert(ch1);
+//		p.insert(ch2);
+//		p.insert(ch3);
+//		p.insert(ch);
+//		game.placeChampions();
+//		while(!(p.isEmpty())) {
+//			System.out.println(((Champion)p.remove()).getSpeed());
+//		}
 //		Object[][] b = game.getBoard();
 //		for(int i = 0; i<getBoardheight(); i++){
 //			System.out.print("[ ");
@@ -255,22 +255,19 @@ public class Game {
 //		}
 //
 //
-////		try {
-////			loadAbilities("Abilities.csv");
-////		} catch (Exception e) {
-////			// TODO Auto-generated catch block
-////			e.printStackTrace();
-////		}
-////		//System.out.println(availableAbilities.get(0));
-////
-////		try {
-////			loadChampions("Champions.csv");
-////		} catch (Exception e) {
-////			// TODO Auto-generated catch block
-////			e.printStackTrace();
-////		}
+//		try {
+//			loadAbilities("Abilities.csv");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		//System.out.println(availableAbilities.get(0));
+//
+//		try {
+//			loadChampions("Champions.csv");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 //		//System.out.println(availableChampions.get(0));
 //	}
-
 }
 
