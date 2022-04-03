@@ -99,7 +99,9 @@ public class Champion implements Comparable{
     }
     
     public void setCurrentActionPoints(int currentActionPoints) {
-        this.currentActionPoints = currentActionPoints;
+    	if (currentActionPoints > this.maxActionPointsPerTurn) this.currentActionPoints=this.maxActionPointsPerTurn ;
+    	else
+    		this.currentActionPoints = (currentActionPoints < 0) ? 0 : currentActionPoints;
     }
 
     public int getMana() {
@@ -133,7 +135,6 @@ public class Champion implements Comparable{
 			return -1;
 		return 0;
 	}
-
     
 
 	

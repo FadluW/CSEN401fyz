@@ -16,8 +16,7 @@ public class Cover {
     }
 
     public void setCurrentHP(int currentHP) {
-    	if (currentHP < 0) return;
-        this.currentHP = currentHP;
+    	this.currentHP = (currentHP < 0) ? 0 : currentHP;
     }
 
     public Cover(int x, int y){
