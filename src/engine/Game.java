@@ -16,7 +16,7 @@ public class Game {
     private Player secondPlayer;
     private boolean firstLeaderAbilityUsed;
     private boolean secondLeaderAbilityUsed;
-    private final Object[][] board;
+    private Object[][] board;
     private static ArrayList<Champion> availableChampions;
     private static ArrayList<Ability> availableAbilities;
     private PriorityQueue turnOrder;
@@ -271,7 +271,4 @@ public class Game {
 //	}
 }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> abc2ce15223f6720d51253ba1d7245116a8609ca

@@ -10,13 +10,9 @@ public class Ability {
     private AreaOfEffect castArea;
 
     public void setCurrentCooldown(int currentCooldown) {
-<<<<<<< HEAD
     	if (currentCooldown > this.baseCooldown) this.currentCooldown=this.baseCooldown ;
     	else
     		this.currentCooldown = (currentCooldown < 0) ? 0 : currentCooldown;
-=======
-        this.currentCooldown = (currentCooldown < 0) ? 0 : currentCooldown;
->>>>>>> abc2ce15223f6720d51253ba1d7245116a8609ca
     }
 
     public AreaOfEffect getCastArea() {
