@@ -3,7 +3,7 @@ package model.world;
 import java.awt.*;
 import java.util.Random;
 
-public class Cover {
+public class Cover implements Damageable{
     private int currentHP;
     private Point location;
 

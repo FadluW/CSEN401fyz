@@ -7,7 +7,7 @@ import model.effects.Effect;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Champion implements Comparable{
+public class Champion implements Comparable, Damageable{
     private String name;
     private int maxHP;
     private int currentHP;
