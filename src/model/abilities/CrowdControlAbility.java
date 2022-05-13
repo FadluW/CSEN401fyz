@@ -25,6 +25,7 @@ public class CrowdControlAbility extends Ability{
 			if (a instanceof Champion)
 				try {
 					effect.apply((Champion) a);
+					((Champion) a).getAppliedEffects().add(effect);
 				} catch (AbilityUseException e) {
 					e.printStackTrace();
 				}
