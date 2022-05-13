@@ -73,12 +73,14 @@ public class Game {
     			Point positionFirst = new Point(0, i+1);
     			((Champion) (firstTeam.get(i))).setLocation(positionFirst);
     			board[0][i + 1] = (Champion) (firstTeam.get(i));
+    			turnOrder.insert((Champion) (firstTeam.get(i)));
     		}
     		// Place down a champion from the second team if they still have any
     		if (i < secondTeam.size()) {
     			Point positionSecond = new Point(4, i+1);
     			((Champion) (secondTeam.get(i))).setLocation(positionSecond);
     			board[4][i + 1] = (Champion) (secondTeam.get(i));
+    			turnOrder.insert((Champion) (secondTeam.get(i)));
     		}
     	}
     	

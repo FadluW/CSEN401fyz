@@ -8,6 +8,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import engine.PriorityQueue;
+import exceptions.LeaderAbilityAlreadyUsedException;
 
 public abstract class Champion implements Comparable, Damageable{
     private String name;
@@ -144,7 +145,7 @@ public abstract class Champion implements Comparable, Damageable{
 			return((this.name).compareTo(champion.getName()));
 	}
 	
-	public abstract void useLeaderAbility(ArrayList<Champion> targets);
+	public abstract void useLeaderAbility(ArrayList<Champion> targets) throws LeaderAbilityAlreadyUsedException;
 	
 		//Testing law el turn order sa7.. 
 //  public static void main(String[] args) {

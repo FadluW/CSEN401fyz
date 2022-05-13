@@ -2,6 +2,7 @@ package model.world;
 
 import java.util.ArrayList;
 
+import exceptions.LeaderAbilityAlreadyUsedException;
 import model.effects.Stun;
 
 public class AntiHero extends Champion{
@@ -10,7 +11,7 @@ public class AntiHero extends Champion{
     }
 
 	@Override
-	public void useLeaderAbility(ArrayList<Champion> targets) {
+	public void useLeaderAbility(ArrayList<Champion> targets) throws LeaderAbilityAlreadyUsedException{
 		Stun newStun = new Stun(2);
 		for(Champion a : targets){
 			a.getAppliedEffects().add(newStun);

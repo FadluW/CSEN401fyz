@@ -2,6 +2,8 @@ package model.world;
 
 import java.util.ArrayList;
 
+import exceptions.LeaderAbilityAlreadyUsedException;
+
 
 public class Villain extends Champion{
     public Villain(String name, int maxHP, int mana, int maxActions, int speed, int attackRange, int attackDamage) {
@@ -9,7 +11,7 @@ public class Villain extends Champion{
     }
 
 	@Override
-	public void useLeaderAbility(ArrayList<Champion> targets) {
+	public void useLeaderAbility(ArrayList<Champion> targets) throws LeaderAbilityAlreadyUsedException {
 		for(Champion a : targets){
 			if (a.getCurrentHP()<(0.3*a.getMaxHP())) 
 				a.setCondition(Condition.KNOCKEDOUT);

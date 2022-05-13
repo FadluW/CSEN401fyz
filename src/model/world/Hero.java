@@ -2,7 +2,7 @@ package model.world;
 
 import java.util.ArrayList;
 
-
+import exceptions.LeaderAbilityAlreadyUsedException;
 import model.effects.Effect;
 import model.effects.EffectType;
 import model.effects.Embrace;
@@ -14,7 +14,7 @@ public class Hero extends Champion{
 
     //Ezay ne3raf law el target dool mafihomsh opponents?
 	@Override
-	public void useLeaderAbility(ArrayList<Champion> targets) {
+	public void useLeaderAbility(ArrayList<Champion> targets) throws LeaderAbilityAlreadyUsedException {
 		Embrace newEmbrace = new Embrace(2);
 		for(Champion a : targets){
 			for(Effect effect : a.getAppliedEffects()){
