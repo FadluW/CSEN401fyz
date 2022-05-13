@@ -11,7 +11,7 @@ public class AntiHero extends Champion{
     }
 
 	@Override
-	public void useLeaderAbility(ArrayList<Champion> targets) throws LeaderAbilityAlreadyUsedException{
+	public void useLeaderAbility(ArrayList<Champion> targets){
 		Stun newStun = new Stun(2);
 		for(Champion a : targets){
 			a.getAppliedEffects().add(newStun);

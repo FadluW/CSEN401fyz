@@ -6,6 +6,7 @@ import model.world.Champion;
 
 public class Disarm extends Effect {
     static int damage;
+    static DamagingAbility p;
 //  damage variable is to store the original damaging amount
     public Disarm(int duration) {
     	super("Disarm", duration, EffectType.DEBUFF);
@@ -15,6 +16,7 @@ public class Disarm extends Effect {
         damage = c.getAttackDamage();
         c.setAttackDamage(0);
         DamagingAbility Punch = new DamagingAbility("Punch",0,1,1, AreaOfEffect.SINGLETARGET,1,50);
+        p = Punch;
         c.getAbilities().add(Punch);
     }
 
@@ -22,7 +24,6 @@ public class Disarm extends Effect {
     public void remove(Champion c) {
         c.getAppliedEffects().remove(this);
         c.setAttackDamage(damage);
-        //3ayez 2ashil el Punch
-        //c.getAbilities().remove(c.getAbilities().lastIndexOf(c));
+        c.getAbilities().remove(p);
     }
 }

@@ -14,7 +14,7 @@ public class Hero extends Champion{
 
     //Ezay ne3raf law el target dool mafihomsh opponents?
 	@Override
-	public void useLeaderAbility(ArrayList<Champion> targets) throws LeaderAbilityAlreadyUsedException {
+	public void useLeaderAbility(ArrayList<Champion> targets) {
 		Embrace newEmbrace = new Embrace(2);
 		for(Champion a : targets){
 			for(Effect effect : a.getAppliedEffects()){
