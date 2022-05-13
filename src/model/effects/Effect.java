@@ -1,14 +1,7 @@
 package model.effects;
 
 import exceptions.AbilityUseException;
-import model.abilities.Ability;
-import model.abilities.AreaOfEffect;
-import model.abilities.DamagingAbility;
-import model.abilities.HealingAbility;
 import model.world.Champion;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 // Class representing the effects in the game
 public abstract class Effect implements Cloneable{

@@ -1,8 +1,6 @@
 package model.world;
 
 import java.util.ArrayList;
-
-import exceptions.LeaderAbilityAlreadyUsedException;
 import model.effects.Stun;
 
 public class AntiHero extends Champion{

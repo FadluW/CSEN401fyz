@@ -2,7 +2,6 @@ package model.world;
 
 import java.util.ArrayList;
 
-import exceptions.LeaderAbilityAlreadyUsedException;
 import model.effects.Effect;
 import model.effects.EffectType;
 import model.effects.Embrace;

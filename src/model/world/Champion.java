@@ -1,14 +1,11 @@
-package model.world;
 //A class representing Champions in the game.
+package model.world;
 
 import model.abilities.Ability;
 import model.effects.Effect;
 
 import java.awt.*;
 import java.util.ArrayList;
-
-import engine.PriorityQueue;
-import exceptions.LeaderAbilityAlreadyUsedException;
 
 public abstract class Champion implements Comparable, Damageable{
     private String name;
@@ -135,6 +132,7 @@ public abstract class Champion implements Comparable, Damageable{
  	   return (this.name);
     }
 
+    @Override
 	public int compareTo(Object o) {
 		Champion champion = (Champion) o;
 		if(this.speed<champion.getSpeed())
@@ -147,7 +145,7 @@ public abstract class Champion implements Comparable, Damageable{
 	
 	public abstract void useLeaderAbility(ArrayList<Champion> targets);
 	
-		//Testing law el turn order sa7.. 
+//Testing law el turn order sa7.. 
 //  public static void main(String[] args) {
 //		Champion ch = new Champion("Fadlu", 50, 50, 50, 100,50 , 50);
 //		Champion ch1 = new Champion("Joey", 50, 50, 50, 101,50 , 50);
