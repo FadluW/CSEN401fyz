@@ -13,13 +13,11 @@ public class Silence extends Effect{
 	}
 
 	@Override
-	public void apply(Champion c) throws AbilityUseException {
+	public void apply(Champion c) {
 		c.getAppliedEffects().add(this);
 		c.setMaxActionPointsPerTurn(c.getMaxActionPointsPerTurn()+2);
 		c.setCurrentActionPoints(c.getCurrentActionPoints()+2);
-		throw new AbilityUseException();
 	}
-
 
 	@Override
 	public void remove(Champion c) {

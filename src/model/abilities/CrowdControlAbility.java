@@ -2,6 +2,7 @@ package model.abilities;
 
 import java.util.ArrayList;
 
+import exceptions.AbilityUseException;
 import model.effects.Effect;
 import model.world.Champion;
 import model.world.Damageable;
@@ -20,10 +21,13 @@ public class CrowdControlAbility extends Ability{
 
 	@Override
 	public void execute(ArrayList<Damageable> targets) {
-		// TODO Auto-generated method stub
 		for(Damageable a : targets){
-			if (a instanceof Champion) 
-				((Champion) a).getAppliedEffects().add(effect);
+			if (a instanceof Champion)
+				try {
+					effect.apply((Champion) a);
+				} catch (AbilityUseException e) {
+					e.printStackTrace();
+				}
 		}
 	}
 }

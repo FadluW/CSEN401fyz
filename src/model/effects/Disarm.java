@@ -5,7 +5,6 @@ import model.abilities.DamagingAbility;
 import model.world.Champion;
 
 public class Disarm extends Effect {
-    static int damage;
     static DamagingAbility p;
 //  damage variable is to store the original damaging amount
     public Disarm(int duration) {
@@ -13,8 +12,6 @@ public class Disarm extends Effect {
     }
     public void apply(Champion c){
         c.getAppliedEffects().add(this);
-        damage = c.getAttackDamage();
-        c.setAttackDamage(0);
         DamagingAbility Punch = new DamagingAbility("Punch",0,1,1, AreaOfEffect.SINGLETARGET,1,50);
         p = Punch;
         c.getAbilities().add(Punch);
@@ -23,7 +20,7 @@ public class Disarm extends Effect {
     @Override
     public void remove(Champion c) {
         c.getAppliedEffects().remove(this);
-        c.setAttackDamage(damage);
         c.getAbilities().remove(p);
+        // (TODO) Swap p for a loop checking all abilities for punch
     }
 }

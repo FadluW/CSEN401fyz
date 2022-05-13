@@ -12,7 +12,6 @@ public class Hero extends Champion{
         super(name, maxHP, mana, maxActions, speed, attackRange, attackDamage);
     }
 
-    //Ezay ne3raf law el target dool mafihomsh opponents?
 	@Override
 	public void useLeaderAbility(ArrayList<Champion> targets) {
 		Embrace newEmbrace = new Embrace(2);

@@ -32,10 +32,10 @@ public class PowerUp extends Effect{
 		for(Ability a : abilities){
 			if (a instanceof HealingAbility) {
 					HealingAbility ha = (HealingAbility) a;
-					ha.setHealAmount((int) (ha.getHealAmount()*0.8));
+					ha.setHealAmount((int) (ha.getHealAmount()/1.2));
 			}else if(a instanceof DamagingAbility) {					
 					DamagingAbility da = (DamagingAbility) a;
-					da.setDamageAmount((int) (da.getDamageAmount()*0.8));
+					da.setDamageAmount((int) (da.getDamageAmount()/1.2));
 			}
 		}
 	}

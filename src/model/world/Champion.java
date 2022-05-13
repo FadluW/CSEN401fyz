@@ -145,7 +145,7 @@ public abstract class Champion implements Comparable, Damageable{
 			return((this.name).compareTo(champion.getName()));
 	}
 	
-	public abstract void useLeaderAbility(ArrayList<Champion> targets) throws LeaderAbilityAlreadyUsedException;
+	public abstract void useLeaderAbility(ArrayList<Champion> targets);
 	
 		//Testing law el turn order sa7.. 
 //  public static void main(String[] args) {
