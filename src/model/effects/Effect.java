@@ -21,7 +21,6 @@ public abstract class Effect implements Cloneable{
         this.duration = duration;
         this.type = type;
     }
-
     
     public EffectType getType() {
         return type;
@@ -42,4 +41,8 @@ public abstract class Effect implements Cloneable{
     public abstract void apply(Champion c) throws AbilityUseException;
     public abstract void remove(Champion c);
 
+    @Override
+    public Object clone() throws CloneNotSupportedException{
+        return super.clone();
+    }
 }
