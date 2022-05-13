@@ -15,16 +15,12 @@ public class PowerUp extends Effect{
 		c.getAppliedEffects().add(this);
 		ArrayList<Ability> abilities = c.getAbilities();
 		for(Ability a : abilities){
-			String abilityType = a.getName();
-			switch (abilityType){
-				case "HealingAbility":
-					HealingAbility ha = (HealingAbility) a;
-					ha.setHealAmount((int) (ha.getHealAmount()*1.2));
-					break;
-				case "DamagingAbility":
-					DamagingAbility da = (DamagingAbility) a;
-					da.setDamageAmount((int) (da.getDamageAmount()*1.2));
-					break;
+			if (a instanceof HealingAbility) {
+				HealingAbility ha = (HealingAbility) a;
+				ha.setHealAmount((int) (ha.getHealAmount()*1.2));
+			}else if(a instanceof DamagingAbility) {
+				DamagingAbility da = (DamagingAbility) a;
+				da.setDamageAmount((int) (da.getDamageAmount()*1.2));
 			}
 		}
 	}
@@ -34,16 +30,12 @@ public class PowerUp extends Effect{
 		c.getAppliedEffects().remove(this);
 		ArrayList<Ability> abilities = c.getAbilities();
 		for(Ability a : abilities){
-			String abilityType = a.getName();
-			switch (abilityType){
-				case "HealingAbility":
+			if (a instanceof HealingAbility) {
 					HealingAbility ha = (HealingAbility) a;
 					ha.setHealAmount((int) (ha.getHealAmount()*0.8));
-					break;
-				case "DamagingAbility":
+			}else if(a instanceof DamagingAbility) {					
 					DamagingAbility da = (DamagingAbility) a;
 					da.setDamageAmount((int) (da.getDamageAmount()*0.8));
-					break;
 			}
 		}
 	}

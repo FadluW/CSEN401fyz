@@ -21,6 +21,7 @@ public abstract class Effect implements Cloneable{
         this.type = type;
     }
 
+    
     public EffectType getType() {
         return type;
     }

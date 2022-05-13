@@ -26,6 +26,7 @@ public class Silence extends Effect{
 	@Override
 	public void remove(Champion c) {
 		c.getAppliedEffects().remove(this);
+		//3andy so2al henaaa!
 		Collections.copy(c.getAbilities(),a);
 		c.setMaxActionPointsPerTurn(c.getMaxActionPointsPerTurn()-2);
 		c.setCurrentActionPoints(c.getCurrentActionPoints()-2);

@@ -11,12 +11,14 @@ public class Root extends Effect{
     @Override
     public void apply(Champion c) {
         c.getAppliedEffects().add(this);
-        c.setCondition(Condition.ROOTED);
+        if(!(c.getCondition()==Condition.INACTIVE))
+        	c.setCondition(Condition.ROOTED);
     }
 
     @Override
     public void remove(Champion c) {
         c.getAppliedEffects().remove(this);
-        c.setCondition(Condition.ACTIVE);
+        if(!(c.getCondition()==Condition.INACTIVE))
+        	c.setCondition(Condition.ACTIVE);
     }
 }

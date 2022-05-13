@@ -7,7 +7,9 @@ import model.effects.Effect;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Champion implements Comparable, Damageable{
+import engine.PriorityQueue;
+
+public abstract class Champion implements Comparable, Damageable{
     private String name;
     private int maxHP;
     private int currentHP;
@@ -126,6 +128,11 @@ public class Champion implements Comparable, Damageable{
     public String getName() {
         return name;
     }
+    
+
+    public String toString() {
+ 	   return (this.name);
+    }
 
 	public int compareTo(Object o) {
 		Champion champion = (Champion) o;
@@ -133,9 +140,23 @@ public class Champion implements Comparable, Damageable{
 			return 1;
 		if(this.speed>champion.getSpeed())
 			return -1;
-		return 0;
+		else
+			return((this.name).compareTo(champion.getName()));
 	}
-    
-
 	
+	public abstract void useLeaderAbility(ArrayList<Champion> targets);
+	
+		//Testing law el turn order sa7.. 
+//  public static void main(String[] args) {
+//		Champion ch = new Champion("Fadlu", 50, 50, 50, 100,50 , 50);
+//		Champion ch1 = new Champion("Joey", 50, 50, 50, 101,50 , 50);
+//		Champion ch2 = new Champion("Zeina", 50, 50, 50, 98,50 , 50);
+//		Champion ch3 = new Champion("Youssef", 50, 50, 50, 100,50 , 50);
+//		PriorityQueue p =  new PriorityQueue(5);
+//		p.insert(ch1);
+//		p.insert(ch2);
+//		p.insert(ch3);
+//		p.insert(ch);
+//		System.out.println(p);
+//	}	
 }

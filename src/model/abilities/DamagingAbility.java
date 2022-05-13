@@ -1,5 +1,10 @@
 package model.abilities;
 
+import java.util.ArrayList;
+
+import model.world.Champion;
+import model.world.Damageable;
+
 public class DamagingAbility extends Ability{
     private int damageAmount;
 
@@ -15,4 +20,11 @@ public class DamagingAbility extends Ability{
     public void setDamageAmount(int damageAmount) {
         this.damageAmount = damageAmount;
     }
+
+	@Override
+	public void execute(ArrayList<Damageable> targets) {
+		for(Damageable a : targets){
+			a.setCurrentHP((a.getCurrentHP()-damageAmount));
+		}
+	}
 }

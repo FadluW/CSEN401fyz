@@ -42,4 +42,12 @@ public class PriorityQueue {
    public int size() {
       return nItems;
    }
+   //Testing law el turn order sa7..
+//   public String toString(){
+//	   String output = "";
+//	   while(!this.isEmpty()) {
+//		   output += (this.remove()).toString() + "\n";
+//	   }
+//	   return output;
+//   }
 }
