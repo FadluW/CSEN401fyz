@@ -1,12 +1,6 @@
 package engine;
 
-import exceptions.AbilityUseException;
-import exceptions.ChampionDisarmedException;
-import exceptions.InvalidTargetException;
-import exceptions.LeaderAbilityAlreadyUsedException;
-import exceptions.LeaderNotCurrentException;
-import exceptions.NotEnoughResourcesException;
-import exceptions.UnallowedMovementException;
+import exceptions.*;
 import model.abilities.*;
 import model.effects.*;
 import model.world.*;
@@ -248,7 +242,8 @@ public class Game {
 		if (vertical < 0 || vertical > 4) throw new UnallowedMovementException("Out of vertical board borders"); 
 		if (horizontal < 0 || horizontal > 4) throw new UnallowedMovementException("Out of horizontal board borders"); 
 
-		if (!getBoard()[vertical][horizontal].equals(null)) throw new UnallowedMovementException();
+		if (!board[vertical][horizontal].equals(null)) throw new UnallowedMovementException();
+
 		c.setLocation(new Point(vertical, horizontal));
 		c.setCurrentActionPoints(c.getCurrentActionPoints() - 1);
 	}
@@ -274,6 +269,9 @@ public class Game {
 			int x = (int) p.getLocation().getX();
 			int y = (int) p.getLocation().getY();
 
+			if (x < 0 || x > BOARDHEIGHT) throw new InvalidTargetException("Target out of board bounds");
+			if (y < 0 || y > BOARDWIDTH) throw new InvalidTargetException("Target out of board bounds");
+
 			// Check if attacking cover
 			if (getBoard()[x][y] instanceof Cover) {
 				flag = true;
@@ -290,36 +288,35 @@ public class Game {
 					double dmgMultiplier = 1;
 					if (!(target.getClass().equals(c.getClass())) && !(target instanceof AntiHero))
 						dmgMultiplier = 1.5;
-						// ;
-					// else target.setCurrentHP(target.getCurrentHP() - c.getAttackDamage());
 
 					double damageDealt = c.getAttackDamage() * dmgMultiplier;
 					Random rand = new Random();
 
 					// Iterate over target's current effects
+					Boolean deflected = false;
 					ArrayList<Effect> targetEffects = target.getAppliedEffects();
 					for (Effect e : targetEffects) {
-						// (TODO) Check priority of shield
-						switch (e.getName()) {
-							case "Shield": {
-								damageDealt = 0;
-								// Remove shield from target
-								e.remove(target);
-								break;
-							}
-							case "Dodge": {
+						if (e.getName().equals("Shield")) {
+							// Remove shield from target
+							e.remove(target);
+							deflected = true;
+							break;
+						}
+					}
+					if (!deflected) {
+						for (Effect e : targetEffects) {
+							if (e.getName().equals("Dodge")){
 								int chance = rand.nextInt(100);
 								// If dodged
-								if (chance < 50) {
-									damageDealt = 0;
-								}
+								if (chance < 50) deflected = true;
 								break;
 							}
 						}
 					}
+					
 
 					// Deal damage on target
-					target.setCurrentHP((int) (target.getCurrentHP() - damageDealt));
+					target.setCurrentHP((int) (target.getCurrentHP() - ((deflected) ? 0 : damageDealt)));
 				}
 			}
 		}
@@ -330,26 +327,35 @@ public class Game {
 		}		
 	}
 
-	public void castAbility(Ability a) throws NotEnoughResourcesException, AbilityUseException {
-		ArrayList<Damageable> targets = new ArrayList<Damageable>();
-		Champion c = getCurrentChampion();
-		ArrayList<Champion> friendlyTeam;
-		ArrayList<Champion> enemyTeam;
-
+	private void checkCastAbility(Ability a, Champion c) throws Exception {
 		// Ensure not silenced
 		for (Effect e : c.getAppliedEffects()) {
 			if (e.getName() == "Silence") throw new AbilityUseException("Champion silenced");
 		}
 
 		// Ensure off of cooldown
-		if (a.getCurrentCooldown() > 0) throw new NotEnoughResourcesException("Ability on cooldown");
+		if (a.getCurrentCooldown() > 0) throw new AbilityUseException("Ability on cooldown");
 
 		// Ensure champ has enough mana
 		if (c.getMana() < a.getManaCost()) throw new NotEnoughResourcesException("Not enough mana");
 
+		// Ensure enough AP
+		if (c.getCurrentActionPoints() < 1) throw new NotEnoughResourcesException("Not enough AP");
+
 		// Reset cooldown, Decrease mana
 		a.setCurrentCooldown(a.getBaseCooldown());
 		c.setMana(c.getMana() - a.getManaCost());
+		c.setCurrentActionPoints(c.getCurrentActionPoints() - 1);
+	}
+
+	public void castAbility(Ability a) throws Exception {
+		ArrayList<Damageable> targets = new ArrayList<Damageable>();
+		Champion c = getCurrentChampion();
+		ArrayList<Champion> friendlyTeam;
+		ArrayList<Champion> enemyTeam;
+
+		// check for proper conditions and update stats
+		checkCastAbility(a, c);
 
 		// If self-cast
 		if (a.getCastArea() == AreaOfEffect.SELFTARGET) {
@@ -402,7 +408,7 @@ public class Game {
 						if (j < 0 || j > BOARDWIDTH) continue;
 						
 						if (board[i][j] == null) continue;
-						if (board[i][j].equals(c)) continue;
+						if (board[i][j] instanceof Champion && board[i][j].equals(c)) continue;
 
 						handleAbilityTarget(c, i, j, a, targets);
 					}
@@ -422,30 +428,17 @@ public class Game {
 		}
 
 		// Ensure target found
-		if (targets.isEmpty()) throw new AbilityUseException("No targets in range");
-		a.execute(targets);
+		if (!targets.isEmpty()) a.execute(targets);
 	}
 
-	public void castAbility(Ability a, Direction d) throws AbilityUseException, NotEnoughResourcesException {
+	public void castAbility(Ability a, Direction d) throws Exception {
 		// Ensure ability is directional
 		if (a.getCastArea() != AreaOfEffect.DIRECTIONAL) throw new AbilityUseException("Ability not directional");
 		Champion c = getCurrentChampion();
 		ArrayList<Damageable> targets = new ArrayList<Damageable>();
 
-		// Ensure not silenced
-		for (Effect e : c.getAppliedEffects()) {
-			if (e.getName() == "Silence") throw new AbilityUseException("Champion silenced");
-		}
-
-		// Ensure off of cooldown
-		if (a.getCurrentCooldown() > 0) throw new NotEnoughResourcesException("Ability on cooldown");
-
-		// Ensure champ has enough mana
-		if (c.getMana() < a.getManaCost()) throw new NotEnoughResourcesException("Not enough mana");
-
-		// Reset cooldown, Decrease mana
-		a.setCurrentCooldown(a.getBaseCooldown());
-		c.setMana(c.getMana() - a.getManaCost());
+		// check for proper conditions and update stats
+		checkCastAbility(a, c);
 
 		// Iterate over board in direction through abilities range
 		for (int i = 1; i <= a.getCastRange(); i++) {
@@ -454,43 +447,37 @@ public class Game {
 			int x = (int) p.getX();
 			int y = (int) p.getY();
 
+			if (x < 0 || x > BOARDHEIGHT) break;
+			if (y < 0 || y > BOARDWIDTH) break;
+
 			if (board[x][y] == null) continue;
 			handleAbilityTarget(c, x, y, a, targets);
 		}
 
-		if (targets.isEmpty()) throw new AbilityUseException("No targets found in direction");
-		a.execute(targets);
-		
+		// Ensure target found
+		if (!targets.isEmpty()) a.execute(targets);
 	}
 
-	public void castAbility(Ability a, int x, int y) throws AbilityUseException, NotEnoughResourcesException {
+	public void castAbility(Ability a, int x, int y) throws Exception {
 		// Ensure ability is directional
 		if (a.getCastArea() != AreaOfEffect.SINGLETARGET) throw new AbilityUseException("Ability not directional");
 		Champion c = getCurrentChampion();
 		ArrayList<Damageable> targets = new ArrayList<Damageable>();
 
-		// Ensure not silenced
-		for (Effect e : c.getAppliedEffects()) {
-			if (e.getName() == "Silence") throw new AbilityUseException("Champion silenced");
-		}
+		// check for proper conditions and update stats
+		checkCastAbility(a, c);
 
-		// Ensure off of cooldown
-		if (a.getCurrentCooldown() > 0) throw new NotEnoughResourcesException("Ability on cooldown");
+		if (x < 0 || x > BOARDHEIGHT) throw new InvalidTargetException("Target out of board bounds");
+		if (y < 0 || y > BOARDWIDTH) throw new InvalidTargetException("Target out of board bounds");
 
-		// Ensure champ has enough mana
-		if (c.getMana() < a.getManaCost()) throw new NotEnoughResourcesException("Not enough mana");
-
-		// Reset cooldown, Decrease mana
-		a.setCurrentCooldown(a.getBaseCooldown());
-		c.setMana(c.getMana() - a.getManaCost());
+		if (board[x][y] == null) throw new InvalidTargetException("Target empty cell");
 
 		handleAbilityTarget(c, x, y, a, targets);
 
-		if (targets.isEmpty()) throw new AbilityUseException("No targets found in direction");
-		a.execute(targets);
+		if (!targets.isEmpty()) a.execute(targets);
 	}
 
-	public void useLeaderAbility() throws LeaderNotCurrentException, LeaderAbilityAlreadyUsedException, InvalidTargetException{
+	public void useLeaderAbility() throws Exception {
 		Champion c = getCurrentChampion();
 		ArrayList<Champion> targets = new ArrayList<Champion>();
 		ArrayList<Champion> friendlyTeam = null;
@@ -526,8 +513,7 @@ public class Game {
 			}
 		}
 
-		if (targets.isEmpty()) throw new InvalidTargetException("No targets for leader ability");
-		c.useLeaderAbility(targets);
+		if (!targets.isEmpty()) c.useLeaderAbility(targets);
 	}
 
 	public void endTurn() {
@@ -604,8 +590,8 @@ public class Game {
 			}
 		}
 
-		p.setLocation(x, y);
-		return p;
+		Point p2 = new Point(x, y);
+		return p2;
 	}
 
 	private void handleAbilityTarget(Champion c, int x, int y, Ability a, ArrayList<Damageable> targets) {

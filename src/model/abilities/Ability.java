@@ -56,5 +56,5 @@ public abstract class Ability {
         this.requiredActionPoints = required;
     }
 
-    public abstract void execute(ArrayList<Damageable> targets);
+    public abstract void execute(ArrayList<Damageable> targets) throws Exception;
 }

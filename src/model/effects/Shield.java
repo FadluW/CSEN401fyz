@@ -9,7 +9,7 @@ public class Shield extends Effect{
 
 	@Override
 	public void apply(Champion c) {
-		c.getAppliedEffects().add(this);
+		// c.getAppliedEffects().add(this);
 		c.setSpeed((int) (c.getSpeed()*1.02));
 	}
 

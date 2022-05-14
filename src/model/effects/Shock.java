@@ -9,7 +9,7 @@ public class Shock extends Effect{
 
 	@Override
 	public void apply(Champion c) {
-		c.getAppliedEffects().add(this);
+		// c.getAppliedEffects().add(this);
 		c.setSpeed((int) (c.getSpeed()*0.9));
 		c.setAttackDamage((int) (c.getAttackDamage()*0.9));
 		c.setMaxActionPointsPerTurn(c.getMaxActionPointsPerTurn()-1);

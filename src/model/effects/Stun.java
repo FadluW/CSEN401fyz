@@ -11,7 +11,7 @@ public class Stun extends Effect{
 
 	@Override
 	public void apply(Champion c) {
-		c.getAppliedEffects().add(this);
+		// c.getAppliedEffects().add(this);
 		// condition = c.getCondition();
 		c.setCondition(Condition.INACTIVE);
 	}
@@ -19,6 +19,15 @@ public class Stun extends Effect{
 	@Override
 	public void remove(Champion c) {
 		c.getAppliedEffects().remove(this);
-		c.setCondition(Condition.ACTIVE);
+
+		// TODO: Check for other root
+        Boolean otherRoot = false;
+        for (Effect a : c.getAppliedEffects()) {
+            if (a.getName().equals("Root")) {
+                otherRoot = true;
+                break;
+            }
+        }
+		c.setCondition((otherRoot) ? Condition.ROOTED : Condition.ACTIVE);
 	}
 }

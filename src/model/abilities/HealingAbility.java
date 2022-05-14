@@ -1,8 +1,7 @@
 package model.abilities;
 
 import java.util.ArrayList;
-
-import model.world.Damageable;
+import model.world.*;
 
 public class HealingAbility extends Ability{
     private int healAmount;
@@ -22,7 +21,8 @@ public class HealingAbility extends Ability{
 //Does the targets list include opponents
 	@Override
 	public void execute(ArrayList<Damageable> targets) {
-		for(Damageable a : targets){
+		for(Damageable a : targets) {
+            if (a instanceof Cover) continue;
 			a.setCurrentHP((a.getCurrentHP()+healAmount));
 		}
 	}

@@ -18,7 +18,21 @@ public class Root extends Effect{
     @Override
     public void remove(Champion c) {
         c.getAppliedEffects().remove(this);
-        if(!(c.getCondition()==Condition.INACTIVE))
-        	c.setCondition(Condition.ACTIVE);
+
+        // TODO: Check for other root
+        Boolean otherRoot = false;
+        for (Effect a : c.getAppliedEffects()) {
+            if (a.getName().equals("Root")) {
+                otherRoot = true;
+                break;
+            }
+        }
+
+        if (c.getCondition() != Condition.INACTIVE) {
+            if (otherRoot) c.setCondition(Condition.ROOTED);
+        	else c.setCondition(Condition.ACTIVE);
+        } else if (otherRoot) {
+            c.setCondition(Condition.ROOTED);
+        }
     }
 }
