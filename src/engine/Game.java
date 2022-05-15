@@ -447,8 +447,8 @@ public class Game {
 			int x = (int) p.getX();
 			int y = (int) p.getY();
 
-			if (x < 0 || x > BOARDHEIGHT) break;
-			if (y < 0 || y > BOARDWIDTH) break;
+			if (x < 0 || x > board.length) break;
+			if (y < 0 || y > board[x].length) break;
 
 			if (board[x][y] == null) continue;
 			handleAbilityTarget(c, x, y, a, targets);
@@ -615,6 +615,9 @@ public class Game {
 		// Handle champion
 		if (board[x][y] instanceof Champion) {
 			Champion currChamp = (Champion) board[x][y];
+			// Ensure within range
+			if (manhattanDist(c.getLocation(), currChamp.getLocation()) > a.getCastRange()) return;
+			
 			if (a instanceof DamagingAbility) {
 				if (enemyTeam.contains(currChamp)) targets.add(currChamp);
 	
