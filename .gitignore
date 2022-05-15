@@ -23,6 +23,7 @@
 hs_err_pid*
 
 # local IDE folders
+.project
 .vscode/
 .idea/
 /bin/
