@@ -17,7 +17,10 @@ public class Root extends Effect{
 
     @Override
     public void remove(Champion c) {
-        c.getAppliedEffects().remove(this);
+        // Ensure it actually ran out
+        if (this.getDuration() < 1) {
+            c.getAppliedEffects().remove(this);
+        }
 
         // TODO: Check for other root
         Boolean otherRoot = false;

@@ -9,6 +9,7 @@ import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class Game {
@@ -60,6 +61,7 @@ public class Game {
 		turnOrder = new PriorityQueue(MAXCHAMPS);
 		placeChampions();
 		placeCovers();
+		// prepareChampionTurns();
 	}
 
 	private void placeChampions() {
@@ -232,12 +234,16 @@ public class Game {
 		return null;
 	}
 
-	public void move(Direction d) throws UnallowedMovementException {
+	public void move(Direction d) throws UnallowedMovementException, NotEnoughResourcesException {
 		Champion c = getCurrentChampion();
 		Point p = calcDirection(c.getLocation(), d, 1);
 		
 		int vertical = (int) p.getLocation().getX();
 		int horizontal = (int) p.getLocation().getY();
+
+		if (c.getCurrentActionPoints() < 1) throw new NotEnoughResourcesException("Need 1 AP to move");
+
+		if (c.getCondition() == Condition.ROOTED) throw new UnallowedMovementException("This champion is rooted");
 
 		if (vertical < 0 || vertical > 4) throw new UnallowedMovementException("Out of vertical board borders"); 
 		if (horizontal < 0 || horizontal > 4) throw new UnallowedMovementException("Out of horizontal board borders"); 
@@ -269,24 +275,26 @@ public class Game {
 			int x = (int) p.getLocation().getX();
 			int y = (int) p.getLocation().getY();
 
-			if (x < 0 || x > BOARDHEIGHT) throw new InvalidTargetException("Target out of board bounds");
-			if (y < 0 || y > BOARDWIDTH) throw new InvalidTargetException("Target out of board bounds");
+			if (x < 0 || x >= BOARDHEIGHT) throw new InvalidTargetException("Target out of board bounds");
+			if (y < 0 || y >= BOARDWIDTH) throw new InvalidTargetException("Target out of board bounds");
 
 			// Check if attacking cover
-			if (getBoard()[x][y] instanceof Cover) {
+			if (board[x][y] instanceof Cover) {
 				flag = true;
 				Cover cover = (Cover) getBoard()[x][y];
 				cover.setCurrentHP(cover.getCurrentHP() - c.getAttackDamage());
+				// if dead cover remove from board
+				checkIfDead((Damageable) board[x][y]);
 			}
 
 			// Check if attacking champion
-			if (getBoard()[x][y] instanceof Champion) {
-				Champion target = (Champion) getBoard()[x][y];
+			if (board[x][y] instanceof Champion) {
+				Champion target = (Champion) board[x][y];
 				// Ensure not of same team
 				if (firstPlayer.getTeam().contains(c) == !firstPlayer.getTeam().contains(target)) {
 					flag = true;
 					double dmgMultiplier = 1;
-					if (!(target.getClass().equals(c.getClass())) && !(target instanceof AntiHero))
+					if (!(target.getClass().equals(c.getClass())))
 						dmgMultiplier = 1.5;
 
 					double damageDealt = c.getAttackDamage() * dmgMultiplier;
@@ -317,6 +325,9 @@ public class Game {
 
 					// Deal damage on target
 					target.setCurrentHP((int)Math.round(target.getCurrentHP() - ((deflected) ? 0 : damageDealt)));
+					
+					// if dead champ remove from board
+					checkIfDead(target);
 				}
 			}
 		}
@@ -327,10 +338,10 @@ public class Game {
 //		}		
 	}
 
-	private void checkCastAbility(Ability a, Champion c) throws Exception {
+	private void checkCastAbility(Ability a, Champion c) throws AbilityUseException, NotEnoughResourcesException {
 		// Ensure not silenced
 		for (Effect e : c.getAppliedEffects()) {
-			if (e.getName() == "Silence") throw new AbilityUseException("Champion silenced");
+			if (e.getName().equals("Silence")) throw new AbilityUseException("Champion silenced");
 		}
 
 		// Ensure off of cooldown
@@ -340,15 +351,35 @@ public class Game {
 		if (c.getMana() < a.getManaCost()) throw new NotEnoughResourcesException("Not enough mana");
 
 		// Ensure enough AP
-		if (c.getCurrentActionPoints() < 1) throw new NotEnoughResourcesException("Not enough AP");
+		if (c.getCurrentActionPoints() < a.getRequiredActionPoints()) throw new NotEnoughResourcesException("Not enough AP");
+	}
 
+	private void updateCastAbilityStats(Ability a, Champion c) {
 		// Reset cooldown, Decrease mana
 		a.setCurrentCooldown(a.getBaseCooldown());
 		c.setMana(c.getMana() - a.getManaCost());
-		c.setCurrentActionPoints(c.getCurrentActionPoints() - 1);
+		c.setCurrentActionPoints(c.getCurrentActionPoints() - a.getRequiredActionPoints());
 	}
 
-	public void castAbility(Ability a) throws Exception {
+	private void checkIfDead(Damageable target) {
+		if (target.getCurrentHP() > 0) return;
+		
+		// If champion, make it knocked out
+		if (target instanceof Champion) {
+			((Champion) target).setCondition(Condition.KNOCKEDOUT);
+			PriorityQueue temp = new PriorityQueue(MAXCHAMPS);
+			while (!turnOrder.isEmpty()) {
+				if (!turnOrder.peekMin().equals(((Champion) target))) temp.insert(turnOrder.remove());
+				else turnOrder.remove();
+			}
+			turnOrder = temp;
+			board[(int)target.getLocation().getX()][(int)target.getLocation().getY()] = null;
+		}
+		// Remove dead target from board
+		board[(int) target.getLocation().getX()][(int) target.getLocation().getY()] = null;
+	}
+
+	public void castAbility(Ability a) throws AbilityUseException, NotEnoughResourcesException, CloneNotSupportedException {
 		ArrayList<Damageable> targets = new ArrayList<Damageable>();
 		Champion c = getCurrentChampion();
 		ArrayList<Champion> friendlyTeam;
@@ -362,8 +393,11 @@ public class Game {
 			// Add self to targets
 			targets.add(c);
 			a.execute(targets);
+			updateCastAbilityStats(a, c);
 			return;
 		}
+
+		updateCastAbilityStats(a, c);
 
 		if (firstPlayer.getTeam().contains(c)) {
 			friendlyTeam = firstPlayer.getTeam();
@@ -375,15 +409,12 @@ public class Game {
 
 		ArrayList<Champion> targetTeam = null;
 		if (a instanceof DamagingAbility) {
-			a = (DamagingAbility) a;
 			targetTeam = enemyTeam;
 
 		} else if (a instanceof HealingAbility) {
-			a = (HealingAbility) a;
 			targetTeam = friendlyTeam;
 
 		} else if (a instanceof CrowdControlAbility) {
-			a = (CrowdControlAbility) a;
 			switch (((CrowdControlAbility) a).getEffect().getType()) {
 				case BUFF: {
 					targetTeam = friendlyTeam;
@@ -401,11 +432,11 @@ public class Game {
 			case SURROUND: {
 				// Iterate over rows
 				for (int i = (int) c.getLocation().getX() - 1; i <= (int) c.getLocation().getX() + 1; i++) {
-					if (i < 0 || i > BOARDHEIGHT) continue;
+					if (i < 0 || i >= BOARDHEIGHT) continue;
 
 					// Iterate over columns
 					for (int j = (int) c.getLocation().getY() - 1; j <= (int) c.getLocation().getY() + 1; j++) {
-						if (j < 0 || j > BOARDWIDTH) continue;
+						if (j < 0 || j >= BOARDWIDTH) continue;
 						if (i==c.getLocation().getX() && j == c.getLocation().getY()) continue;
 						if (board[i][j] == null) continue;
 						//if (board[i][j] instanceof Champion && board[i][j].equals(c)) continue;
@@ -429,9 +460,13 @@ public class Game {
 
 		// Ensure target found
 		if (!targets.isEmpty()) a.execute(targets);
+		
+		for (Damageable curr : targets) {
+			checkIfDead(curr);
+		}
 	}
 
-	public void castAbility(Ability a, Direction d) throws Exception {
+	public void castAbility(Ability a, Direction d) throws AbilityUseException, NotEnoughResourcesException, CloneNotSupportedException {
 		// Ensure ability is directional
 		if (a.getCastArea() != AreaOfEffect.DIRECTIONAL) throw new AbilityUseException("Ability not directional");
 		Champion c = getCurrentChampion();
@@ -439,6 +474,7 @@ public class Game {
 
 		// check for proper conditions and update stats
 		checkCastAbility(a, c);
+		updateCastAbilityStats(a, c);
 
 		// Iterate over board in direction through abilities range
 		for (int i = 1; i <= a.getCastRange(); i++) {
@@ -447,8 +483,8 @@ public class Game {
 			int x = (int) p.getX();
 			int y = (int) p.getY();
 
-			if (x < 0 || x > board.length) break;
-			if (y < 0 || y > board[x].length) break;
+			if (x < 0 || x >= BOARDHEIGHT) break;
+			if (y < 0 || y >= BOARDWIDTH) break;
 
 			if (board[x][y] == null) continue;
 			handleAbilityTarget(c, x, y, a, targets);
@@ -456,9 +492,12 @@ public class Game {
 
 		// Ensure target found
 		if (!targets.isEmpty()) a.execute(targets);
+		for (Damageable curr : targets) {
+			checkIfDead(curr);
+		}
 	}
 
-	public void castAbility(Ability a, int x, int y) throws Exception {
+	public void castAbility(Ability a, int x, int y) throws AbilityUseException, InvalidTargetException, NotEnoughResourcesException, CloneNotSupportedException {
 		// Ensure ability is directional
 		if (a.getCastArea() != AreaOfEffect.SINGLETARGET) throw new AbilityUseException("Ability not directional");
 		Champion c = getCurrentChampion();
@@ -466,9 +505,10 @@ public class Game {
 
 		// check for proper conditions and update stats
 		checkCastAbility(a, c);
+		updateCastAbilityStats(a, c);
 
-		if (x < 0 || x > BOARDHEIGHT) throw new InvalidTargetException("Target out of board bounds");
-		if (y < 0 || y > BOARDWIDTH) throw new InvalidTargetException("Target out of board bounds");
+		if (x < 0 || x >= BOARDHEIGHT) throw new InvalidTargetException("Target out of board bounds");
+		if (y < 0 || y >= BOARDWIDTH) throw new InvalidTargetException("Target out of board bounds");
 
 		if (board[x][y] == null) throw new InvalidTargetException("Target empty cell");
 
@@ -483,13 +523,12 @@ public class Game {
 			Champion currChamp = (Champion) board[x][y];
 			int distance = manhattanDist(c.getLocation(), currChamp.getLocation());
 			// Ensure within range
-			if (distance > a.getCastRange()) throw new InvalidTargetException();
+			if (distance > a.getCastRange()) throw new AbilityUseException();
 			
 			if (a instanceof DamagingAbility) {
 				if (firstPlayer.getTeam().contains(currChamp) == firstPlayer.getTeam().contains(c)) throw new InvalidTargetException("Cannot damage same team");
 				if (distance == 0) throw new InvalidTargetException("Cannot damage self");
 				targets.add(currChamp);
-	
 			} else if (a instanceof HealingAbility) {
 				if (firstPlayer.getTeam().contains(currChamp) == !firstPlayer.getTeam().contains(c)) throw new InvalidTargetException("Cannot damage same team");
 				targets.add(currChamp);
@@ -512,9 +551,12 @@ public class Game {
 		}
 
 		if (!targets.isEmpty()) a.execute(targets);
+		for (Damageable curr : targets) {
+			checkIfDead(curr);
+		}
 	}
 
-	public void useLeaderAbility() throws Exception {
+	public void useLeaderAbility() throws LeaderAbilityAlreadyUsedException, LeaderNotCurrentException {
 		Champion c = getCurrentChampion();
 		ArrayList<Champion> targets = new ArrayList<Champion>();
 		ArrayList<Champion> friendlyTeam = null;
@@ -562,6 +604,25 @@ public class Game {
 			for (Ability a : ((Champion)turnOrder.peekMin()).getAbilities()) {
 				a.setCurrentCooldown(a.getCurrentCooldown() - 1);
 			}
+
+			ArrayList<Integer> toRemoveIndex = new ArrayList<Integer>();
+			int x = 0;
+			for (Effect e : ((Champion)turnOrder.peekMin()).getAppliedEffects()) {
+				e.setDuration(e.getDuration() - 1);
+				// If duration ran out, remove effect
+				if (e.getDuration() < 1) { toRemoveIndex.add(x);
+					// ((Champion)turnOrder.peekMin()).getAppliedEffects().remove(e);
+				}
+				x++;
+			}
+			
+			Collections.reverse(toRemoveIndex);
+			// Remove to be removed
+			for (Integer i : toRemoveIndex) {
+				Effect e = ((Champion)turnOrder.peekMin()).getAppliedEffects().get(i);
+				e.remove(((Champion)turnOrder.peekMin()));
+				// current.getAppliedEffects().remove(e);
+			}
 			turnOrder.remove();
 			if (turnOrder.isEmpty()) prepareChampionTurns();
 		}
@@ -572,13 +633,23 @@ public class Game {
 		for (Ability a : current.getAbilities()) {
 			a.setCurrentCooldown(a.getCurrentCooldown() - 1);
 		}
+		ArrayList<Integer> toRemoveIndex = new ArrayList<Integer>();
+		int x = 0;
 		for (Effect e : current.getAppliedEffects()) {
 			e.setDuration(e.getDuration() - 1);
 			// If duration ran out, remove effect
 			if (e.getDuration() < 1) {
-				//e.remove(current);
-				//current.getAppliedEffects().remove(e);
+				toRemoveIndex.add(x);
 			}
+			x++;
+		}
+
+		Collections.reverse(toRemoveIndex);
+		// Remove to be removed
+		for (Integer i : toRemoveIndex) {
+			Effect e = current.getAppliedEffects().get(i);
+			e.remove(current);
+			// current.getAppliedEffects().remove(e);
 		}
 
 		// Reset current AP

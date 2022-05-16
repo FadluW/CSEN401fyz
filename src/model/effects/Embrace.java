@@ -11,7 +11,7 @@ public class Embrace extends Effect{
         c.setCurrentHP(c.getCurrentHP() + (int) Math.round (c.getMaxHP()*0.2));
         c.setMana((int) Math.round (c.getMana()*1.2));
         c.setSpeed((int)Math.round  (c.getSpeed()*1.2));
-        c.setAttackDamage((int) Math.round (c.getAttackDamage()*1.2));
+        c.setAttackDamage((int) /*Math.round*/ (c.getAttackDamage()*1.2));
     }
 
     @Override

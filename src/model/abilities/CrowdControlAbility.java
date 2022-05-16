@@ -2,7 +2,6 @@ package model.abilities;
 
 import java.util.ArrayList;
 
-import exceptions.AbilityUseException;
 import model.effects.Effect;
 import model.world.Champion;
 import model.world.Damageable;
@@ -23,9 +22,9 @@ public class CrowdControlAbility extends Ability{
 	public void execute(ArrayList<Damageable> targets) throws CloneNotSupportedException {
 		for(Damageable a : targets){
 			if (a instanceof Champion) {
-					effect.apply((Champion) a);
 					Effect effectCopy = (Effect) effect.clone();
 					((Champion) a).getAppliedEffects().add(effectCopy);
+					effectCopy.apply((Champion) a);
 			}
 		}
 	}

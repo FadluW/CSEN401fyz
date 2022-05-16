@@ -1,6 +1,7 @@
 package model.world;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import model.effects.Effect;
 import model.effects.EffectType;
@@ -13,13 +14,25 @@ public class Hero extends Champion{
 
 	@Override
 	public void useLeaderAbility(ArrayList<Champion> targets) {
-		Embrace newEmbrace = new Embrace(2);
 		for(Champion a : targets){
-//			for(Effect effect : a.getAppliedEffects()){
-//				if (effect.getType()==EffectType.DEBUFF) 
-//					a.getAppliedEffects().remove(effect);
-//			}
+			Embrace newEmbrace = new Embrace(2);
+
+			ArrayList<Integer> toRemoveIndex = new ArrayList<Integer>();
+			int x = 0;
+			
+			for(Effect effect : a.getAppliedEffects()){
+				if (effect.getType()==EffectType.DEBUFF) toRemoveIndex.add(x);
+				x++;
+			}
+			Collections.reverse(toRemoveIndex);
+			// Remove to be removed
+			for (Integer i : toRemoveIndex) {
+				Effect e = a.getAppliedEffects().get(i);
+				e.remove(a);
+				// current.getAppliedEffects().remove(e);
+			}
 			a.getAppliedEffects().add(newEmbrace);
+			newEmbrace.apply(a);
 		}
 	}
 }

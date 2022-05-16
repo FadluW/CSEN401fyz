@@ -1,6 +1,5 @@
 package model.effects;
 
-import exceptions.AbilityUseException;
 import model.world.Champion;
 
 // Class representing the effects in the game
