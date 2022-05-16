@@ -8,7 +8,8 @@ public class Disarm extends Effect {
     	super("Disarm", duration, EffectType.DEBUFF);
     }
     public void apply(Champion c){
-        c.getAppliedEffects().add(this);
+ 
+        //c.getAppliedEffects().add(this);
         DamagingAbility Punch = new DamagingAbility("Punch",0,1,1, AreaOfEffect.SINGLETARGET,1,50);
         c.getAbilities().add(Punch);
     }

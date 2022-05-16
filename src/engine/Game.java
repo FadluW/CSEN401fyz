@@ -316,15 +316,15 @@ public class Game {
 					
 
 					// Deal damage on target
-					target.setCurrentHP((int) (target.getCurrentHP() - ((deflected) ? 0 : damageDealt)));
+					target.setCurrentHP((int)Math.round(target.getCurrentHP() - ((deflected) ? 0 : damageDealt)));
 				}
 			}
 		}
 
 		// If no target found throw exception
-		if (!flag) {
-			throw new InvalidTargetException("No target in direction");
-		}		
+//		if (!flag) {
+//			throw new InvalidTargetException("No target in direction");
+//		}		
 	}
 
 	private void checkCastAbility(Ability a, Champion c) throws Exception {
@@ -406,10 +406,10 @@ public class Game {
 					// Iterate over columns
 					for (int j = (int) c.getLocation().getY() - 1; j <= (int) c.getLocation().getY() + 1; j++) {
 						if (j < 0 || j > BOARDWIDTH) continue;
-						
+						if (i==c.getLocation().getX() && j == c.getLocation().getY()) continue;
 						if (board[i][j] == null) continue;
-						if (board[i][j] instanceof Champion && board[i][j].equals(c)) continue;
-
+						//if (board[i][j] instanceof Champion && board[i][j].equals(c)) continue;
+						
 						handleAbilityTarget(c, i, j, a, targets);
 					}
 				}
@@ -472,7 +472,44 @@ public class Game {
 
 		if (board[x][y] == null) throw new InvalidTargetException("Target empty cell");
 
-		handleAbilityTarget(c, x, y, a, targets);
+		// Handle covers
+		if (board[x][y] instanceof Cover) {
+			if (!(a instanceof DamagingAbility)) throw new InvalidTargetException();
+			else	targets.add((Cover) board[x][y]);
+		}
+
+		// Handle champion
+		if (board[x][y] instanceof Champion) {
+			Champion currChamp = (Champion) board[x][y];
+			int distance = manhattanDist(c.getLocation(), currChamp.getLocation());
+			// Ensure within range
+			if (distance > a.getCastRange()) throw new InvalidTargetException();
+			
+			if (a instanceof DamagingAbility) {
+				if (firstPlayer.getTeam().contains(currChamp) == firstPlayer.getTeam().contains(c)) throw new InvalidTargetException("Cannot damage same team");
+				if (distance == 0) throw new InvalidTargetException("Cannot damage self");
+				targets.add(currChamp);
+	
+			} else if (a instanceof HealingAbility) {
+				if (firstPlayer.getTeam().contains(currChamp) == !firstPlayer.getTeam().contains(c)) throw new InvalidTargetException("Cannot damage same team");
+				targets.add(currChamp);
+
+			} else if (a instanceof CrowdControlAbility) {
+				switch (((CrowdControlAbility) a).getEffect().getType()) {
+					case BUFF: {
+						if (firstPlayer.getTeam().contains(currChamp) == !firstPlayer.getTeam().contains(c)) throw new InvalidTargetException("Cannot buff enemy");
+						targets.add(currChamp);
+						break;
+					}
+					case DEBUFF: {
+						if (firstPlayer.getTeam().contains(currChamp) == firstPlayer.getTeam().contains(c)) throw new InvalidTargetException("Cannot buff enemy");
+						targets.add(currChamp);
+						break;
+					}
+					default: break;
+				}
+			}
+		}
 
 		if (!targets.isEmpty()) a.execute(targets);
 	}
@@ -522,6 +559,9 @@ public class Game {
 
 		// Loop until first non inactive
 		while (((Champion)turnOrder.peekMin()).getCondition() == Condition.INACTIVE) {
+			for (Ability a : ((Champion)turnOrder.peekMin()).getAbilities()) {
+				a.setCurrentCooldown(a.getCurrentCooldown() - 1);
+			}
 			turnOrder.remove();
 			if (turnOrder.isEmpty()) prepareChampionTurns();
 		}
@@ -535,7 +575,10 @@ public class Game {
 		for (Effect e : current.getAppliedEffects()) {
 			e.setDuration(e.getDuration() - 1);
 			// If duration ran out, remove effect
-			if (e.getDuration() < 1) e.remove(current);
+			if (e.getDuration() < 1) {
+				//e.remove(current);
+				//current.getAppliedEffects().remove(e);
+			}
 		}
 
 		// Reset current AP
@@ -608,7 +651,7 @@ public class Game {
 
 		// Handle covers
 		if (board[x][y] instanceof Cover) {
-			if (!(a instanceof CrowdControlAbility)) targets.add((Cover) board[x][y]);
+			if ((a instanceof DamagingAbility)) targets.add((Cover) board[x][y]);
 			return;
 		}
 

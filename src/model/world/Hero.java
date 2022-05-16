@@ -15,10 +15,10 @@ public class Hero extends Champion{
 	public void useLeaderAbility(ArrayList<Champion> targets) {
 		Embrace newEmbrace = new Embrace(2);
 		for(Champion a : targets){
-			for(Effect effect : a.getAppliedEffects()){
-				if (effect.getType()==EffectType.DEBUFF) 
-					a.getAppliedEffects().remove(effect);
-			}
+//			for(Effect effect : a.getAppliedEffects()){
+//				if (effect.getType()==EffectType.DEBUFF) 
+//					a.getAppliedEffects().remove(effect);
+//			}
 			a.getAppliedEffects().add(newEmbrace);
 		}
 	}

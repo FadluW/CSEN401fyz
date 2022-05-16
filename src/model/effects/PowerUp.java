@@ -12,15 +12,17 @@ public class PowerUp extends Effect{
 		super("PowerUp", duration, EffectType.BUFF);
 	}
 	public void apply(Champion c){
-		c.getAppliedEffects().add(this);
+		//c.getAppliedEffects().add(this);
 		ArrayList<Ability> abilities = c.getAbilities();
 		for(Ability a : abilities){
 			if (a instanceof HealingAbility) {
-				HealingAbility ha = (HealingAbility) a;
-				ha.setHealAmount((int) (ha.getHealAmount()*1.2));
+				//HealingAbility ha = (HealingAbility) a;
+				((HealingAbility) a).setHealAmount((int) Math.round (((HealingAbility) a).getHealAmount()*1.2));
+				//a=ha;
 			}else if(a instanceof DamagingAbility) {
-				DamagingAbility da = (DamagingAbility) a;
-				da.setDamageAmount((int) (da.getDamageAmount()*1.2));
+				//DamagingAbility da = (DamagingAbility) a;
+				((DamagingAbility) a).setDamageAmount((int)Math.round  (((DamagingAbility) a).getDamageAmount()*1.2));
+				//a=da;
 			}
 		}
 	}
@@ -31,11 +33,13 @@ public class PowerUp extends Effect{
 		ArrayList<Ability> abilities = c.getAbilities();
 		for(Ability a : abilities){
 			if (a instanceof HealingAbility) {
-					HealingAbility ha = (HealingAbility) a;
-					ha.setHealAmount((int) (ha.getHealAmount()/1.2));
+					//HealingAbility ha = (HealingAbility) a;
+					((HealingAbility) a).setHealAmount((int)Math.round  (((HealingAbility) a).getHealAmount()/1.2));
+					//a=ha;
 			}else if(a instanceof DamagingAbility) {					
-					DamagingAbility da = (DamagingAbility) a;
-					da.setDamageAmount((int) (da.getDamageAmount()/1.2));
+					//DamagingAbility da = (DamagingAbility) a;
+					((DamagingAbility) a).setDamageAmount((int) Math.round (((DamagingAbility) a).getDamageAmount()/1.2));
+					//a=da;
 			}
 		}
 	}

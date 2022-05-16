@@ -10,7 +10,7 @@ public class HealingAbility extends Ability{
         super(name, cost, baseCooldown, castRange, area, required);
         this.healAmount = healAmount;
     }
-
+ 
     public int getHealAmount() {
         return healAmount;
     }

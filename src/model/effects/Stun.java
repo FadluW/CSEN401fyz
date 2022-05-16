@@ -11,7 +11,7 @@ public class Stun extends Effect{
 
 	@Override
 	public void apply(Champion c) {
-		// c.getAppliedEffects().add(this);
+		//c.getAppliedEffects().add(this);
 		// condition = c.getCondition();
 		c.setCondition(Condition.INACTIVE);
 	}
