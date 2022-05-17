@@ -30,6 +30,7 @@ public class Hero extends Champion{
 			// Remove to be removed
 			for (Integer i : toRemoveIndex) {
 				Effect e = a.getAppliedEffects().get(i);
+				e.setDuration(0);
 				e.remove(a);
 				// current.getAppliedEffects().remove(e);
 			}
