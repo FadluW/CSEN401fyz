@@ -17,11 +17,11 @@ public class PowerUp extends Effect{
 		for(Ability a : abilities){
 			if (a instanceof HealingAbility) {
 				//HealingAbility ha = (HealingAbility) a;
-				((HealingAbility) a).setHealAmount((int) Math.round (((HealingAbility) a).getHealAmount()*1.2));
+				((HealingAbility) a).setHealAmount((int)  (((HealingAbility) a).getHealAmount()*1.2));
 				//a=ha;
 			}else if(a instanceof DamagingAbility) {
 				//DamagingAbility da = (DamagingAbility) a;
-				((DamagingAbility) a).setDamageAmount((int)Math.round  (((DamagingAbility) a).getDamageAmount()*1.2));
+				((DamagingAbility) a).setDamageAmount((int)  (((DamagingAbility) a).getDamageAmount()*1.2));
 				//a=da;
 			}
 		}
@@ -34,11 +34,11 @@ public class PowerUp extends Effect{
 		for(Ability a : abilities){
 			if (a instanceof HealingAbility) {
 					//HealingAbility ha = (HealingAbility) a;
-					((HealingAbility) a).setHealAmount((int)Math.round  (((HealingAbility) a).getHealAmount()/1.2));
+					((HealingAbility) a).setHealAmount((int) (((HealingAbility) a).getHealAmount()/1.2));
 					//a=ha;
 			}else if(a instanceof DamagingAbility) {					
 					//DamagingAbility da = (DamagingAbility) a;
-					((DamagingAbility) a).setDamageAmount((int) Math.round (((DamagingAbility) a).getDamageAmount()/1.2));
+					((DamagingAbility) a).setDamageAmount((int)  (((DamagingAbility) a).getDamageAmount()/1.2));
 					//a=da;
 			}
 		}

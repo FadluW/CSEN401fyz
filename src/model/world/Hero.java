@@ -16,12 +16,14 @@ public class Hero extends Champion{
 	public void useLeaderAbility(ArrayList<Champion> targets) {
 		for(Champion a : targets){
 			Embrace newEmbrace = new Embrace(2);
-
+			newEmbrace.apply(a);
+			a.getAppliedEffects().add(newEmbrace);
+			
 			ArrayList<Integer> toRemoveIndex = new ArrayList<Integer>();
 			int x = 0;
 			
 			for(Effect effect : a.getAppliedEffects()){
-				if (effect.getType()==EffectType.DEBUFF) toRemoveIndex.add(x);
+				if (effect.getType().equals(EffectType.DEBUFF)) toRemoveIndex.add(x);
 				x++;
 			}
 			Collections.reverse(toRemoveIndex);
@@ -31,8 +33,6 @@ public class Hero extends Champion{
 				e.remove(a);
 				// current.getAppliedEffects().remove(e);
 			}
-			a.getAppliedEffects().add(newEmbrace);
-			newEmbrace.apply(a);
 		}
 	}
 }

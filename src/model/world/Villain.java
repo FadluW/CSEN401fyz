@@ -10,7 +10,7 @@ public class Villain extends Champion{
 	@Override
 	public void useLeaderAbility(ArrayList<Champion> targets) {
 		for(Champion a : targets){
-			if (a.getCurrentHP()<(0.3*a.getMaxHP())) 
+			if (a.getCurrentHP()/(a.getMaxHP())<0.3) 
 				a.setCondition(Condition.KNOCKEDOUT);
 		}
 	}     

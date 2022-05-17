@@ -374,6 +374,11 @@ public class Game {
 			}
 			turnOrder = temp;
 			board[(int)target.getLocation().getX()][(int)target.getLocation().getY()] = null;
+			
+			// Remove dead target from team
+			if (firstPlayer.getTeam().contains(target)) 
+				firstPlayer.getTeam().remove(target);
+			else secondPlayer.getTeam().remove(target);
 		}
 		// Remove dead target from board
 		board[(int) target.getLocation().getX()][(int) target.getLocation().getY()] = null;
@@ -730,7 +735,7 @@ public class Game {
 		if (board[x][y] instanceof Champion) {
 			Champion currChamp = (Champion) board[x][y];
 			// Ensure within range
-			if (manhattanDist(c.getLocation(), currChamp.getLocation()) > a.getCastRange()) return;
+			if (!(a.getCastArea().equals(AreaOfEffect.SURROUND))&&(manhattanDist(c.getLocation(), currChamp.getLocation()) > a.getCastRange())) return;
 			
 			if (a instanceof DamagingAbility) {
 				if (enemyTeam.contains(currChamp)) targets.add(currChamp);
