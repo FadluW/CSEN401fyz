@@ -236,7 +236,8 @@ public class Game {
 
 	public void move(Direction d) throws UnallowedMovementException, NotEnoughResourcesException {
 		Champion c = getCurrentChampion();
-		Point p = calcDirection(c.getLocation(), d, 1);
+		Point oldLoc = c.getLocation();
+		Point p = calcDirection(oldLoc, d, 1);
 		
 		int vertical = (int) p.getLocation().getX();
 		int horizontal = (int) p.getLocation().getY();
@@ -251,6 +252,11 @@ public class Game {
 		if (!board[vertical][horizontal].equals(null)) throw new UnallowedMovementException();
 
 		c.setLocation(new Point(vertical, horizontal));
+
+		// Update board
+		board[(int) oldLoc.getX()][(int) oldLoc.getY()] = null;
+		board[vertical][horizontal] = c;
+		
 		c.setCurrentActionPoints(c.getCurrentActionPoints() - 1);
 	}
 
