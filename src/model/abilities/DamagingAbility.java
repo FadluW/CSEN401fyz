@@ -32,7 +32,7 @@ public class DamagingAbility extends Ability{
                 // Iterate over target's current effects
                 ArrayList<Effect> targetEffects = ((Champion) a).getAppliedEffects();
                 for (Effect e : targetEffects) {
-                    if (e.getName().equals("Shield")) {
+                    if (e instanceof Shield) {
                         // Remove shield from target
                         e.remove(((Champion) a));
                         deflected = true;
@@ -41,7 +41,7 @@ public class DamagingAbility extends Ability{
                 }
                 if (!deflected) {
                     for (Effect e : targetEffects) {
-                        if (e.getName().equals("Dodge")){
+                        if (e instanceof Dodge){
                             int chance = rand.nextInt(100);
                             // If dodged
                             if (chance < 50) deflected = true;

@@ -19,7 +19,7 @@ public class Hero extends Champion{
 			newEmbrace.apply(a);
 			a.getAppliedEffects().add(newEmbrace);
 			
-			ArrayList<Integer> toRemoveIndex = new ArrayList<Integer>();
+			ArrayList<Integer> toRemoveIndex = new ArrayList<>();
 			int x = 0;
 			
 			for(Effect effect : a.getAppliedEffects()){

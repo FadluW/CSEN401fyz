@@ -23,7 +23,7 @@ public class Stun extends Effect{
 		// TODO: Check for other root
         Boolean otherRoot = false;
         for (Effect a : c.getAppliedEffects()) {
-            if (a.getName().equals("Root")) {
+            if (a instanceof Root) {
                 otherRoot = true;
                 break;
             }

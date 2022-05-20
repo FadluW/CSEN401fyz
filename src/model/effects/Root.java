@@ -31,10 +31,10 @@ public class Root extends Effect{
                 if (!otherRoot){
                     c.setCondition(Condition.ACTIVE);
                 }
-                else if(otherRoot) c.setCondition(Condition.ROOTED);
+                else c.setCondition(Condition.ROOTED);
             }
         }
-        else return;
+        //else return;
 
         // TODO: Check for other root
 
