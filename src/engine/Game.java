@@ -300,7 +300,7 @@ public class Game {
 			if (board[x][y] instanceof Champion) {
 				Champion target = (Champion) board[x][y];
 				// Ensure not of same team
-				// if (firstPlayer.getTeam().contains(c) == firstPlayer.getTeam().contains(target)) continue;
+				if (firstPlayer.getTeam().contains(c) == firstPlayer.getTeam().contains(target)) continue;
 				
 				double dmgMultiplier = (!(target.getClass().equals(c.getClass()))) ? 1.5 : 1;
 				double damageDealt = c.getAttackDamage() * dmgMultiplier;
