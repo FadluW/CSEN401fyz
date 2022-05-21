@@ -292,58 +292,52 @@ public class Game {
 				cover.setCurrentHP(cover.getCurrentHP() - c.getAttackDamage());
 				// if dead cover remove from board
 				checkIfDead((Damageable) board[x][y]);
+
+				break;
 			}
 
 			// Check if attacking champion
 			if (board[x][y] instanceof Champion) {
 				Champion target = (Champion) board[x][y];
 				// Ensure not of same team
-				if (firstPlayer.getTeam().contains(c) == !firstPlayer.getTeam().contains(target)) {
-					flag = true;
-					double dmgMultiplier = 1;
-					if (!(target.getClass().equals(c.getClass())))
-						dmgMultiplier = 1.5;
+				// if (firstPlayer.getTeam().contains(c) == firstPlayer.getTeam().contains(target)) continue;
+				
+				double dmgMultiplier = (!(target.getClass().equals(c.getClass()))) ? 1.5 : 1;
+				double damageDealt = c.getAttackDamage() * dmgMultiplier;
+				Random rand = new Random();
 
-					double damageDealt = c.getAttackDamage() * dmgMultiplier;
-					Random rand = new Random();
-
-					// Iterate over target's current effects
-					Boolean deflected = false;
-					ArrayList<Effect> targetEffects = target.getAppliedEffects();
+				// Iterate over target's current effects
+				Boolean deflected = false;
+				ArrayList<Effect> targetEffects = target.getAppliedEffects();
+				for (Effect e : targetEffects) {
+					if (e instanceof Shield) {
+						// Remove shield from target
+						e.remove(target);
+						//targetEffects.remove(e);
+						deflected = true;
+						break;
+					}
+				}
+				if (!deflected) {
 					for (Effect e : targetEffects) {
-						if (e instanceof Shield) {
-							// Remove shield from target
-							e.remove(target);
-							//targetEffects.remove(e);
-							deflected = true;
+						if (e instanceof Dodge){
+							int chance = rand.nextInt(100);
+							// If dodged
+							if (chance < 50) deflected = true;
 							break;
 						}
 					}
-					if (!deflected) {
-						for (Effect e : targetEffects) {
-							if (e instanceof Dodge){
-								int chance = rand.nextInt(100);
-								// If dodged
-								if (chance < 50) deflected = true;
-								break;
-							}
-						}
-					}
-					
-
-					// Deal damage on target
-					target.setCurrentHP((int)Math.round(target.getCurrentHP() - ((deflected) ? 0 : damageDealt)));
-					
-					// if dead champ remove from board
-					checkIfDead(target);
 				}
+				
+
+				// Deal damage on target
+				target.setCurrentHP((int)Math.round(target.getCurrentHP() - ((deflected) ? 0 : damageDealt)));
+				
+				// if dead champ remove from board
+				checkIfDead(target);
+				break;
 			}
 		}
-
-		// If no target found throw exception
-//		if (!flag) {
-//			throw new InvalidTargetException("No target in direction");
-//		}		
 	}
 
 	private void checkCastAbility(Ability a, Champion c) throws AbilityUseException, NotEnoughResourcesException {
