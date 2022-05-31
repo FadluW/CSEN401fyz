@@ -29,7 +29,7 @@ public class cleanSelectChampion extends JFrame implements ActionListener {
 
         background = new JLayeredPane();
         background.setBounds(0,0,1366,768);
-        getContentPane().setBackground(Color.pink);
+        getContentPane().setBackground(new Color(103,0,0));
         add(background);
         setLayout(null);
         background.setVisible(true);
@@ -37,19 +37,19 @@ public class cleanSelectChampion extends JFrame implements ActionListener {
 
         JPanel icons = new JPanel();
         icons.setLayout(new GridLayout(3,5));
-        icons.setBounds(358,0,650,390);
+        icons.setBounds(358,10,650,390);
         icons.setVisible(true);
         background.add(icons);
         placeButtons(icons);
 
         JPanel player1 = new JPanel();
-        player1.setBounds(0,500,390,170);
+        player1.setBounds(0,510,390,170);
         player1.setVisible(true);
         player1.setBackground(Color.red);
         background.add(player1,Integer.valueOf(0));
 
         JLabel p1 = new JLabel("Player one");
-        p1.setBounds(150,510,390,20);
+        p1.setBounds(150,520,390,20);
         p1.setVisible(true);
         p1.setFont(player);
         p1.setForeground(Color.WHITE);
@@ -71,25 +71,25 @@ public class cleanSelectChampion extends JFrame implements ActionListener {
         champs1.add(champ);
         champs1.add(champ2);
         champs1.add(champ3);
-        champs1.setBounds(0,540,390,130);
+        champs1.setBounds(0,550,390,130);
         champs1.setVisible(true);
         background.add(champs1,Integer.valueOf(2));
 
         JPanel player2 = new JPanel();
-        player2.setBounds(976,500,390,170);
+        player2.setBounds(976,510,390,170);
         player2.setVisible(true);
         player2.setBackground(Color.blue);
         background.add(player2,Integer.valueOf(0));
 
         JLabel p2 = new JLabel("Player two");
-        p2.setBounds(1120,510,390,20);
+        p2.setBounds(1120,520,390,20);
         p2.setVisible(true);
         p2.setFont(player);
         p2.setForeground(Color.WHITE);
         background.add(p2,Integer.valueOf(1));
 
         JPanel text = new JPanel();
-        text.setBounds(430,420,500,75);
+        text.setBounds(430,430,500,75);
         text.setBackground(Color.GRAY);
         JLabel actualText = new JLabel("Select Your Champion");
         actualText.setFont(selectChamp);
@@ -119,21 +119,21 @@ public class cleanSelectChampion extends JFrame implements ActionListener {
         JButton back = new JButton("Back");
         back.setForeground(Color.blue);
         back.setBackground(Color.WHITE);
-        back.setBounds(410,625,100,30);
+        back.setBounds(410,635,100,30);
         back.setFocusPainted(false);
         background.add(back,Integer.valueOf(1));
 
         JButton start = new JButton("Start");
         start.setForeground(Color.blue);
         start.setBackground(Color.WHITE);
-        start.setBounds(856,625,100,30);
+        start.setBounds(856,635,100,30);
         start.setFocusPainted(false);
         background.add(start,Integer.valueOf(1));
 
         JButton ok = new JButton("OK");
         ok.setForeground(Color.blue);
         ok.setBackground(Color.WHITE);
-        ok.setBounds(633,520,100,100);
+        ok.setBounds(633,530,100,100);
         ok.setFocusPainted(false);
         background.add(ok,Integer.valueOf(1));
 
@@ -150,10 +150,10 @@ public class cleanSelectChampion extends JFrame implements ActionListener {
         champions.add("Electro");
         champions.add("Iceman");
         champions.add("Spiderman");
-        champions.add("Venom");
-        champions.add("Venom");
-        champions.add("Venom");
-        champions.add("Venom");
+        champions.add("Ghost Rider");
+        champions.add("Hulk");
+        champions.add("Ironman");
+        champions.add("Loki");
         champions.add("Venom");
         champions.add("Venom");
         champions.add("Venom");
