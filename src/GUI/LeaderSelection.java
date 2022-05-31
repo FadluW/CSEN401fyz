@@ -92,11 +92,6 @@ public class LeaderSelection extends JFrame{
 					frame.revalidate();
 					if(leader.getText()!="" && leader2.getText()!="") forward.setEnabled(true);
 				}
-
-				private void setText(String string) {
-					// TODO Auto-generated method stub
-					
-				}
 			});
 			panel.add(champion,Integer.valueOf(1));
 			j+=170;
