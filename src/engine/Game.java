@@ -51,7 +51,7 @@ public class Game {
 		return board;
 	}
 
-	public Game(Player firstPlayer, Player secondPlayer) {
+	public Game(Player firstPlayer, Player secondPlayer) throws Exception {
 		this.firstPlayer = firstPlayer;
 		this.secondPlayer = secondPlayer;
 		board = new Object[BOARDHEIGHT][BOARDWIDTH];
@@ -62,6 +62,8 @@ public class Game {
 		turnOrder = new PriorityQueue(MAXCHAMPS);
 		placeChampions();
 		placeCovers();
+		loadAbilities("Abilities.csv");
+		loadChampions("Champions.csv");
 		// prepareChampionTurns();
 	}
 
@@ -373,7 +375,6 @@ public class Game {
 			PriorityQueue temp = new PriorityQueue(MAXCHAMPS);
 			while (!turnOrder.isEmpty()) {
 				if (!(turnOrder.peekMin().equals(target))){
-					Champion test = (Champion) turnOrder.peekMin();
 					temp.insert(turnOrder.remove());
 				}
 				else turnOrder.remove();
@@ -385,6 +386,12 @@ public class Game {
 			if (firstPlayer.getTeam().contains(target)) 
 				firstPlayer.getTeam().remove(target);
 			else secondPlayer.getTeam().remove(target);
+
+			Player winner = checkGameOver();
+			if (winner != null) {
+				if (winner == firstPlayer) /* Throw Winner exception */;
+				else if (winner == secondPlayer);
+			}
 		}
 		// Remove dead cover from board
 		board[(int) target.getLocation().getX()][(int) target.getLocation().getY()] = null;

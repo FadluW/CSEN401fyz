@@ -24,12 +24,14 @@ public class BoardView extends JFrame {
 	public BoardView() {
 		leader=new JLabel("");
 		leader.setText("<html> Current Champion <br> Current HP</html>");
-		leader.setBounds(1100,150,250,300);
+		leader.setBounds(1100,290,225,300);
+		leader.setVerticalAlignment(JLabel.TOP);
+		leader.setOpaque(true);
 		leader.setBackground(Color.white);
 		leader2=new JLabel("");
 		
 		Object[][] testBoard = new Object[5][5];
-		testBoard[1][3] = new AntiHero("Venom", 0, 0, 0, 0, 0, 0);
+		testBoard[1][3] = new AntiHero("Dr Strange", 0, 0, 0, 0, 0, 0);
 		
 		drawBoard(testBoard);
 		
@@ -66,55 +68,63 @@ public class BoardView extends JFrame {
 				}
 				
 				if (board[i][j] instanceof Champion) {
-//					add that champion to this place
-					
+					// add that champion to this place
+					Champion curr = (Champion) board[i][j];
+					ImageIcon champIcon = new ImageIcon("assets/characters/128/" + curr.getName() + ".png", curr.getName());
+					button.setIcon(champIcon);
 					panel2.add(button);
 				}
 			}
 		}
 		
-		panel.addMouseMotionListener(new MouseMotionListener() {
-			
-
-		@Override
-		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseMoved(MouseEvent e) {
-			System.out.print("Button Works");
-			//if (i==100) {
-			leader.setText("<html> Current Champion <br> Current HP</html>");
-			//}
-			//else {leader2.setText("Leader "+ champion.getLocation()+"\n"+"Current HP");
-			//leader2.setBounds(120,i+100,300,50);//}
-			//frame.getContentPane().add(panel2);
-			frame.revalidate();
-			//if(leader.getText()!="" && leader2.getText()!="") forward.setEnabled(true);
-		}
-	});
-		
-		int j =1100;
-		for (int ind = 0; ind < 6; ind++) {
-			j = (ind==3? 1100 : j);
-			ImageIcon btn = new ImageIcon("assets/ui/button_Dr Strange.png");
-			champion = new JLabel(btn);
-			int i = (ind<3? 60 : 160);
-			champion.setBounds(j,i,64,64);
-			champion.addMouseMotionListener(new MouseMotionListener() {
-					
-
+		// Listen for mouse over alive champ
+		panel.addMouseMotionListener(
+			new MouseMotionListener() {
 				@Override
-				public void mouseDragged(MouseEvent e) {
-					// TODO Auto-generated method stub
-					
-				}
+				public void mouseDragged(MouseEvent e) {}
 
 				@Override
 				public void mouseMoved(MouseEvent e) {
-					System.out.print("Button Works");
+					//if (i==100) {
+					leader.setText("<html> Current Champion <br> Current HP</html>");
+					//}
+					//else {leader2.setText("Leader "+ champion.getLocation()+"\n"+"Current HP");
+					//leader2.setBounds(120,i+100,300,50);//}
+					//frame.getContentPane().add(panel2);
+					frame.revalidate();
+					//if(leader.getText()!="" && leader2.getText()!="") forward.setEnabled(true);
+				}
+			}
+		);
+		
+		final int ICON_WIDTH = 75;
+		final int ROWS = 2;
+
+		// for (int i = 0; i < ROWS; i++) {
+		// 	// Fetch team "i"
+
+		// 	for (int j = 0; /*j < team[i].size*/; j++) {
+		// 		// Fetch champion j from team
+		// 		// Champion curr = team.get(j);
+
+		// 		// Fetch Icon of champion
+		// 		// ImageIcon iconChamp = new ImageIcon("assets/characters/64/" + curr.getName() + ".png");
+		// 	}
+		// }
+
+		int j =1100;
+		for (int ind = 0; ind < 6; ind++) {
+			j = (ind==3? 1100 : j);
+			ImageIcon btn = new ImageIcon("assets/characters/64/Dr Strange.png");
+			champion = new JLabel(btn);
+			int i = (ind<3? 100 : 200);
+			champion.setBounds(j,i,64,64);
+			champion.addMouseMotionListener(new MouseMotionListener() {
+				@Override
+				public void mouseDragged(MouseEvent e) {}
+
+				@Override
+				public void mouseMoved(MouseEvent e) {
 					champion = (JLabel) e.getSource();
 					//if (i==100) {
 					leader.setText("<html>Leader "+ champion.getLocation()+"<br> Current HP</html>");
@@ -131,11 +141,11 @@ public class BoardView extends JFrame {
 		}
 		
 		label =  new JLabel("Team 1's Info:");
-		label.setBounds(1100, 20, 350, 50);
+		label.setBounds(1100, 60, 350, 50);
 		//label.setFont(plain);
 		
 		label2 =  new JLabel("Team 2's Info:");
-		label2.setBounds(1100, 120, 350, 50);
+		label2.setBounds(1100, 160, 350, 50);
 		//label2.setFont(plain);
 		
 		

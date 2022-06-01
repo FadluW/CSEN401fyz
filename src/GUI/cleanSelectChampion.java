@@ -1,6 +1,9 @@
 package GUI;
 
 import javax.swing.*;
+
+import model.world.Champion;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +15,7 @@ import java.util.ArrayList;
 
 public class cleanSelectChampion extends JFrame implements ActionListener {
     JLayeredPane background;
-    public cleanSelectChampion() throws IOException, FontFormatException {
+    public cleanSelectChampion(ArrayList<Champion> Champions) throws IOException, FontFormatException {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("Marvel Ultimate War");
         setVisible(true);
@@ -40,7 +43,7 @@ public class cleanSelectChampion extends JFrame implements ActionListener {
         icons.setBounds(358,10,650,390);
         icons.setVisible(true);
         background.add(icons);
-        placeButtons(icons);
+        placeButtons(icons, Champions);
 
         JPanel player1 = new JPanel();
         player1.setBounds(0,510,390,170);
@@ -142,26 +145,26 @@ public class cleanSelectChampion extends JFrame implements ActionListener {
         repaint();
     }
 
-    private void placeButtons(JPanel north) throws IOException {
-        ArrayList<String> champions = new ArrayList<>();
-        champions.add("Captain America");
-        champions.add("Deadpool");
-        champions.add("Dr Strange");
-        champions.add("Electro");
-        champions.add("Iceman");
-        champions.add("Spiderman");
-        champions.add("Ghost Rider");
-        champions.add("Hulk");
-        champions.add("Ironman");
-        champions.add("Loki");
-        champions.add("Venom");
-        champions.add("Venom");
-        champions.add("Venom");
-        champions.add("Venom");
-        champions.add("Venom");
+    private void placeButtons(JPanel north, ArrayList<Champion> Champions) throws IOException {
+        // ArrayList<String> champions = new ArrayList<>();
+        // champions.add("Captain America");
+        // champions.add("Deadpool");
+        // champions.add("Dr Strange");
+        // champions.add("Electro");
+        // champions.add("Iceman");
+        // champions.add("Spiderman");
+        // champions.add("Ghost Rider");
+        // champions.add("Hulk");
+        // champions.add("Ironman");
+        // champions.add("Loki");
+        // champions.add("Venom");
+        // champions.add("Venom");
+        // champions.add("Venom");
+        // champions.add("Venom");
+        // champions.add("Venom");
 
         for(int i = 0; i < 15; i++){
-            ImageIcon btn = new ImageIcon("assets/ui/button_" + champions.get(i) + ".png");
+            ImageIcon btn = new ImageIcon("assets/ui/button_" + Champions.get(i).getName() + ".png");
             JButton button = new JButton(btn);
             button.setBackground(new Color(103,0,0));
             //button.setBorderPainted(false);
@@ -174,7 +177,7 @@ public class cleanSelectChampion extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) throws IOException, FontFormatException {
-        new cleanSelectChampion();
+        // new cleanSelectChampion();
     }
 
     @Override

@@ -11,7 +11,7 @@ public class StartScreen extends JFrame{
 	JLayeredPane panel;
 	JButton begin, quit;
 	Move move;
-	Font font,font2,font3,font4,plain,font5;
+	Font font,font2,font3,font4,plain,font5, font5Big;
 	JTextField field,field2;
 	JLabel label,label2,title,background1;
 	Image image;
@@ -29,6 +29,7 @@ public class StartScreen extends JFrame{
 		catch (IOException e1) {}
 		try {
 			font5 = Font.createFont(Font.TRUETYPE_FONT,new File( "assets/fonts/eight-bit-dragon.otf"));
+			font5Big = font5.deriveFont(Font.PLAIN, 32f);
 			font5 = font5.deriveFont(Font.PLAIN,20f);
 		} 
 		catch (FontFormatException e1) {} 
@@ -47,15 +48,17 @@ public class StartScreen extends JFrame{
 		title.setFont(font3);
 		title.setForeground(Color.green);
 		
-		field = new JTextField();
-		field.setBounds(300, 460, 100, 50);
+		field = new JTextField("Player 1");
+		field.setBounds(300, 460, 325, 100);
 		field.setBackground(new Color(0x9DBFD1));
 		field.setBorder(null);
-		field.setForeground(Color.red);
+		field.setForeground(Color.DARK_GRAY);
+		field.setFont(font5);
+		field.setHorizontalAlignment(JLabel.CENTER);
 		field.requestFocus();
 		
-		field2 = new JTextField();
-		field2.setBounds(950, 460, 100, 50);
+		field2 = new JTextField("Player 2");
+		field2.setBounds(950, 460, 150, 75);
 		field2.setBackground(new Color(0x9DBFD1));
 		field2.setBorder(null);
 		field2.setForeground(Color.red);
@@ -79,7 +82,7 @@ public class StartScreen extends JFrame{
 		begin = new JButton();
 		begin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.print("Button Works");
+				System.out.print("Names Entered");
 				JLayeredPane panel2 = new JLayeredPane();
 				panel2.setBackground(Color.yellow);
 				frame.getContentPane().remove(panel);
