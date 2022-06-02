@@ -2,6 +2,7 @@ package GUI;
 
 import javax.swing.*;
 
+import engine.Game;
 import model.world.Champion;
 
 import java.awt.*;
@@ -13,11 +14,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class cleanSelectChampion extends JLayeredPane implements ActionListener {
-    JLayeredPane background = this;
-    public cleanSelectChampion(ArrayList<Champion> Champions) throws IOException, FontFormatException {
+public class cleanSelectChampion extends JFrame implements ActionListener {
+    JLayeredPane background;
+    public cleanSelectChampion(Game game) throws IOException, FontFormatException {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setTitle("Marvel Ultimate War");
+        setVisible(true);
+        setResizable(false);
+        setBounds(20,20,1366,768);
 
-        
+        ArrayList<Champion> Champions = game.getAvailableChampions();
+
+
+        ImageIcon icon = new ImageIcon("assets/background/Game Start Small.jpg");
+        setIconImage(icon.getImage());
 
         InputStream is = new BufferedInputStream(new FileInputStream("assets/fonts/BlackWidowMovie-d95Rg.ttf"));
         Font blackWidowFont = Font.createFont(Font.TRUETYPE_FONT,is);
@@ -44,8 +54,9 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
         player1.setBackground(Color.red);
         background.add(player1,Integer.valueOf(0));
 
-        JLabel p1 = new JLabel("Player one");
-        p1.setBounds(150,520,390,20);
+        JLabel p1 = new JLabel(game.getFirstPlayer().getName());
+        p1.setHorizontalAlignment(JLabel.CENTER);
+        p1.setBounds(0,520,390,20);
         p1.setVisible(true);
         p1.setFont(player);
         p1.setForeground(Color.WHITE);
@@ -77,8 +88,9 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
         player2.setBackground(Color.blue);
         background.add(player2,Integer.valueOf(0));
 
-        JLabel p2 = new JLabel("Player two");
-        p2.setBounds(1120,520,390,20);
+        JLabel p2 = new JLabel(game.getSecondPlayer().getName());
+        p2.setBounds(970,520,390,20);
+        p2.setHorizontalAlignment(JLabel.CENTER);
         p2.setVisible(true);
         p2.setFont(player);
         p2.setForeground(Color.WHITE);
