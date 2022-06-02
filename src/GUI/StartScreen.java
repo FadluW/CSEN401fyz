@@ -4,8 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
@@ -18,10 +22,12 @@ public class StartScreen extends JFrame{
 	JButton begin, quit;
 	Move move;
 	Font font,font2,font3,font4,plain,font5, font5Big;
-	JTextField field,field2;
+	JTextField field,field2,field0;
 	JLabel label,label2,title,background1,error;
 	Image image;
 	JFrame frame = this;
+	boolean entered2 = false;
+	boolean entered1 = false;
 	GameController control;
 	
 	public StartScreen(GameController control){//JLayeredPane panel, JButton begin, JButton quit) {
@@ -59,7 +65,70 @@ public class StartScreen extends JFrame{
 		title.setFont(font3);
 		title.setForeground(Color.green);
 		
-		field = new JTextField("Player 1");
+
+		field0 = new JTextField(1);
+		field0.setText(" ");
+		field0.setBounds(0, 0,1, 1);
+		field0.setVisible(false);
+		field0.requestFocus();
+		panel.add(field0,Integer.valueOf(1));
+		
+		
+		
+		
+		field = new JTextField(11);
+		field.setText("Player 1");
+		field.setFocusable(false);
+		field.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				field.setFocusable(true);
+				field.requestFocus();
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		field.addFocusListener(new FocusListener() {
+		
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (!entered1) {
+					(field).setText("");
+					entered1 = true;
+				}
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		field.addKeyListener(new KeyListener() {
 
 			@Override
@@ -88,9 +157,60 @@ public class StartScreen extends JFrame{
 		field.setForeground(Color.red);
 		field.setFont(font5);
 		field.setHorizontalAlignment(JLabel.CENTER);
-		field.requestFocus();
 		
+	
 		field2 = new JTextField("Player 2");
+		field2.setFocusable(false);
+		field2.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				field2.setFocusable(true);
+				field2.requestFocus();
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		field2.addFocusListener(new FocusListener() {
+		
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (!entered2) {
+					field2.setText("");
+					entered2 = true;
+				}
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		field2.addKeyListener(new KeyListener() {
 
 			@Override
@@ -119,7 +239,7 @@ public class StartScreen extends JFrame{
 		field2.setFont(font5);
 		field2.setHorizontalAlignment(JLabel.CENTER);
 		field2.setForeground(Color.red);
-		field2.requestFocus();
+		
 		
 		error = new JLabel("Please enter both players' names first!");
 		error.setOpaque(true);
@@ -179,13 +299,28 @@ public class StartScreen extends JFrame{
 		begin.setText("Start");
 		begin.setBounds(726,600,175,70);
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		//panel.add(background1,Integer.valueOf(0));
 		panel.add(move,Integer.valueOf(0));
 		//panel.add(title,Integer.valueOf(2));
 		panel.add(label,Integer.valueOf(1));
 		panel.add(label2,Integer.valueOf(1));
-		panel.add(field,Integer.valueOf(1));
 		panel.add(field2,Integer.valueOf(1));
+		panel.add(field,Integer.valueOf(1));
 		panel.add(begin,Integer.valueOf(1));
 		panel.add(quit,Integer.valueOf(1));
 		panel.add(error,Integer.valueOf(2));

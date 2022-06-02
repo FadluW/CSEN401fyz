@@ -14,13 +14,13 @@ public class GameController {
     StartScreen screen;
 
     public GameController() throws Exception {
-    	screen = new StartScreen(this);
-//    	player1 = new Player("Joey");
-//		player2 = new Player("Fadl");
-//		
-//			currentGame = new Game(player1, player2);
-//		
-//    	new cleanSelectChampions(currentGame.getAvailableChampions());
+    	//screen = new StartScreen(this);
+    	player1 = new Player("Joey");
+		player2 = new Player("Fadl");
+		
+			currentGame = new Game(player1, player2);
+		
+    	new cleanSelectChampions(currentGame.getAvailableChampions());
     }
 
     public void setGame(Game game) {
@@ -34,7 +34,7 @@ public class GameController {
 	public class BeginListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(((screen.getField()).equals("") || screen.getField2().equals("") || screen.getField().equals("Player 1") || screen.getField2().equals("Player 2"))){
+			if(((screen.getField()).equals("") || screen.getField2().equals(""))){
 				System.out.println("Button Works");
 				screen.getError().setVisible(true);
 				screen.repaint();

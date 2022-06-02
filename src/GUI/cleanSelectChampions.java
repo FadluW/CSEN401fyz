@@ -15,8 +15,11 @@ import java.util.ArrayList;
 
 public class cleanSelectChampions extends JFrame implements ActionListener {
 	Move move = new Move();
-	JButton champion;
+	JButton champion,current,ok;
 	int counter = 0;
+	JPanel champs1;
+	JPanel champs2;
+	ImageIcon img;
 	
     JLayeredPane background=new JLayeredPane(); //= this;
     public cleanSelectChampions(ArrayList<Champion> Champions) throws IOException, FontFormatException {
@@ -27,7 +30,7 @@ public class cleanSelectChampions extends JFrame implements ActionListener {
 		this.setVisible(true);
 		this.setResizable(false);
 		
-		
+		current = new JButton();
 		move.setBounds(0,0,1366, 768);
 
         InputStream is = new BufferedInputStream(new FileInputStream("assets/fonts/BlackWidowMovie-d95Rg.ttf"));
@@ -66,35 +69,64 @@ public class cleanSelectChampions extends JFrame implements ActionListener {
 //        JLabel champ2 = new JLabel(spiderman);
 //
 //        ImageIcon captainAmerica = new ImageIcon("assets/ui/button_Captain America.png");
-//        JLabel champ3 = new JLabel(captainAmerica);
-
-        int j = 0;
-		for (int ind = 0; ind < 6; ind++) {
-			j = (ind == 3? 976 : j);
+//        JLabel champ3 = new JLabel(captainAmerica);JPanel champs1 = new JPanel();
+        champs1 = new JPanel();
+        champs1.setBackground(Color.blue);
+        champs1.setLayout(new GridLayout(0,3));
+		
+//			//champion.addActionListener(new MyPlayListener());
+//			champion.setBackground(color);
+//			champion.setEnabled(false
+        champs1.setBounds(0,550,390,130);
+        champs1.setVisible(true);
+        background.add(champs1,Integer.valueOf(2));
+        
+        champs2 = new JPanel();
+        champs2.setBackground(Color.red);
+        champs2.setLayout(new GridLayout(0,3));;
+        champs2.setBounds(976,550,390,130);
+        champs2.setVisible(true);
+        background.add(champs2,Integer.valueOf(2));
+        
+        for (int ind = 0; ind < 6; ind++) {
 			Color color = (ind < 3? Color.blue/*new Color(0,56,98)*/ : Color.red);
+			JPanel one = (ind < 3? champs1/*new Color(0,56,98)*/ : champs2);
 			champion = new JButton();
 			//champion.addActionListener(new MyPlayListener());
 			champion.setBackground(color);
-			champion.setEnabled(false);
-			//int i = (ind<3? 100 : 500);
-			champion.setBounds(j,550,130,130);
-//			champion.addActionListener(new ActionListener() {
-//				public void actionPerformed(ActionEvent e) {
-//					System.out.print("Button Works");
-//					champion = (JButton) e.getSource();
-//					if (i==100) {
-//					leader.setText("Leader "+ champion.getLocation());
-//					leader.setBounds(120,i+100,300,50);}
-//					else {leader2.setText("Leader "+ champion.getLocation());
-//					leader2.setBounds(120,i+100,300,50);}
-//					//frame.getContentPane().add(panel2);
-//					frame.revalidate();
-//					if(leader.getText()!="" && leader2.getText()!="") forward.setEnabled(true);
-//				}
-//			});
-			background.add(champion,Integer.valueOf(1));
-			j+=130;
-		}
+			//champion.setEnabled(false);
+			one.add((champion));
+        
+        }
+
+//        int j = 0;
+//		for (int ind = 0; ind < 6; ind++) {
+//			j = (ind == 3? 976 : j);
+//			Color color = (ind < 3? Color.blue/*new Color(0,56,98)*/ : Color.red);
+//			champion = new JButton();
+//			//champion.addActionListener(new MyPlayListener());
+//			champion.setBackground(color);
+//			champion.setEnabled(false);
+//			champion.setName(""+ind);
+//			//int i = (ind<3? 100 : 500);
+//			champion.setBounds(j,550,130,130);
+////			champion.addActionListener(new ActionListener() {
+////				public void actionPerformed(ActionEvent e) {
+////					System.out.print("Button Works");
+////					champion = (JButton) e.getSource();
+////					if (i==100) {
+////					leader.setText("Leader "+ champion.getLocation());
+////					leader.setBounds(120,i+100,300,50);}
+////					else {leader2.setText("Leader "+ champion.getLocation());
+////					leader2.setBounds(120,i+100,300,50);}
+////					//frame.getContentPane().add(panel2);
+////					frame.revalidate();
+////					if(leader.getText()!="" && leader2.getText()!="") forward.setEnabled(true);
+////				}
+////			});
+//			background.add(champion,Integer.valueOf(1));
+//			j+=130;
+//		}
         
         JLabel p2 = new JLabel("Player two");
         p2.setBounds(1120,520,390,20);
@@ -138,19 +170,40 @@ public class cleanSelectChampions extends JFrame implements ActionListener {
 //        back.setFocusPainted(false);
 //        background.add(back,Integer.valueOf(1));
 //
-//        JButton start = new JButton("Start");
-//        start.setForeground(Color.blue);
-//        start.setBackground(Color.WHITE);
-//        start.setBounds(856,635,100,30);
-//        start.setFocusPainted(false);
-//        background.add(start,Integer.valueOf(1));
+        JButton start = new JButton("Start");
+        start.setForeground(Color.blue);
+        start.setBackground(Color.WHITE);
+        start.setBounds(856,635,100,30);
+        start.setFocusPainted(false);
+        start.setEnabled(false);
+        background.add(start,Integer.valueOf(1));
 //
-//        JButton ok = new JButton("OK");
-//        ok.setForeground(Color.blue);
-//        ok.setBackground(Color.WHITE);
-//        ok.setBounds(633,530,100,100);
-//        ok.setFocusPainted(false);
-//        background.add(ok,Integer.valueOf(1));
+        ok = new JButton("OK");
+        ok.setForeground(Color.blue);
+        ok.setBackground(Color.WHITE);
+        ok.setBounds(633,530,100,100);
+        ok.setFocusPainted(false);
+        ok.setEnabled(false);
+        ok.setFont(blackWidowFont);
+        ok.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				counter+=1;
+				if (counter ==6) 
+					start.setEnabled(true);
+				else	
+					current.setEnabled(false);
+				ok.setEnabled(false);
+				current.setForeground(Color.green);
+//				current.setDisabledIcon(img);
+//				current.setForeground(Color.red);
+				//ok.ena
+			}
+        	
+        });
+        background.add(ok,Integer.valueOf(1));
 
 
         revalidate();
@@ -182,7 +235,35 @@ public class cleanSelectChampions extends JFrame implements ActionListener {
             button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 				System.out.print("Button Works");
-				champion = (JButton) e.getSource();
+				img = (ImageIcon) ((JButton) (e.getSource())).getIcon();
+				switch (counter) {
+					case 0:
+						((JButton)(champs1.getComponent(0))).setIcon(img);
+						break;
+					case 1:
+						((JButton)(champs2.getComponent(0))).setIcon(img);
+						break;
+					case 2:
+						((JButton)(champs1.getComponent(1))).setIcon(img);
+						break;
+					case 3:
+						((JButton)(champs2.getComponent(1))).setIcon(img);
+						break;
+					case 4:
+						((JButton)(champs1.getComponent(2))).setIcon(img);
+						break;
+					case 5:
+						((JButton)(champs2.getComponent(2))).setIcon(img);
+						break;
+					default :
+						return;
+				}
+					current = ((JButton) (e.getSource()));
+					ok.setEnabled(true);
+						
+				}
+				//background.get
+				//counter+=1;
 //				if (i==100) {
 //				leader.setText("Leader "+ champion.getLocation());
 //				leader.setBounds(120,i+100,300,50);}
@@ -191,7 +272,6 @@ public class cleanSelectChampions extends JFrame implements ActionListener {
 //				//frame.getContentPane().add(panel2);
 //				frame.revalidate();
 //				if(leader.getText()!="" && leader2.getText()!="") forward.setEnabled(true);
-			}
 		});
             //button.setBorderPainted(false);
             button.setFocusPainted(false);
