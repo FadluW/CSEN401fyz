@@ -13,27 +13,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class cleanSelectChampion extends JFrame implements ActionListener {
-    JLayeredPane background;
+public class cleanSelectChampion extends JLayeredPane implements ActionListener {
+    JLayeredPane background = this;
     public cleanSelectChampion(ArrayList<Champion> Champions) throws IOException, FontFormatException {
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setTitle("Marvel Ultimate War");
-        setVisible(true);
-        setResizable(false);
-        setBounds(20,20,1366,768);
 
-        ImageIcon icon = new ImageIcon("assets/background/Game Start Small.jpg");
-        setIconImage(icon.getImage());
+        
 
         InputStream is = new BufferedInputStream(new FileInputStream("assets/fonts/BlackWidowMovie-d95Rg.ttf"));
         Font blackWidowFont = Font.createFont(Font.TRUETYPE_FONT,is);
         Font selectChamp = blackWidowFont.deriveFont(45f);
         Font player = blackWidowFont.deriveFont(20f);
 
-        background = new JLayeredPane();
         background.setBounds(0,0,1366,768);
-        getContentPane().setBackground(new Color(103,0,0));
-        add(background);
+        setBackground(new Color(103,0,0));
+        //add(background);
         setLayout(null);
         background.setVisible(true);
 
