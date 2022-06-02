@@ -34,10 +34,9 @@ public class cleanSelectChampion extends JFrame implements ActionListener {
         Font selectChamp = blackWidowFont.deriveFont(45f);
         Font player = blackWidowFont.deriveFont(20f);
 
-        background = new JLayeredPane();
         background.setBounds(0,0,1366,768);
-        getContentPane().setBackground(new Color(103,0,0));
-        add(background);
+        setBackground(new Color(103,0,0));
+        //add(background);
         setLayout(null);
         background.setVisible(true);
 

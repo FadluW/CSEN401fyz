@@ -4,8 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+
+import controller.GameController;
+import controller.GameController.BeginListener;
 
 public class StartScreen extends JFrame{
 	JLayeredPane panel;
@@ -13,12 +19,17 @@ public class StartScreen extends JFrame{
 	Move move;
 	Font font,font2,font3,font4,plain,font5, font5Big;
 	JTextField field,field2;
-	JLabel label,label2,title,background1;
+	JLabel label,label2,title,background1,error;
 	Image image;
 	JFrame frame = this;
+	GameController control;
 	
-	public StartScreen(){//JLayeredPane panel, JButton begin, JButton quit) {
+	public StartScreen(GameController control){//JLayeredPane panel, JButton begin, JButton quit) {
 		
+		
+		ImageIcon icon = new ImageIcon("assets/background/Game Start Small.jpg");
+        setIconImage(icon.getImage());
+		this.control = control;
 		//JFrame frame = this;
 		panel = new JLayeredPane();
 		try {
@@ -49,29 +60,90 @@ public class StartScreen extends JFrame{
 		title.setForeground(Color.green);
 		
 		field = new JTextField("Player 1");
-		field.setBounds(300, 460, 325, 100);
-		field.setBackground(new Color(0x9DBFD1));
-		field.setBorder(null);
-		field.setForeground(Color.DARK_GRAY);
+		field.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (field.getText().length()>=11)
+				field.setText(field.getText().substring(0, 10));
+				
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		field.setBounds(250, 530,200, 50);
+		field.setBackground(Color.yellow);
+		field.setOpaque(true);
+		field.setForeground(Color.red);
 		field.setFont(font5);
 		field.setHorizontalAlignment(JLabel.CENTER);
 		field.requestFocus();
 		
 		field2 = new JTextField("Player 2");
-		field2.setBounds(950, 460, 150, 75);
-		field2.setBackground(new Color(0x9DBFD1));
-		field2.setBorder(null);
+		field2.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (field2.getText().length()>=11)
+				field2.setText(field2.getText().substring(0, 10));
+				
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		field2.setBounds(916, 530, 200, 50);
+		field2.setOpaque(true);
+		field2.setBackground(Color.yellow);
+		field2.setFont(font5);
+		field2.setHorizontalAlignment(JLabel.CENTER);
 		field2.setForeground(Color.red);
 		field2.requestFocus();
 		
+		error = new JLabel("Please enter both players' names first!");
+		error.setOpaque(true);
+		error.setBackground(Color.black);
+		error.setBounds((380),350, 580, 100);
+		error.setForeground(Color.red);
+		error.setFont(plain);
+		error.setHorizontalAlignment(0);
+		error.setVisible(false);
+		
 		label =  new JLabel("First Player's name:");
-		label.setBounds(300, 400, 190, 50);
+		label.setOpaque(true);
+		label.setBackground(Color.red);
+		label.setBounds(200, 450, 300, 50);
 		label.setFont(plain);
+		label.setHorizontalAlignment(0);
 		//label.setForeground(new Color(0x9DBFD1));
 		
 		label2 =  new JLabel("Second Player's name:");
-		label2.setBounds(950, 400, 210, 50);
+		label2.setOpaque(true);
+		label2.setBackground(Color.red);
+		label2.setBounds(866, 450, 300, 50);
 		label2.setFont(plain);
+		label2.setHorizontalAlignment(0);
 		
 		background1 = new JLabel();
 		//background1.setFont(font3);
@@ -79,48 +151,33 @@ public class StartScreen extends JFrame{
 		background1.setBackground(Color.white);
 		background1.setBounds(0, 0, 1366, 768);
 		
-		begin = new JButton();
-		begin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.print("Names Entered");
-				JLayeredPane panel2 = new JLayeredPane();
-				panel2.setBackground(Color.yellow);
-				frame.getContentPane().remove(panel);
-				frame.getContentPane().add(panel2);
-				frame.revalidate();
-				//label.setText("HI");
-			}
-		});
-		//begin.addActionListener(new MyButtonListener());
-		begin.setOpaque(false);
-		begin.setContentAreaFilled(false);
-		begin.setBorderPainted(false);
-		begin.setFocusPainted(false);
-		begin.setFont(font5);
-		begin.setText("Start");
-		begin.setBounds(465,570,175,70);
-		
 		quit = new JButton();
 		quit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.print("Button Works");
-				JLayeredPane panel2 = new JLayeredPane();
-				panel2.setBackground(Color.yellow);
-				frame.getContentPane().remove(panel);
-				frame.getContentPane().add(panel2);
-				frame.revalidate();
-				//label.setText("HI");
+				frame.dispatchEvent(new WindowEvent(frame,WindowEvent.WINDOW_CLOSING));
 			}
 		});
-		//quit.addActionListener(new MyPlayListener());
-		//quit.setBackground(Color.white);
+		
+		//quit.addActionListener(new MyButtonListener());
 		quit.setOpaque(false);
 		quit.setContentAreaFilled(false);
 		quit.setBorderPainted(false);
 		quit.setFocusPainted(false);
 		quit.setFont(font5);
 		quit.setText("Quit");
-		quit.setBounds(726,570,175,70);
+		quit.setBounds(465,600,175,70);
+		
+		begin = new JButton();
+		begin.addActionListener(control.new BeginListener());
+		//begin.addActionListener(new MyPlayListener());
+		//begin.setBackground(Color.white);
+		begin.setOpaque(false);
+		begin.setContentAreaFilled(false);
+		begin.setBorderPainted(false);
+		begin.setFocusPainted(false);
+		begin.setFont(font5);
+		begin.setText("Start");
+		begin.setBounds(726,600,175,70);
 		
 		//panel.add(background1,Integer.valueOf(0));
 		panel.add(move,Integer.valueOf(0));
@@ -131,6 +188,7 @@ public class StartScreen extends JFrame{
 		panel.add(field2,Integer.valueOf(1));
 		panel.add(begin,Integer.valueOf(1));
 		panel.add(quit,Integer.valueOf(1));
+		panel.add(error,Integer.valueOf(2));
 		
 		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
 		this.getContentPane().add(panel);	
@@ -140,6 +198,20 @@ public class StartScreen extends JFrame{
 		this.setResizable(false);
 		
 	}
+	public JLayeredPane getPanel() {
+		return panel;
+	}
+	public JLabel getError() {
+		return error;
+	}
+	public String getField() {
+		return field.getText();
+	}
+
+	public String getField2() {
+		return field2.getText();
+	}
+
 	public class Move extends JPanel{
 		public void paintComponent(Graphics g) {
 			ImageIcon image = new ImageIcon("assets/background/Game Start Small.jpg");
@@ -152,8 +224,8 @@ public class StartScreen extends JFrame{
 			//frame.pack();
 			g2.setColor(Color.red);
 			//g2.drawRoundRect( 465, 570, 175, 70, 10, 10);
-			g2.fillRoundRect(  465, 570, 175, 70, 30, 30);
-			g2.fillRoundRect( 726, 570, 175, 70, 30, 30);
+			g2.fillRoundRect(  465, 600, 175, 70, 30, 30);
+			g2.fillRoundRect( 726, 600, 175, 70, 30, 30);
 		}
 	}
 	
@@ -163,8 +235,8 @@ public class StartScreen extends JFrame{
 //		
 //	}
 //}
-	public static void main(String[] args) {
-		StartScreen start = new StartScreen();
-	}
+////	public static void main(String[] args) {
+////		StartScreen start = new StartScreen(null);
+////	}
 }
 

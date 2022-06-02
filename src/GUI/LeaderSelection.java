@@ -52,7 +52,7 @@ public class LeaderSelection extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				System.out.print("Button Worked");
 				JLayeredPane panel2 = new JLayeredPane();
-				panel2.setBackground(Color.yellow);
+				panel2.setBackground(new Color(231,154,32));
 				frame.getContentPane().remove(panel);
 				frame.getContentPane().add(panel2);
 				frame.revalidate();
@@ -67,16 +67,17 @@ public class LeaderSelection extends JFrame{
 		forward.setFont(font);
 		forward.setBounds(1000,570,175,70);
 		forward.setText("Continue..");
+		//forword.setforeground()
 		//forward.disable();
 		forward.setEnabled(false);
 		
 		
-		int j =473;
+		int j = 438;
 		for (int ind = 0; ind < 6; ind++) {
-			j = (ind==3? 473 : j);
+			j = (ind == 3? 438 : j);
 			champion = new JButton();
 			//champion.addActionListener(new MyPlayListener());
-			champion.setBackground(Color.black);
+			champion.setBackground(new Color(49,145,237));
 			int i = (ind<3? 100 : 500);
 			champion.setBounds(j,i,150,150);
 			champion.addActionListener(new ActionListener() {
@@ -97,10 +98,10 @@ public class LeaderSelection extends JFrame{
 			j+=170;
 		}
 		
-		title = new JLabel("Select your leader!!!");
-		title.setBounds(460, 260, 600, 200);
+		title = new JLabel("Select Your Leader");
+		title.setBounds(438, 260, 600, 200);
 		title.setFont(font3);
-		title.setForeground(Color.green);
+		title.setForeground(new Color(245,162,41));
 		
 		label =  new JLabel("First Player's Leader");
 		label.setBounds(100, 150, 350, 50);
@@ -120,7 +121,7 @@ public class LeaderSelection extends JFrame{
 		
 		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
 		this.getContentPane().add(panel);	
-		this.getContentPane().setBackground(Color.black);
+		this.getContentPane().setBackground(new Color(122,66,148));
 		this.setSize(1366,768);
 		this.setVisible(true);
 		this.setResizable(false);
@@ -139,7 +140,7 @@ public class LeaderSelection extends JFrame{
 //			g2.fillRect(0, 0, 1366, 768);
 			//g2.drawImage(zeina, 0, 0, 	1366, 768, null);
 			//frame.pack();
-			g2.setColor(Color.yellow);
+			g2.setColor(new Color(231,154,32));
 			//g2.drawRoundRect( 465, 570, 175, 70, 10, 10);
 			g2.fillRoundRect(  1000,570, 175, 70, 30, 30);
 			//g2.fillRoundRect( 726, 570, 175, 70, 30, 30);
