@@ -14,13 +14,13 @@ public class GameController {
     StartScreen screen;
 
     public GameController() throws Exception {
-    	//screen = new StartScreen(this);
-    	player1 = new Player("Joey");
-		player2 = new Player("Fadl");
-		
-			currentGame = new Game(player1, player2);
-		
-    	new cleanSelectChampions(currentGame.getAvailableChampions());
+    	screen = new StartScreen(this);
+//    	player1 = new Player("Joey");
+//		player2 = new Player("Fadl");
+//		
+//			currentGame = new Game(player1, player2);
+//		
+//    	new cleanSelectChampions(currentGame.getAvailableChampions());
     }
 
     public void setGame(Game game) {
@@ -62,7 +62,7 @@ public class GameController {
 				screen.revalidate();
 				screen.repaint();
 				try {
-					screen.getContentPane().add((new cleanSelectChampion(currentGame.getAvailableChampions())));
+					screen.getContentPane().add((new cleanSelectChampion(currentGame, currentGame.getAvailableChampions())));
 					screen.revalidate();
 					screen.repaint();
 				} catch (IOException | FontFormatException e1) {

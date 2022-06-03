@@ -1,6 +1,7 @@
 package GUI;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
 import model.world.Champion;
 
@@ -8,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +22,7 @@ public class cleanSelectChampions extends JFrame implements ActionListener {
 	JPanel champs1;
 	JPanel champs2;
 	ImageIcon img;
+	Font font,font2,font3,font4,font5,font5Big,plain,font5Small;
 	
     JLayeredPane background=new JLayeredPane(); //= this;
     public cleanSelectChampions(ArrayList<Champion> Champions) throws IOException, FontFormatException {
@@ -32,6 +35,26 @@ public class cleanSelectChampions extends JFrame implements ActionListener {
 		
 		current = new JButton();
 		move.setBounds(0,0,1366, 768);
+		
+		try {
+			font4 = Font.createFont(Font.TRUETYPE_FONT,new File( "assets/fonts/Super Webcomic Bros. Bold Italic.ttf"));
+			plain = font4.deriveFont(Font.PLAIN,20f);
+		} 
+		catch (FontFormatException e1) {} 
+		catch (IOException e1) {}
+		try {
+			font5 = Font.createFont(Font.TRUETYPE_FONT,new File( "assets/fonts/eight-bit-dragon.otf"));
+			font5Big = font5.deriveFont(Font.PLAIN, 32f);
+			font5Small = font5.deriveFont(Font.PLAIN,14f);
+			font5 = font5.deriveFont(Font.PLAIN,20f);
+			
+		} 
+		catch (FontFormatException e1) {} 
+		catch (IOException e1) {}
+		
+		font = new Font("serif",Font.ITALIC + Font.BOLD,30);
+		font2 = new Font("serif", Font.BOLD,20);
+		font3 = new Font("serif", Font.BOLD,70);
 
         InputStream is = new BufferedInputStream(new FileInputStream("assets/fonts/BlackWidowMovie-d95Rg.ttf"));
         Font blackWidowFont = Font.createFont(Font.TRUETYPE_FONT,is);
@@ -71,25 +94,25 @@ public class cleanSelectChampions extends JFrame implements ActionListener {
 //        ImageIcon captainAmerica = new ImageIcon("assets/ui/button_Captain America.png");
 //        JLabel champ3 = new JLabel(captainAmerica);JPanel champs1 = new JPanel();
         champs1 = new JPanel();
-        champs1.setBackground(Color.blue);
+        champs1.setBackground(new Color(0,56,98));
         champs1.setLayout(new GridLayout(0,3));
 		
 //			//champion.addActionListener(new MyPlayListener());
 //			champion.setBackground(color);
 //			champion.setEnabled(false
-        champs1.setBounds(0,550,390,130);
+        champs1.setBounds(1,550,390,130);
         champs1.setVisible(true);
         background.add(champs1,Integer.valueOf(2));
         
         champs2 = new JPanel();
-        champs2.setBackground(Color.red);
+        champs2.setBackground(new Color(103,0,0));
         champs2.setLayout(new GridLayout(0,3));;
-        champs2.setBounds(976,550,390,130);
+        champs2.setBounds(962,550,390,130);
         champs2.setVisible(true);
         background.add(champs2,Integer.valueOf(2));
         
         for (int ind = 0; ind < 6; ind++) {
-			Color color = (ind < 3? Color.blue/*new Color(0,56,98)*/ : Color.red);
+			Color color = (ind < 3? new Color(0x0d0f26) :  new Color(0x48142a));
 			JPanel one = (ind < 3? champs1/*new Color(0,56,98)*/ : champs2);
 			champion = new JButton();
 			//champion.addActionListener(new MyPlayListener());
@@ -138,12 +161,15 @@ public class cleanSelectChampions extends JFrame implements ActionListener {
 //        JPanel text = new JPanel();
 //        text.setBounds(430,430,500,75);
 //        text.setBackground(Color.GRAY);
-//        JLabel actualText = new JLabel("Select Your Champion");
-//        actualText.setFont(selectChamp);
-//        actualText.setForeground(Color.cyan);
-//        actualText.setVerticalAlignment((int) CENTER_ALIGNMENT);
-//        text.add(actualText);
-//        background.add(text);
+        JLabel actualText = new JLabel("Select Your Champion");
+        actualText.setBounds(430,430,500,75);
+        actualText.setFont(selectChamp);
+        Border empty = BorderFactory.createDashedBorder(new Color(0x440931), 4, 20, 5, true);
+        //Border empty = BorderFactory.
+        actualText.setBorder(empty);
+        actualText.setForeground(new Color(0x1d916f));
+        actualText.setHorizontalAlignment((int) CENTER_ALIGNMENT);
+        background.add(actualText,Integer.valueOf(1));
 //
 //        JPanel info1 = new JPanel();
 //        info1.setBounds(54,45,250,300);
@@ -163,39 +189,50 @@ public class cleanSelectChampions extends JFrame implements ActionListener {
 //        info2.add(test2);
 //        background.add(info2);
 //
-//        JButton back = new JButton("Back");
-//        back.setForeground(Color.blue);
-//        back.setBackground(Color.WHITE);
-//        back.setBounds(410,635,100,30);
-//        back.setFocusPainted(false);
-//        background.add(back,Integer.valueOf(1));
+        JButton back = new JButton("Back");
+        back.setForeground(Color.red/*new Color(0xeeff00)*/);
+        back.setBackground(new Color(0x440931));
+        back.setBounds(412,635,100,30);
+        back.setFocusPainted(false);
+        back.setBorder(BorderFactory.createLineBorder(new Color(/*0x8a8a8a*/0xeeff00),3));
+        back.setFont(font5Small);
+        background.add(back,Integer.valueOf(1));
 //
-        JButton start = new JButton("Start");
-        start.setForeground(Color.blue);
-        start.setBackground(Color.WHITE);
-        start.setBounds(856,635,100,30);
+        JButton start = new JButton("Next");
+        start.setForeground(/*new Color(0xeeff00)*/Color.green);
+        start.setBackground(new Color(0x440931));
+        start.setBounds(843,635,100,30);
         start.setFocusPainted(false);
         start.setEnabled(false);
+        start.setFont(font5Small);
+        //start.setEnabled(true);
+		start.setBorder(BorderFactory.createLineBorder(new Color(0x8a8a8a),3));
         background.add(start,Integer.valueOf(1));
 //
         ok = new JButton("OK");
-        ok.setForeground(Color.blue);
-        ok.setBackground(Color.WHITE);
-        ok.setBounds(633,530,100,100);
+        ok.setForeground(new Color(0x4cbdf0));
+        ok.setOpaque(true);
+        ok.setBackground(new Color(0x11173c)/*new Color(0,56,98)*/);
+        ok.setBounds(635,530,100,100);
         ok.setFocusPainted(false);
         ok.setEnabled(false);
-        ok.setFont(blackWidowFont);
+        ok.setFont(font5Big);
+        ok.setBorder(BorderFactory.createLineBorder(new Color(0x8a8a8a),3));
+        Border border = ok.getBorder();
         ok.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				counter+=1;
-				if (counter ==6) 
+				if (counter ==6) {
 					start.setEnabled(true);
+					start.setBorder(BorderFactory.createLineBorder(new Color(/*0x8a8a8a*/0xeeff00),3));
+				}
 				else	
 					current.setEnabled(false);
 				ok.setEnabled(false);
+				ok.setBorder(border);
 				current.setForeground(Color.green);
 //				current.setDisabledIcon(img);
 //				current.setForeground(Color.red);
@@ -260,6 +297,8 @@ public class cleanSelectChampions extends JFrame implements ActionListener {
 				}
 					current = ((JButton) (e.getSource()));
 					ok.setEnabled(true);
+					ok.setBorder(BorderFactory.createLineBorder(new Color(0x4cbdf0),5));
+					//ok.setb
 						
 				}
 				//background.get
@@ -296,16 +335,18 @@ public class cleanSelectChampions extends JFrame implements ActionListener {
 //			ImageIcon image = new ImageIcon("assets/background/Game Start Small.jpg");
 //			Image zeina = image.getImage();
 			Graphics2D g2 = (Graphics2D) g;
-//			GradientPaint gradient = new GradientPaint(0,0,Color.cyan,1366,768,Color.blue);
-//			g2.setPaint(gradient);
-//			g2.fillRect(0, 0, 1366, 768);
+			//GradientPaint gradient = new GradientPaint(1366/2,768,new Color(0x590303),1366/2,0,new Color(0xf80707));
+			GradientPaint gradient = new GradientPaint(1366/2,768/2+100,new Color(0x050505),1366/2,0,new Color(0x9e9e9e));
+			//GradientPaint gradient = new GradientPaint(0,0,new Color(0x44000B),1366,768,new Color(0xE0455F));
+			g2.setPaint(gradient);
+			g2.fillRect(0, 0, 1366, 768);
 			//g2.drawImage(zeina, 0, 0, 	1366, 768, null);
 			//frame.pack();
-			g2.setColor(Color.red);
+			g2.setColor(new Color(0x48142a));
 			//g2.drawRoundRect( 465, 570, 175, 70, 10, 10);
-			g2.fillRect(0,510,390,170);
-			g2.setColor(Color.blue);
-			g2.fillRect(976,510,390,170);
+			g2.fillRect(1,510,390,170);
+			g2.setColor(new Color(0x0d0f26));
+			g2.fillRect(962,510,390,170);
 			//g2.fillRoundRect( 726, 570, 175, 70, 30, 30);
 		}
 	}

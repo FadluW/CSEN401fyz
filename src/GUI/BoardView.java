@@ -1,7 +1,6 @@
 package GUI;
 
 import java.awt.*;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -19,9 +18,11 @@ public class BoardView extends JFrame {
 	JLabel champion,label,label2,leader,leader2;
 	JLayeredPane panel = new JLayeredPane();
 	JFrame frame = this;
+	Move move = new Move();
 	
 	
 	public BoardView() {
+		move.setSize(1366,768);
 		leader=new JLabel("");
 		leader.setText("<html> Current Champion <br> Current HP</html>");
 		leader.setBounds(1100,290,225,300);
@@ -149,13 +150,31 @@ public class BoardView extends JFrame {
 		//label2.setFont(plain);
 		
 		
-		panel.add(panel2,Integer.valueOf(0));
-		panel.add(label,Integer.valueOf(0));
-		panel.add(label2,Integer.valueOf(0));
-		panel.add(leader,Integer.valueOf(0));
+		panel.add(panel2,Integer.valueOf(1));
+		panel.add(label,Integer.valueOf(1));
+		panel.add(label2,Integer.valueOf(1));
+		panel.add(leader,Integer.valueOf(1));
+		panel.add(move,Integer.valueOf(0));
 	}
 	
 	public static void main(String[] args) {
 		BoardView view = new BoardView();
+	}
+	
+	public class Move extends JPanel{
+		public void paintComponent(Graphics g) {
+			ImageIcon image = new ImageIcon("assets/background/Board_grass.jpg");
+			Image zeina = image.getImage();
+			Graphics2D g2 = (Graphics2D) g;
+//			GradientPaint gradient = new GradientPaint(0,0,Color.cyan,1366,768,Color.blue);
+//			g2.setPaint(gradient);
+//			g2.fillRect(0, 0, 1366, 768);
+			g2.drawImage(zeina, 0, 0, 	1366, 768, null);
+			//frame.pack();
+			//g2.setColor(Color.red);
+			//g2.drawRoundRect( 465, 570, 175, 70, 10, 10);
+			///g2.fillRoundRect(  465, 600, 175, 70, 30, 30);
+			//g2.fillRoundRect( 726, 600, 175, 70, 30, 30);
+		}
 	}
 }
