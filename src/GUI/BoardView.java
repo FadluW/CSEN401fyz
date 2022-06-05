@@ -89,11 +89,11 @@ public class BoardView extends JFrame {
 					//if (i==100) {
 					leader.setText("<html> Current Champion <br> Current HP</html>");
 					//}
-					//else {leader2.setText("Leader "+ champion.getLocation()+"\n"+"Current HP");
-					//leader2.setBounds(120,i+100,300,50);//}
+					//else {queue.setText("Leader "+ champion.getLocation()+"\n"+"Current HP");
+					//queue.setBounds(120,i+100,300,50);//}
 					//frame.getContentPane().add(panel2);
 					frame.revalidate();
-					//if(leader.getText()!="" && leader2.getText()!="") forward.setEnabled(true);
+					//if(leader.getText()!="" && queue.getText()!="") forward.setEnabled(true);
 				}
 			}
 		);
@@ -130,29 +130,40 @@ public class BoardView extends JFrame {
 					//if (i==100) {
 					leader.setText("<html>Leader "+ champion.getLocation()+"<br> Current HP</html>");
 					//}
-					//else {leader2.setText("Leader "+ champion.getLocation()+"\n"+"Current HP");
-					//leader2.setBounds(120,i+100,300,50);//}
+					//else {queue.setText("Leader "+ champion.getLocation()+"\n"+"Current HP");
+					//queue.setBounds(120,i+100,300,50);//}
 					//frame.getContentPane().add(panel2);
 					frame.revalidate();
-					//if(leader.getText()!="" && leader2.getText()!="") forward.setEnabled(true);
+					//if(leader.getText()!="" && queue.getText()!="") forward.setEnabled(true);
 				}
 			});
 			panel.add(champion,Integer.valueOf(0));
 			j+=75;
 		}
+
+		JPanel p1 = new JPanel();
+		p1.setBounds(1100, 60, 90, 35);
+		p1.setBackground(Color.white);
 		
 		label =  new JLabel("Team 1's Info:");
-		label.setBounds(1100, 60, 350, 50);
-		//label.setFont(plain);
-		
+		label.setBounds(1100, 60, 100, 30);
+		label.setHorizontalAlignment(JLabel.LEFT);
+
+		JPanel p2 = new JPanel();
+		p2.setBounds(1100, 160, 90, 35);
+		p2.setBackground(Color.white);
+
 		label2 =  new JLabel("Team 2's Info:");
-		label2.setBounds(1100, 160, 350, 50);
-		//label2.setFont(plain);
-		
+		label2.setBounds(1100, 160, 100, 30);
+		label2.setBackground(Color.black);
+		label2.setHorizontalAlignment(JLabel.LEFT);
+
 		
 		panel.add(panel2,Integer.valueOf(1));
-		panel.add(label,Integer.valueOf(1));
-		panel.add(label2,Integer.valueOf(1));
+		panel.add(label,Integer.valueOf(2));
+		panel.add(label2,Integer.valueOf(2));
+		panel.add(p1,Integer.valueOf(1));
+		panel.add(p2,Integer.valueOf(1));
 		panel.add(leader,Integer.valueOf(1));
 		panel.add(move,Integer.valueOf(0));
 	}

@@ -151,22 +151,7 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
     }
 
     private void placeButtons(JPanel north, ArrayList<Champion> Champions) throws IOException {
-        // ArrayList<String> champions = new ArrayList<>();
-        // champions.add("Captain America");
-        // champions.add("Deadpool");
-        // champions.add("Dr Strange");
-        // champions.add("Electro");
-        // champions.add("Iceman");
-        // champions.add("Spiderman");
-        // champions.add("Ghost Rider");
-        // champions.add("Hulk");
-        // champions.add("Ironman");
-        // champions.add("Loki");
-        // champions.add("Venom");
-        // champions.add("Venom");
-        // champions.add("Venom");
-        // champions.add("Venom");
-        // champions.add("Venom");
+
 
         for(int i = 0; i < 15; i++){
             ImageIcon btn = new ImageIcon("assets/ui/button_" + Champions.get(i).getName() + ".png");

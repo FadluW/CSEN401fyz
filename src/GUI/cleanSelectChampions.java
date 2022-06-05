@@ -140,11 +140,11 @@ public class cleanSelectChampions extends JFrame implements ActionListener {
 ////					if (i==100) {
 ////					leader.setText("Leader "+ champion.getLocation());
 ////					leader.setBounds(120,i+100,300,50);}
-////					else {leader2.setText("Leader "+ champion.getLocation());
-////					leader2.setBounds(120,i+100,300,50);}
+////					else {queue.setText("Leader "+ champion.getLocation());
+////					queue.setBounds(120,i+100,300,50);}
 ////					//frame.getContentPane().add(panel2);
 ////					frame.revalidate();
-////					if(leader.getText()!="" && leader2.getText()!="") forward.setEnabled(true);
+////					if(leader.getText()!="" && queue.getText()!="") forward.setEnabled(true);
 ////				}
 ////			});
 //			background.add(champion,Integer.valueOf(1));
@@ -306,11 +306,11 @@ public class cleanSelectChampions extends JFrame implements ActionListener {
 //				if (i==100) {
 //				leader.setText("Leader "+ champion.getLocation());
 //				leader.setBounds(120,i+100,300,50);}
-//				else {leader2.setText("Leader "+ champion.getLocation());
-//				leader2.setBounds(120,i+100,300,50);}
+//				else {queue.setText("Leader "+ champion.getLocation());
+//				queue.setBounds(120,i+100,300,50);}
 //				//frame.getContentPane().add(panel2);
 //				frame.revalidate();
-//				if(leader.getText()!="" && leader2.getText()!="") forward.setEnabled(true);
+//				if(leader.getText()!="" && queue.getText()!="") forward.setEnabled(true);
 		});
             //button.setBorderPainted(false);
             button.setFocusPainted(false);
