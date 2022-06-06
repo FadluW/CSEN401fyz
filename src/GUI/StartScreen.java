@@ -2,22 +2,13 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
 import controller.GameController;
-import controller.GameController.BeginListener;
 
-public class StartScreen extends JFrame{
+public class StartScreen extends JLayeredPane{
 	JLayeredPane panel;
 	JButton begin, quit;
 	Move move;
@@ -25,19 +16,11 @@ public class StartScreen extends JFrame{
 	JTextField field,field2,field0;
 	JLabel label,label2,title,background1,error;
 	Image image;
-	JFrame frame = this;
 	boolean entered2 = false;
 	boolean entered1 = false;
-	GameController control;
 	
-	public StartScreen(GameController control){//JLayeredPane panel, JButton begin, JButton quit) {
-		
-		
-		ImageIcon icon = new ImageIcon("assets/background/Game Start Small.jpg");
-        setIconImage(icon.getImage());
-		this.control = control;
-		//JFrame frame = this;
-		panel = new JLayeredPane();
+	public StartScreen (GameController control) {
+		panel = this;
 		try {
 			font4 = Font.createFont(Font.TRUETYPE_FONT,new File( "assets/fonts/Super Webcomic Bros. Bold Italic.ttf"));
 			plain = font4.deriveFont(Font.PLAIN,20f);
@@ -77,7 +60,7 @@ public class StartScreen extends JFrame{
 		
 		
 		field = new JTextField(11);
-		field.setText("Player 1");
+		field.setText((control.getCurrentGame() == null) ? "Player 1" :control.getCurrentGame().getFirstPlayer().getName());
 		field.setFocusable(false);
 		field.addMouseListener(new MouseListener(){
 
@@ -159,7 +142,7 @@ public class StartScreen extends JFrame{
 		field.setHorizontalAlignment(JLabel.CENTER);
 		
 	
-		field2 = new JTextField("Player 2");
+		field2 = new JTextField((control.getCurrentGame() == null) ? "Player 2" :control.getCurrentGame().getSecondPlayer().getName());
 		field2.setFocusable(false);
 		field2.addMouseListener(new MouseListener(){
 
@@ -272,11 +255,7 @@ public class StartScreen extends JFrame{
 		background1.setBounds(0, 0, 1366, 768);
 		
 		quit = new JButton();
-		quit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispatchEvent(new WindowEvent(frame,WindowEvent.WINDOW_CLOSING));
-			}
-		});
+		quit.addActionListener(control.new QuitListener());
 		
 		//quit.addActionListener(new MyButtonListener());
 		quit.setOpaque(false);
@@ -299,21 +278,6 @@ public class StartScreen extends JFrame{
 		begin.setText("Start");
 		begin.setBounds(726,600,175,70);
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		//panel.add(background1,Integer.valueOf(0));
 		panel.add(move,Integer.valueOf(0));
 		//panel.add(title,Integer.valueOf(2));
@@ -324,15 +288,8 @@ public class StartScreen extends JFrame{
 		panel.add(begin,Integer.valueOf(1));
 		panel.add(quit,Integer.valueOf(1));
 		panel.add(error,Integer.valueOf(2));
-		
-		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
-		this.getContentPane().add(panel);	
-		this.getContentPane().setBackground(Color.black);
-		this.setSize(1366,768);
-		this.setVisible(true);
-		this.setResizable(false);
-		
 	}
+
 	public JLayeredPane getPanel() {
 		return panel;
 	}
@@ -363,15 +320,5 @@ public class StartScreen extends JFrame{
 			g2.fillRoundRect( 726, 600, 175, 70, 30, 30);
 		}
 	}
-	
-//	public class MyButtonListener implements ActionListener{
-//	public void actionPerformed(ActionEvent a) {
-//		panel.setBackground(Color.white);
-//		
-//	}
-//}
-////	public static void main(String[] args) {
-////		StartScreen start = new StartScreen(null);
-////	}
 }
 
