@@ -131,7 +131,7 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
         back.setBackground(Color.WHITE);
         back.setBounds(410,635,100,30);
         back.setFocusPainted(false);
-        back.addActionListener(controller.new backListener("start", background));
+        back.addActionListener(controller.new BackListener("start", background));
         background.add(back,Integer.valueOf(1));
 
         JButton start = new JButton("Start");

@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import GUI.*;
 import engine.*;
+import exceptions.*;
 import model.world.*;
 
 public class GameController {
@@ -64,15 +65,16 @@ public class GameController {
 // 		team2 = player2.getTeam();
 // //    	new cleanSelectChampions(currentGame.getAvailableChampions());
 // 		new editingBoard(controller);
-    }
+	}
+	
+	public static void main(String[] args) throws Exception {
+		new GameController();
+	}
 
     public void setGame(Game game) {
     	this.currentGame = game;
     }
     
-    public static void main(String[] args) throws Exception {
-        new GameController();
-    }
 
 	// Sets up initial frame to be used and link start screen to it
 	public void initializeFrame() {
@@ -137,12 +139,12 @@ public class GameController {
 	}
 
 	// Listener to go back to a previous screen
-	public class backListener implements ActionListener {
+	public class BackListener implements ActionListener {
 		private JLayeredPane previousScreen;
 		private JLayeredPane currentScreen;
 
 		// Constructor for new panel
-		public backListener(String screenName, JLayeredPane currentScreen) {
+		public BackListener(String screenName, JLayeredPane currentScreen) {
 			this.currentScreen = currentScreen;
 			switch (screenName.toLowerCase()) {
 				case "start": previousScreen = startScreen;
@@ -150,7 +152,7 @@ public class GameController {
 		}
 
 		// Constructor for exact panel
-		public backListener (JLayeredPane screenPane, JLayeredPane currentScreen) {
+		public BackListener (JLayeredPane screenPane, JLayeredPane currentScreen) {
 			previousScreen = screenPane;
 			this.currentScreen = currentScreen;
 		}
@@ -159,5 +161,34 @@ public class GameController {
 		public void actionPerformed(ActionEvent e) {
 			changeScreen(this.currentScreen, this.previousScreen);
 		}
+	}
+
+	// Listener to handle movement
+	public class MoveListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String[] buttonID = ((JButton) e.getSource()).getName().split("\\|");
+			// Ensure it was a move button
+			if (buttonID[0] != "move") {
+				System.out.println(ANSI_RED + "[ERROR] MoveListener - given incorrect button of type " + buttonID[0] + ANSI_RESET);
+				return;
+			}
+
+			Direction direction = null;
+			switch (buttonID[1].toLowerCase()) {
+				case "up": direction = Direction.UP; break;
+				case "down": direction = Direction.DOWN; break;
+				case "left": direction = Direction.LEFT; break;
+				case "right": direction = Direction.RIGHT; break;
+			}
+
+			try {
+				currentGame.move(direction);
+			} catch (UnallowedMovementException | NotEnoughResourcesException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
 	}
 }
