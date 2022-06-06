@@ -2,6 +2,7 @@ package GUI;
 
 import javax.swing.*;
 
+import controller.GameController;
 import engine.Game;
 import model.world.Champion;
 
@@ -16,13 +17,14 @@ import java.util.ArrayList;
 
 public class cleanSelectChampion extends JLayeredPane implements ActionListener {
     JLayeredPane background = this;
-    public cleanSelectChampion(Game game,ArrayList<Champion> Champs) throws IOException, FontFormatException {
+    public cleanSelectChampion(GameController controller) throws IOException, FontFormatException {
 //        setDefaultCloseOperation(EXIT_ON_CLOSE);
 //        setTitle("Marvel Ultimate War");
 //        setVisible(true);
 //        setResizable(false);
 //        setBounds(20,20,1366,768);
 
+        Game game = controller.getCurrentGame();
         ArrayList<Champion> Champions = game.getAvailableChampions();
 
 
@@ -129,6 +131,7 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
         back.setBackground(Color.WHITE);
         back.setBounds(410,635,100,30);
         back.setFocusPainted(false);
+        back.addActionListener(controller.new backListener("start", background));
         background.add(back,Integer.valueOf(1));
 
         JButton start = new JButton("Start");
