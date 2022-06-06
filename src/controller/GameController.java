@@ -21,7 +21,7 @@ public class GameController {
 	public static final String ANSI_YELLOW = "\u001B[33m";
 
 	private GameController controller;
-    private Game currentGame;
+    private Game currentGame, tempGame;
     private Player player1, player2;
     private StartScreen startScreen;
 	private ArrayList<Champion> team1, team2;
@@ -49,22 +49,25 @@ public class GameController {
 
 	public GameController() throws Exception {
 		controller = this;
-		startScreen = new StartScreen(this);
-		initializeFrame();
-//     	player1 = new Player("Joey");
-// 		player2 = new Player("Fadl");
+		//startScreen = new StartScreen(this);
+		//initializeFrame();
+     	player1 = new Player("Joey");
+ 		player2 = new Player("Fadl");
+		 tempGame = new Game(player1,player2);
 
-// 		player1.getTeam().add(new Hero("Dr Strange", 1000,10,2,20,3,3));
-// 		player1.getTeam().add(new AntiHero("Deadpool", 1000,10,2,20,3,3));
-// 		player1.getTeam().add(new Hero("Hulk", 1000,10,2,20,3,3));
-// 		player2.getTeam().add(new Villain("Loki", 1000,10,2,20,3,3));
-// 		player2.getTeam().add(new Hero("Thor", 1000,10,2,20,3,3));
-// 		player2.getTeam().add(new Hero("Iceman", 1000,10,2,20,3,3));
-// 		currentGame = new Game(player1, player2);
-// 		team1 = player1.getTeam();
-// 		team2 = player2.getTeam();
-// //    	new cleanSelectChampions(currentGame.getAvailableChampions());
-// 		new editingBoard(controller);
+
+ 		player1.getTeam().add(tempGame.getAvailableChampions().get(2));
+ 		player1.getTeam().add(tempGame.getAvailableChampions().get(1));
+ 		player1.getTeam().add(tempGame.getAvailableChampions().get(6));
+ 		player2.getTeam().add(tempGame.getAvailableChampions().get(9));
+ 		player2.getTeam().add(tempGame.getAvailableChampions().get(12));
+ 		player2.getTeam().add(tempGame.getAvailableChampions().get(7));
+		currentGame = new Game(player1, player2);
+
+ 		team1 = player1.getTeam();
+ 		team2 = player2.getTeam();
+ //    	new cleanSelectChampions(currentGame.getAvailableChampions());
+ 		new editingBoard(controller);
 	}
 	
 	public static void main(String[] args) throws Exception {

@@ -39,11 +39,11 @@ public class Game {
 		return turnOrder;
 	}
 
-	public static ArrayList<Ability> getAvailableAbilities() {
+	public ArrayList<Ability> getAvailableAbilities() {
 		return availableAbilities;
 	}
 
-	public static ArrayList<Champion> getAvailableChampions() {
+	public ArrayList<Champion> getAvailableChampions() {
 		return availableChampions;
 	}
 
