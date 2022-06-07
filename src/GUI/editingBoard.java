@@ -25,11 +25,10 @@ public class editingBoard extends JLayeredPane {
 
     JLabel champion, player1Label, player2Label, info, ability1Used, ability2Used;
     JTextArea queue, abilitiesInfo, effectsInfo;
-    JPanel abilitiesPanel, effectsPanel, queuePanel, endTurnPanel, player1Panel, player2panel, leader1Ability, leader2Ability;
+    JPanel abilitiesPanel, effectsPanel, queuePanel, player1Panel, player2panel, leader1Ability, leader2Ability, allButtonsPanel;
     JLayeredPane panel = this;
     JLayeredPane panel2;
-    //JFrame frame = this;
-    JButton endTurn;
+    JButton endTurn, move, attack, castAbility, useLeaderAbility;
     baseBackground grass = new baseBackground();
     ArrayList<Champion> team1,team2;
     ArrayList<Ability> abilities;
@@ -58,7 +57,8 @@ public class editingBoard extends JLayeredPane {
         PlacePlayersLabels();
         PlaceAbilitiesAndEffects();
         PlaceQueue();
-        PlaceEndTurnButton();
+        //PlaceEndTurnButton();
+        PlaceButtons();
         drawBoard(board);
 
         displayQueue(queue, info);
@@ -77,7 +77,7 @@ public class editingBoard extends JLayeredPane {
         panel.add(effectsPanel,Integer.valueOf(1));
         panel.add(queuePanel, Integer.valueOf(1));
         panel.add(grass,Integer.valueOf(0));
-        panel.add(endTurnPanel,Integer.valueOf(1));
+        panel.add(allButtonsPanel, Integer.valueOf(1));
 
 
 //        this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
@@ -315,7 +315,7 @@ public class editingBoard extends JLayeredPane {
 
 
         effectsPanel = new JPanel();
-        effectsPanel.setBounds(1100,284,225,220);
+        effectsPanel.setBounds(1080,300,225,220);
         effectsPanel.setBackground(Color.WHITE);
         effectsPanel.setOpaque(true);
 
@@ -389,24 +389,35 @@ public class editingBoard extends JLayeredPane {
 
     }
 
-    private void PlaceEndTurnButton(){
-        endTurnPanel = new JPanel();
-        endTurnPanel.setBounds(1100,600,80,30);
-        endTurnPanel.setBackground(Color.WHITE);
-        endTurnPanel.setOpaque(true);
+    private void PlaceButtons(){
+        allButtonsPanel = new JPanel(new GridLayout(5,1));
+        allButtonsPanel.setBounds(1080,540,225,160);
+        allButtonsPanel.setBackground(Color.WHITE);
 
+        //allButtonsPanel = new JPanel(new GridLayout(4,1));
+
+        attack = new JButton("Attack");
+        move = new JButton("Move");
+        castAbility = new JButton("Cast Ability");
+        useLeaderAbility = new JButton("Leader Ability");
         endTurn = new JButton("End Turn");
-        endTurn.setVisible(true);
-        endTurn.setForeground(Color.black);
-        EndTurnButtonListener(endTurn);
-//        endTurn.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                drawBoard(board);
-//            }
-//        });
 
-        endTurnPanel.add(endTurn);
+        //endTurn.setPreferredSize(new Dimension(225,31));
+        //endTurn.setHorizontalAlignment(JLabel.BOTTOM);
+
+        if(game.getCurrentChampion() == controller.getPlayer1().getLeader() || game.getCurrentChampion() == controller.getPlayer2().getLeader()) useLeaderAbility.setEnabled(true);
+        else useLeaderAbility.setEnabled(false);
+
+        EndTurnButtonListener(endTurn);
+
+        allButtonsPanel.add(move);
+        allButtonsPanel.add(attack);
+        allButtonsPanel.add(castAbility);
+        allButtonsPanel.add(useLeaderAbility);
+        allButtonsPanel.add(endTurn);
+
+//        allButtonsPanel.add(allButtonsPanel);
+//        allButtonsPanel.add(endTurn);
     }
 
     private void EndTurnButtonListener(JButton btn){
@@ -418,6 +429,8 @@ public class editingBoard extends JLayeredPane {
                 Champion curr = (Champion) turnOrder.peekMin();
                 displayQueue(queue, info);
                 displayAbilitiesAndEffects(curr, abilitiesInfo, effectsInfo);
+                if(game.getCurrentChampion() == controller.getPlayer1().getLeader() || game.getCurrentChampion() == controller.getPlayer2().getLeader()) useLeaderAbility.setEnabled(true);
+                else useLeaderAbility.setEnabled(false);
             }
         });
     }
