@@ -67,8 +67,8 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 
     public GameController() throws Exception {
     	controller = this;
-		//startScreen = new StartScreen(this);
-		// initializeFrame();
+		startScreen = new StartScreen(this);
+		 initializeFrame();
 //    	player1 = new Player("Joey");
 //		player2 = new Player("Fadl");
 //		currentGame = new Game(player1, player2);
@@ -87,20 +87,20 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 		
 //    	selectTest = new cleanSelectChampions(this, currentGame.getAvailableChampions(), currentGame);
 //    	leadTest = new LeaderTestingSelection(this,currentGame);
-//    	testBoard = new BoardTest(this);
-		ArrayList<Champion> availableChamps = Game.getAvailableChampions();
-		player1.getTeam().add(availableChamps.get(2));
-		player1.getTeam().add(availableChamps.get(1));
-		player1.getTeam().add(availableChamps.get(6));
-		player2.getTeam().add(availableChamps.get(9));
-		player2.getTeam().add(availableChamps.get(12));
-		player2.getTeam().add(availableChamps.get(7));
-		currentGame = new Game(player1, player2);
-
-		team1 = player1.getTeam();
-		team2 = player2.getTeam();
+    	//testBoard = new BoardTest(this);
+//		ArrayList<Champion> availableChamps = Game.getAvailableChampions();
+//		player1.getTeam().add(availableChamps.get(2));
+//		player1.getTeam().add(availableChamps.get(1));
+//		player1.getTeam().add(availableChamps.get(6));
+//		player2.getTeam().add(availableChamps.get(9));
+//		player2.getTeam().add(availableChamps.get(12));
+//		player2.getTeam().add(availableChamps.get(7));
+//		currentGame = new Game(player1, player2);
+//
+//		team1 = player1.getTeam();
+//		team2 = player2.getTeam();
 		//    	new cleanSelectChampions(currentGame.getAvailableChampions());
-		new editingBoard(controller);
+		//new editingBoard(controller);
     }
 
     public void setGame(Game game) {
@@ -162,18 +162,39 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 				}
 				
 				try {
-					changeScreen(startScreen, new cleanSelectChampion(controller));
+					select= new cleanSelectChampion(controller);
+					changeScreen(startScreen,select );
 				} catch (IOException | FontFormatException e1) {}
 			}
 		}
 	}
 
+	
 	public class QuitListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			frame.dispatchEvent(new WindowEvent(frame,WindowEvent.WINDOW_CLOSING));
 		}
 	}
+	
+//	public class BackingListener implements ActionListener{
+//
+//		@Override
+//		public void actionPerformed(ActionEvent e) {
+//			// TODO Auto-generated method stub
+//			screen.remove(select);;
+//			screen.revalidate();
+//			screen.repaint();
+//			screen.getContentPane().add(panel);
+//			screen.revalidate();
+//			screen.repaint();
+//			screen.setField(currentGame.getFirstPlayer().getName());
+//			screen.setField2(currentGame.getSecondPlayer().getName());
+//			screen.revalidate();
+//			screen.repaint();
+//		}
+//		
+//	}
 	
 	// Listener to go back to a previous screen
 	public class BackListener implements ActionListener {
@@ -287,19 +308,13 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			startScreen.remove(select);;
-			startScreen.revalidate();
-			startScreen.repaint();
 			try {
 				lead = new LeaderSelection(control, currentGame);
+				changeScreen(select, lead);
 			} catch (FontFormatException | IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			frame.getContentPane().add(lead);
-			frame.revalidate();
-			frame.repaint();
 		}
 		
 	}
@@ -349,10 +364,19 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			for(int i = currentGame.getFirstPlayer().getTeam().size()-1; i >= 0; i--){
+					currentGame.getFirstPlayer().getTeam().remove(i);
+			}
+			for(int i = currentGame.getSecondPlayer().getTeam().size()-1; i >= 0; i--){
+				currentGame.getSecondPlayer().getTeam().remove(i);
+			}
 			try {
 				select = new cleanSelectChampion(control);
-				changeScreen(lead, select);
-			} catch (IOException | FontFormatException e1) {}
+			} catch (IOException | FontFormatException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			changeScreen(lead, select);
 		}
 	}
 //	public class TimeListener implements MouseMotionListener,MouseListener{
