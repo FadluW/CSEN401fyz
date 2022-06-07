@@ -2,8 +2,6 @@ package controller;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -13,13 +11,9 @@ import javax.swing.*;
 
 import GUI.*;
 import engine.*;
-import model.abilities.CrowdControlAbility;
-import model.abilities.DamagingAbility;
-import model.abilities.HealingAbility;
-import model.world.AntiHero;
-import model.world.Champion;
-import model.world.Hero;
-import model.world.Villain;
+import exceptions.*;
+import model.abilities.*;
+import model.world.*;
 
 public class GameController {
 // String colours for console logs
@@ -30,7 +24,6 @@ public static final String ANSI_GREEN = "\u001B[32m";
 public static final String ANSI_YELLOW = "\u001B[33m";
 
 	GameController control = this;
-    StartScreen screen;
     JLayeredPane panel,panel2;
     cleanSelectChampions selectTest;
     cleanSelectChampion select;
@@ -42,20 +35,40 @@ public static final String ANSI_YELLOW = "\u001B[33m";
     TimerTask tt;
     Timer t;
 	private GameController controller;
-    private Game currentGame, tempGame;
+    private Game currentGame;
     private Player player1, player2;
     private StartScreen startScreen;
 	private ArrayList<Champion> team1, team2;
 	private	JFrame frame = new JFrame();
 
+	public Game getCurrentGame() {
+		return currentGame;
+	}
+
+	public void setCurrentGame(Game currentGame) {
+		this.currentGame = currentGame;
+	}
+
+	public Player getPlayer1() {
+		return player1;
+	}
+
+	public Player getPlayer2() {
+		return player2;
+	}
+
+	public ArrayList<Champion> getTeam1() {
+		return team1;
+	}
+
+	public ArrayList<Champion> getTeam2() {
+		return team2;
+	}
+
     public GameController() throws Exception {
     	controller = this;
 		//startScreen = new StartScreen(this);
-		//initializeFrame();
-     	player1 = new Player("Joey");
- 		player2 = new Player("Fadl");
-		tempGame = new Game(player1,player2);
-    	
+		// initializeFrame();
 //    	player1 = new Player("Joey");
 //		player2 = new Player("Fadl");
 //		currentGame = new Game(player1, player2);
@@ -75,18 +88,19 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 //    	selectTest = new cleanSelectChampions(this, currentGame.getAvailableChampions(), currentGame);
 //    	leadTest = new LeaderTestingSelection(this,currentGame);
 //    	testBoard = new BoardTest(this);
-player1.getTeam().add(tempGame.getAvailableChampions().get(2));
-player1.getTeam().add(tempGame.getAvailableChampions().get(1));
-player1.getTeam().add(tempGame.getAvailableChampions().get(6));
-player2.getTeam().add(tempGame.getAvailableChampions().get(9));
-player2.getTeam().add(tempGame.getAvailableChampions().get(12));
-player2.getTeam().add(tempGame.getAvailableChampions().get(7));
-currentGame = new Game(player1, player2);
+		ArrayList<Champion> availableChamps = Game.getAvailableChampions();
+		player1.getTeam().add(availableChamps.get(2));
+		player1.getTeam().add(availableChamps.get(1));
+		player1.getTeam().add(availableChamps.get(6));
+		player2.getTeam().add(availableChamps.get(9));
+		player2.getTeam().add(availableChamps.get(12));
+		player2.getTeam().add(availableChamps.get(7));
+		currentGame = new Game(player1, player2);
 
-team1 = player1.getTeam();
-team2 = player2.getTeam();
-//    	new cleanSelectChampions(currentGame.getAvailableChampions());
-new editingBoard(controller);
+		team1 = player1.getTeam();
+		team2 = player2.getTeam();
+		//    	new cleanSelectChampions(currentGame.getAvailableChampions());
+		new editingBoard(controller);
     }
 
     public void setGame(Game game) {
@@ -96,12 +110,23 @@ new editingBoard(controller);
     public static void main(String[] args) throws Exception {
         new GameController();
     }
+
+	// Removes old screen and adds new one
+	public void changeScreen(JLayeredPane oldScreen, JLayeredPane newScreen) {
+		frame.remove(oldScreen);
+		frame.revalidate();
+		frame.repaint();
+
+		frame.getContentPane().add((newScreen));
+		frame.revalidate();
+		frame.repaint();
+	}
     
 	// Sets up initial frame to be used and link start screen to it
 	public void initializeFrame() {
 		ImageIcon icon = new ImageIcon("assets/background/Game Start Small.jpg");
 		frame.setIconImage(icon.getImage());
-		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(startScreen);	
 		frame.getContentPane().setBackground(Color.black);
 		frame.setSize(1366,768);
@@ -111,63 +136,45 @@ new editingBoard(controller);
 	public class BeginListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(((screen.getField()).equals("") || screen.getField2().equals(""))){
+			if(((startScreen.getField()).equals("") || startScreen.getField2().equals(""))){
 				System.out.println("Button Works");
-				screen.getError().setVisible(true);
-				screen.repaint();
-				screen.revalidate();
+				startScreen.getError().setVisible(true);
+				startScreen.repaint();
+				startScreen.revalidate();
 				new java.util.Timer().schedule(new java.util.TimerTask() {
 					@Override
 					public void run() {
-						screen.getError().setVisible(false);
-						screen.repaint();
-						screen.revalidate();
+						startScreen.getError().setVisible(false);
+						startScreen.repaint();
+						startScreen.revalidate();
 					}
 				}, 1500);
 				//setTimeout(screen.getError().setVisible(false),3000);
 					
 			}
 			else {
-				System.out.println("Button Worked");
-				player1 = new Player(screen.getField());
-				player2 = new Player(screen.getField2());
+				System.out.println(ANSI_GREEN + "Names selected: " + ANSI_RESET + startScreen.getField() + ", " + startScreen.getField2());
+				player1 = new Player(startScreen.getField());
+				player2 = new Player(startScreen.getField2());
 				try {
 					currentGame = new Game(player1, player2);
 				} catch (Exception e1) {
 				}
-				panel = screen.getPanel();
-				screen.remove(screen.getPanel());
-				screen.revalidate();
-				screen.repaint();
+				
 				try {
-					select = new cleanSelectChampion(control);
-					screen.getContentPane().add(select);
-					screen.revalidate();
-					screen.repaint();
-				} catch (IOException | FontFormatException e1) {
-				}
+					changeScreen(startScreen, new cleanSelectChampion(controller));
+				} catch (IOException | FontFormatException e1) {}
 			}
 		}
 	}
-	
-	public class BackListener implements ActionListener{
 
+	public class QuitListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			screen.remove(select);;
-			screen.revalidate();
-			screen.repaint();
-			screen.getContentPane().add(panel);
-			screen.revalidate();
-			screen.repaint();
-			screen.setField(currentGame.getFirstPlayer().getName());
-			screen.setField2(currentGame.getSecondPlayer().getName());
-			screen.revalidate();
-			screen.repaint();
+			frame.dispatchEvent(new WindowEvent(frame,WindowEvent.WINDOW_CLOSING));
 		}
-		
 	}
+	
 	// Listener to go back to a previous screen
 	public class BackListener implements ActionListener {
 		private JLayeredPane previousScreen;
@@ -276,23 +283,23 @@ new editingBoard(controller);
 			}
 		}
 	}
-	public class NextListener implements ActionListener{
+	public class NextListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			screen.remove(select);;
-			screen.revalidate();
-			screen.repaint();
+			startScreen.remove(select);;
+			startScreen.revalidate();
+			startScreen.repaint();
 			try {
 				lead = new LeaderSelection(control, currentGame);
 			} catch (FontFormatException | IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			screen.getContentPane().add(lead);
-			screen.revalidate();
-			screen.repaint();
+			frame.getContentPane().add(lead);
+			frame.revalidate();
+			frame.repaint();
 		}
 		
 	}
@@ -301,11 +308,11 @@ new editingBoard(controller);
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			for(int i = 0; i < currentGame.getAvailableChampions().size(); i++){
-				if (currentGame.getAvailableChampions().get(i).getName().equals(select.getCurrentName())){
+			for(int i = 0; i < Game.getAvailableChampions().size(); i++){
+				if (Game.getAvailableChampions().get(i).getName().equals(select.getCurrentName())){
 					try {
-						if (select.getCounter()%2==1) {currentGame.getFirstPlayer().getTeam().add(currentGame.getAvailableChampions().get(i));break;}
-						else {currentGame.getSecondPlayer().getTeam().add(currentGame.getAvailableChampions().get(i));break;}
+						if (select.getCounter()%2==1) {currentGame.getFirstPlayer().getTeam().add(Game.getAvailableChampions().get(i));break;}
+						else {currentGame.getSecondPlayer().getTeam().add(Game.getAvailableChampions().get(i));break;}
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -321,7 +328,6 @@ new editingBoard(controller);
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
 			//panel = screen.getPanel();
 			for(int i = 0; i < currentGame.getFirstPlayer().getTeam().size(); i++){
 				if (currentGame.getFirstPlayer().getTeam().get(i).getName().equals(lead.getLeader().getText())){
@@ -333,13 +339,9 @@ new editingBoard(controller);
 					currentGame.getSecondPlayer().setLeader(currentGame.getSecondPlayer().getTeam().get(i));
 				}
 			}
-			screen.remove(lead);
-			screen.revalidate();
-			screen.repaint();
+			
 			board = new BoardView(control);
-			screen.getContentPane().add(board);
-			screen.revalidate();
-			screen.repaint();
+			changeScreen(lead, board);
 		}
 		
 	}
@@ -347,21 +349,11 @@ new editingBoard(controller);
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			//panel = screen.getPanel();
-			screen.remove(lead);
-			screen.revalidate();
-			screen.repaint();
 			try {
 				select = new cleanSelectChampion(control);
-				screen.getContentPane().add(select);
-				screen.revalidate();
-				screen.repaint();
-			} catch (IOException | FontFormatException e1) {
-			}
+				changeScreen(lead, select);
+			} catch (IOException | FontFormatException e1) {}
 		}
-		
-		
 	}
 //	public class TimeListener implements MouseMotionListener,MouseListener{
 //
@@ -529,12 +521,4 @@ new editingBoard(controller);
 //		t.cancel();
 //		}
 //}
-
-	public Game getCurrentGame() {
-		return currentGame;
-	}
-
-	public void setCurrentGame(Game currentGame) {
-		this.currentGame = currentGame;
-	}
 }
