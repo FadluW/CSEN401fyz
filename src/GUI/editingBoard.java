@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
+import engine.Game;
 import engine.PriorityQueue;
 
 import javax.swing.*;
@@ -20,14 +21,14 @@ import model.effects.Effect;
 import model.world.Champion;
 import model.world.Cover;
 
-public class editingBoard extends JFrame {
+public class editingBoard extends JLayeredPane {
 
     JLabel champion, player1Label, player2Label, info, ability1Used, ability2Used;
     JTextArea queue, abilitiesInfo, effectsInfo;
     JPanel abilitiesPanel, effectsPanel, queuePanel, endTurnPanel, player1Panel, player2panel, leader1Ability, leader2Ability;
-    JLayeredPane panel = new JLayeredPane();
+    JLayeredPane panel = this;
     JLayeredPane panel2;
-    JFrame frame = this;
+    //JFrame frame = this;
     JButton endTurn;
     baseBackground grass = new baseBackground();
     ArrayList<Champion> team1,team2;
@@ -36,27 +37,29 @@ public class editingBoard extends JFrame {
     GameController controller;
     Object[][] board;
     PriorityQueue turnOrder;
+    Game game;
 
 
     public editingBoard(GameController controller) {
         this.controller = controller;
-        turnOrder = this.controller.getCurrentGame().getTurnOrder();
+        game = controller.getCurrentGame();
+        turnOrder = game.getTurnOrder();
         team1 = controller.getTeam1();
         team2 = controller.getTeam2();
         grass.setSize(1366,768);
         info =new JLabel("");
-        info.setBounds(5,20,170,130);
+        info.setBounds(5,20,170,145);
         info.setVerticalAlignment(JLabel.TOP);
         info.setOpaque(true);
         info.setBackground(Color.white);
 
         board = controller.getCurrentGame().getBoard();
-        drawBoard(board);
         PlaceIcons();
         PlacePlayersLabels();
         PlaceAbilitiesAndEffects();
         PlaceQueue();
         PlaceEndTurnButton();
+        drawBoard(board);
 
         displayQueue(queue, info);
 
@@ -77,11 +80,11 @@ public class editingBoard extends JFrame {
         panel.add(endTurnPanel,Integer.valueOf(1));
 
 
-        this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
-        this.getContentPane().add(panel);
-        this.setSize(1366,768);
-        this.setVisible(true);
-        this.setResizable(false);
+//        this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+//        this.getContentPane().add(panel);
+//        this.setSize(1366,768);
+//        this.setVisible(true);
+//        this.setResizable(false);
     }
 
     public void drawBoard(Object[][] board) {
@@ -116,7 +119,7 @@ public class editingBoard extends JFrame {
 
                         @Override
                         public void mouseMoved(MouseEvent e) {
-
+                            displayQueue(queue,info);
                         }
                     });
                 }
@@ -139,8 +142,8 @@ public class editingBoard extends JFrame {
 
                     @Override
                     public void mouseMoved(MouseEvent e) {
-                        //displayQueue(queue,info);
-                        frame.revalidate();
+                        displayQueue(queue,info);
+                        //frame.revalidate();
                     }
                 }
         );
@@ -233,7 +236,7 @@ public class editingBoard extends JFrame {
                     break;
                 default: break;
             }
-            frame.revalidate();
+            //frame.revalidate();
         }
         if(appliedEffects.size() == 0) eInfo.append("There is no applied effects yet");
         else{
@@ -285,8 +288,8 @@ public class editingBoard extends JFrame {
                     abilitiesInfo.setText("");
                     effectsInfo.setText("");
                     displayAbilitiesAndEffects(realChampion,abilitiesInfo,effectsInfo);
-                    frame.revalidate();
-                    frame.repaint();
+//                    frame.revalidate();
+//                    frame.repaint();
 
                 }
             });
@@ -296,9 +299,9 @@ public class editingBoard extends JFrame {
 
     }
 
-    private void PlaceAbilitiesAndEffects(){
+    private void PlaceAbilitiesAndEffects() {
         abilitiesPanel = new JPanel();
-        abilitiesPanel.setBounds(30, 180,225,500);
+        abilitiesPanel.setBounds(30, 195,225,500);
         abilitiesPanel.setBackground(Color.white);
         abilitiesPanel.setOpaque(true);
 
@@ -327,7 +330,7 @@ public class editingBoard extends JFrame {
 
     private void PlaceQueue(){
         queuePanel = new JPanel(new GridLayout(1,2));
-        queuePanel.setBounds(185,20,145,130);
+        queuePanel.setBounds(185,20,145,145);
         queuePanel.setBackground(Color.WHITE);
         queuePanel.setOpaque(true);
 
@@ -395,14 +398,28 @@ public class editingBoard extends JFrame {
         endTurn = new JButton("End Turn");
         endTurn.setVisible(true);
         endTurn.setForeground(Color.black);
-        endTurn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                drawBoard(board);
-            }
-        });
+        EndTurnButtonListener(endTurn);
+//        endTurn.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                drawBoard(board);
+//            }
+//        });
 
         endTurnPanel.add(endTurn);
+    }
+
+    private void EndTurnButtonListener(JButton btn){
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.endTurn();
+                turnOrder = game.getTurnOrder();
+                Champion curr = (Champion) turnOrder.peekMin();
+                displayQueue(queue, info);
+                displayAbilitiesAndEffects(curr, abilitiesInfo, effectsInfo);
+            }
+        });
     }
 }
 

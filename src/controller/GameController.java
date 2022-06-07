@@ -29,7 +29,7 @@ public static final String ANSI_YELLOW = "\u001B[33m";
     cleanSelectChampion select;
     LeaderSelection lead;
     LeaderTestingSelection leadTest;
-    BoardView board;
+    editingBoard board;
     BoardTest testBoard;
     
     TimerTask tt;
@@ -68,7 +68,7 @@ public static final String ANSI_YELLOW = "\u001B[33m";
     public GameController() throws Exception {
     	controller = this;
 		startScreen = new StartScreen(this);
-		 initializeFrame();
+		initializeFrame();
 //    	player1 = new Player("Joey");
 //		player2 = new Player("Fadl");
 //		currentGame = new Game(player1, player2);
@@ -87,7 +87,8 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 		
 //    	selectTest = new cleanSelectChampions(this, currentGame.getAvailableChampions(), currentGame);
 //    	leadTest = new LeaderTestingSelection(this,currentGame);
-    	//testBoard = new BoardTest(this);
+//    	testBoard = new BoardTest(this);
+
 //		ArrayList<Champion> availableChamps = Game.getAvailableChampions();
 //		player1.getTeam().add(availableChamps.get(2));
 //		player1.getTeam().add(availableChamps.get(1));
@@ -95,8 +96,9 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 //		player2.getTeam().add(availableChamps.get(9));
 //		player2.getTeam().add(availableChamps.get(12));
 //		player2.getTeam().add(availableChamps.get(7));
-//		currentGame = new Game(player1, player2);
-//
+
+		//currentGame = new Game(player1, player2);
+
 //		team1 = player1.getTeam();
 //		team2 = player2.getTeam();
 		//    	new cleanSelectChampions(currentGame.getAvailableChampions());
@@ -126,6 +128,7 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 	public void initializeFrame() {
 		ImageIcon icon = new ImageIcon("assets/background/Game Start Small.jpg");
 		frame.setIconImage(icon.getImage());
+		frame.setTitle("Marvel: Ultimate War");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(startScreen);	
 		frame.getContentPane().setBackground(Color.black);
@@ -133,6 +136,7 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 		frame.setVisible(true);
 		frame.setResizable(false);
 	}
+
 	public class BeginListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -156,11 +160,16 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 				System.out.println(ANSI_GREEN + "Names selected: " + ANSI_RESET + startScreen.getField() + ", " + startScreen.getField2());
 				player1 = new Player(startScreen.getField());
 				player2 = new Player(startScreen.getField2());
+//				try {
+//					currentGame = new Game(player1, player2);
+//				} catch (Exception e1) {
+//				}
 				try {
-					currentGame = new Game(player1, player2);
-				} catch (Exception e1) {
+					currentGame = new Game(player1,player2);
+				} catch (Exception ex) {
+					ex.printStackTrace();
 				}
-				
+
 				try {
 					select= new cleanSelectChampion(controller);
 					changeScreen(startScreen,select );
@@ -169,7 +178,7 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 		}
 	}
 
-	
+
 	public class QuitListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -193,9 +202,9 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 //			screen.revalidate();
 //			screen.repaint();
 //		}
-//		
+//
 //	}
-	
+
 	// Listener to go back to a previous screen
 	public class BackListener implements ActionListener {
 		private JLayeredPane previousScreen;
@@ -304,6 +313,7 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 			}
 		}
 	}
+
 	public class NextListener implements ActionListener {
 
 		@Override
@@ -339,27 +349,37 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 		
 		}
 	}
+
 	public class ForwardListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			//panel = screen.getPanel();
-			for(int i = 0; i < currentGame.getFirstPlayer().getTeam().size(); i++){
-				if (currentGame.getFirstPlayer().getTeam().get(i).getName().equals(lead.getLeader().getText())){
-					currentGame.getFirstPlayer().setLeader(currentGame.getFirstPlayer().getTeam().get(i));
+//			player1 = currentGame.getFirstPlayer();
+//			player2 = currentGame.getSecondPlayer();
+			team1 = player1.getTeam();
+			team2 = player2.getTeam();
+			for(int i = 0; i < team1.size(); i++){
+				if (team1.get(i).getName().equals(lead.getLeader().getText())){
+					player1.setLeader(team1.get(i));
 				}
 			}
-			for(int i = 0; i < currentGame.getSecondPlayer().getTeam().size(); i++){
-				if (currentGame.getSecondPlayer().getTeam().get(i).getName().equals(lead.getLeader2().getText())){
-					currentGame.getSecondPlayer().setLeader(currentGame.getSecondPlayer().getTeam().get(i));
+			for(int i = 0; i < team2.size(); i++){
+				if (team2.get(i).getName().equals(lead.getLeader2().getText())){
+					player2.setLeader(team2.get(i));
 				}
 			}
-			
-			board = new BoardView(control);
+			try {
+				currentGame = new Game(player1,player2);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			board = new editingBoard(control);
 			changeScreen(lead, board);
 		}
 		
 	}
+
 	public class BehindListener implements ActionListener{
 
 		@Override

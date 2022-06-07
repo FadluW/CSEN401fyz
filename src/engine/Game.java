@@ -44,6 +44,11 @@ public class Game {
 	}
 
 	public static ArrayList<Champion> getAvailableChampions() {
+		try {
+			loadChampions("Champions.csv");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return availableChampions;
 	}
 
@@ -63,7 +68,6 @@ public class Game {
 		placeChampions();
 		placeCovers();
 		loadAbilities("Abilities.csv");
-		loadChampions("Champions.csv");
 		// prepareChampionTurns();
 	}
 
