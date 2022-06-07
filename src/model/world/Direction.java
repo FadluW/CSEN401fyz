@@ -17,4 +17,15 @@ public enum Direction {
                 return "";
         }
     }
+
+    
+    public static Direction directionOf(String d) {
+        switch (d.toLowerCase()) {
+            case "up": return Direction.UP;
+            case "down": return Direction.DOWN;
+            case "left": return Direction.LEFT;
+            case "right": return Direction.RIGHT;
+        }
+        return null;
+    }
 }

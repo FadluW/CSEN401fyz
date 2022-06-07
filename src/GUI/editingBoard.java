@@ -112,22 +112,6 @@ public class editingBoard extends JFrame {
                 }
         );
 
-        final int ICON_WIDTH = 75;
-        final int ROWS = 2;
-
-        // for (int i = 0; i < ROWS; i++) {
-        // 	// Fetch team "i"
-
-        // 	for (int j = 0; /*j < team[i].size*/; j++) {
-        // 		// Fetch champion j from team
-        // 		// Champion curr = team.get(j);
-
-        // 		// Fetch Icon of champion
-        // 		// ImageIcon iconChamp = new ImageIcon("assets/characters/64/" + curr.getName() + ".png");
-        // 	}
-        // }
-
-
         // placing each player's champions for display
         int j =1100;
         for (int ind = 0; ind < 6; ind++) {

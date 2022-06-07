@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 import GUI.*;
+import GUI.buttonPresets.ArrowButtons;
 import engine.*;
 import exceptions.*;
+import model.abilities.Ability;
 import model.world.*;
 
 public class GameController {
@@ -164,6 +166,7 @@ public class GameController {
 	}
 
 	// Listener to handle movement
+	/* ButtonID = move|direction */
 	public class MoveListener implements ActionListener {
 
 		@Override
@@ -189,6 +192,60 @@ public class GameController {
 				e1.printStackTrace();
 			}
 		}
+	}
+
+	// Listener to handle casting abilities
+	/* ButtonID = cast| (abilityIndex inside of champion ability arrayList) | (direction / x,y)*/
+	public class CastListener implements ActionListener {
 		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String[] buttonID = ((JButton) e.getSource()).getName().split("\\|");
+			// Ensure it was a move button
+			if (buttonID[0] != "cast") {
+				System.out.println(ANSI_RED + "[ERROR] CastListener - given incorrect button of type " + buttonID[0] + ANSI_RESET);
+				return;
+			}
+
+			Champion currentChamp = currentGame.getCurrentChampion();
+			Ability chosenAbility = currentChamp.getAbilities().get(Integer.parseInt(buttonID[1]));
+			
+			switch (chosenAbility.getCastArea()) {
+				case DIRECTIONAL:
+					try {
+						currentGame.castAbility(chosenAbility, Direction.directionOf(buttonID[2]));
+					} catch (AbilityUseException | NotEnoughResourcesException | CloneNotSupportedException e1) {
+						e1.printStackTrace();
+					}
+					break;
+				case SELFTARGET:
+				case SURROUND:
+				case TEAMTARGET:
+
+					try {
+						currentGame.castAbility(chosenAbility);
+					} catch (AbilityUseException | NotEnoughResourcesException | CloneNotSupportedException e1) {
+						e1.printStackTrace();
+					}
+
+					break;
+				case SINGLETARGET:
+					int x = Integer.parseInt(buttonID[1].split(",")[0]);
+					int y = Integer.parseInt(buttonID[1].split(",")[1]);
+
+					try {
+						currentGame.castAbility(chosenAbility, x, y);
+					} catch (AbilityUseException | InvalidTargetException | NotEnoughResourcesException
+							| CloneNotSupportedException e1) {
+						e1.printStackTrace();
+					}
+
+					break;
+				default:
+					// Throw error
+					break;
+
+			}
+		}
 	}
 }
