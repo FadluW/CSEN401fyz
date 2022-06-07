@@ -241,7 +241,7 @@ public class editingBoard extends JLayeredPane {
         if(appliedEffects.size() == 0) eInfo.append("There is no applied effects yet");
         else{
             for(Effect e: appliedEffects){
-
+                eInfo.append(e.getName() + " (" + e.getDuration() + " turns)");
             }
         }
 

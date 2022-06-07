@@ -88,7 +88,7 @@ public class ArrowButtons {
                 }
                 case CAST_ABILITY: {
                     btn.setName("cast|" + abilityIndex + direction.toString());
-                    // btn.addActionListener(controller.new CastListener());
+                    btn.addActionListener(controller.new CastListener());
                     break;
                 }
                 case MOVE: {
