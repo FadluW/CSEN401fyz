@@ -16,15 +16,15 @@ import model.abilities.*;
 import model.world.*;
 
 public class GameController {
-// String colours for console logs
-public static final String ANSI_RESET = "\u001B[0m";
-public static final String ANSI_BLACK = "\u001B[30m";
-public static final String ANSI_RED = "\u001B[31m";
-public static final String ANSI_GREEN = "\u001B[32m";
-public static final String ANSI_YELLOW = "\u001B[33m";
+	// String colours for console logs
+	public static final String ANSI_RESET = "\u001B[0m";
+	public static final String ANSI_BLACK = "\u001B[30m";
+	public static final String ANSI_RED = "\u001B[31m";
+	public static final String ANSI_GREEN = "\u001B[32m";
+	public static final String ANSI_YELLOW = "\u001B[33m";
 
 	GameController control = this;
-    JLayeredPane panel,panel2;
+    JLayeredPane panel, panel2;
     cleanSelectChampions selectTest;
     cleanSelectChampion select;
     LeaderSelection lead;
@@ -39,6 +39,8 @@ public static final String ANSI_YELLOW = "\u001B[33m";
     private Player player1, player2;
     private StartScreen startScreen;
 	private ArrayList<Champion> team1, team2;
+	private Boolean isBoardCasting;
+	private int abilityIndex;
 	private	JFrame frame = new JFrame();
 
 	public Game getCurrentGame() {
@@ -260,7 +262,7 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 	}
 
 	// Listener to handle casting abilities
-	/* ButtonID = cast| (abilityIndex inside of champion ability arrayList) | (direction / x,y)*/
+	/* ButtonID = cast| (abilityIndex inside of champion ability arrayList) |direction*/
 	public class CastListener implements ActionListener {
 		
 		@Override
@@ -295,17 +297,6 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 
 					break;
 				case SINGLETARGET:
-					int x = Integer.parseInt(buttonID[1].split(",")[0]);
-					int y = Integer.parseInt(buttonID[1].split(",")[1]);
-
-					try {
-						currentGame.castAbility(chosenAbility, x, y);
-					} catch (AbilityUseException | InvalidTargetException | NotEnoughResourcesException
-							| CloneNotSupportedException e1) {
-						e1.printStackTrace();
-					}
-
-					break;
 				default:
 					// Throw error
 					break;
@@ -325,10 +316,16 @@ public static final String ANSI_YELLOW = "\u001B[33m";
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		}
-		
+		}	
 	}
 	
+	public class BoardListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+		}	
+	}
 	public class SelectListener implements ActionListener{
 
 		@Override
