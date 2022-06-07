@@ -277,9 +277,9 @@ public class editingBoard extends JFrame {
 
     }
 
-    public static void main(String[] args) {
-        BoardView view = new BoardView();
-    }
+//    public static void main(String[] args) {
+//        BoardView view = new BoardView();
+//    }
 
     public class baseBackground extends JPanel{
         public void paintComponent(Graphics g) {

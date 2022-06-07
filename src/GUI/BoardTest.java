@@ -20,6 +20,7 @@ public class BoardTest extends JFrame {
 	JLayeredPane panel = new JLayeredPane();
 	//JLayeredPane panel = this;
 	JFrame frame = this;
+	Timer timer;
 	Move move = new Move();
 	int xPos = 100;
 	int yPos = 100;
@@ -43,26 +44,40 @@ public class BoardTest extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				timer = new Timer(10,new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						
+					
+					xPos++;
+					yPos++;
+					if (xPos > 200 || yPos >200) timer.stop();
+					move.repaint();
+					}
+				});
+				timer.start();
 				// TODO Auto-generated method stub
 				//for(int i = 0; i<130; i++) {
-					xPos+=30;
-					yPos+=30;
-					move.repaint();
-					//move.repaint(100);
-					frame.repaint();
-					frame.revalidate();
-					try {
-						Thread.sleep(500);
-					}catch(Exception ex) {}
-					xPos+=30;
-					yPos+=30;
-					move.repaint();
-					//move.repaint(100);
-					frame.repaint();
-					frame.revalidate();
-					try {
-						Thread.sleep(500);
-					}catch(Exception ex) {}
+//					xPos+=30;
+//					yPos+=30;
+//					move.repaint();
+//					//move.repaint(100);
+//					frame.repaint();
+//					frame.revalidate();
+//					try {
+//						Thread.sleep(500);
+//					}catch(Exception ex) {}
+//					xPos+=30;
+//					yPos+=30;
+//					move.repaint();
+//					//move.repaint(100);
+//					frame.repaint();
+//					frame.revalidate();
+//					try {
+//						Thread.sleep(500);
+//					}catch(Exception ex) {}
 //					frame.repaint();
 //					frame.revalidate();
 				//}
