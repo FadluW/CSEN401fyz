@@ -14,16 +14,20 @@ import model.world.AntiHero;
 import model.world.Champion;
 import model.world.Cover;
 
-public class BoardView extends JLayeredPane {
+public class BoardTest extends JFrame {
 	
 	JLabel champion,label,label2,leader,leader2;
-	//JLayeredPane panel = new JLayeredPane();
-	JLayeredPane panel = this;
-	//JFrame frame = this;
+	JLayeredPane panel = new JLayeredPane();
+	//JLayeredPane panel = this;
+	JFrame frame = this;
 	Move move = new Move();
+	int xPos = 100;
+	int yPos = 100;
+	ImageIcon image = new ImageIcon("assets/characters/128/Untitled22_20220607135453.png");
+	Image Joey = image.getImage();
+	//Graphics2D g2 = (Graphics2D) g;
 	
-	
-	public BoardView(GameController control) {
+	public BoardTest(GameController control) {
 		move.setSize(1366,768);
 		leader=new JLabel("");
 		leader.setText("<html> Current Champion <br> Current HP</html>");
@@ -33,17 +37,52 @@ public class BoardView extends JLayeredPane {
 		leader.setBackground(Color.white);
 		leader2=new JLabel("");
 		
+		JButton buttonAnime = new JButton();
+		buttonAnime.setBounds(500, 500, 30, 30);
+		buttonAnime.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				//for(int i = 0; i<130; i++) {
+					xPos+=30;
+					yPos+=30;
+					move.repaint();
+					//move.repaint(100);
+					frame.repaint();
+					frame.revalidate();
+					try {
+						Thread.sleep(500);
+					}catch(Exception ex) {}
+					xPos+=30;
+					yPos+=30;
+					move.repaint();
+					//move.repaint(100);
+					frame.repaint();
+					frame.revalidate();
+					try {
+						Thread.sleep(500);
+					}catch(Exception ex) {}
+//					frame.repaint();
+//					frame.revalidate();
+				//}
+				
+			}
+			
+		});
+		panel.add(buttonAnime, Integer.valueOf(2));
+		
 		Object[][] testBoard = new Object[5][5];
 		testBoard[1][3] = new AntiHero("Dr Strange", 0, 0, 0, 0, 0, 0);
 		
 		drawBoard(testBoard);
 		
-//		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
-//		this.getContentPane().add(panel);	
-//		this.getContentPane().setBackground(Color.pink);
+		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+		this.getContentPane().add(panel);	
+		//this.getContentPane().setBackground(Color.pink);
 		this.setSize(1366,768);
 		this.setVisible(true);
-//		this.setResizable(false);
+		this.setResizable(false);
 	}
 	
 	public void drawBoard(Object[][] board) {
@@ -163,7 +202,9 @@ public class BoardView extends JLayeredPane {
 		panel.add(label,Integer.valueOf(1));
 		panel.add(label2,Integer.valueOf(1));
 		panel.add(leader,Integer.valueOf(1));
-		panel.add(move,Integer.valueOf(0));
+		panel.add(move,Integer.valueOf(1));
+		
+		
 	}
 	
 //	public static void main(String[] args) {
@@ -172,6 +213,8 @@ public class BoardView extends JLayeredPane {
 	
 	public class Move extends JPanel{
 		public void paintComponent(Graphics g) {
+			
+			
 			ImageIcon image = new ImageIcon("assets/background/Board_grass.jpg");
 			Image zeina = image.getImage();
 			Graphics2D g2 = (Graphics2D) g;
@@ -179,10 +222,14 @@ public class BoardView extends JLayeredPane {
 //			g2.setPaint(gradient);
 //			g2.fillRect(0, 0, 1366, 768);
 			g2.drawImage(zeina, 0, 0, 	1366, 768, null);
+			g.drawImage(Joey, xPos, yPos, null);
+//			GradientPaint gradient = new GradientPaint(0,0,Color.cyan,1366,768,Color.blue);
+//			g2.setPaint(gradient);
+//			g2.fillRect(0, 0, 1366, 768);
 			//frame.pack();
 			//g2.setColor(Color.red);
 			//g2.drawRoundRect( 465, 570, 175, 70, 10, 10);
-			///g2.fillRoundRect(  465, 600, 175, 70, 30, 30);
+			//g2.fillRoundRect(  xPos, yPos, 175, 70, 30, 30);
 			//g2.fillRoundRect( 726, 600, 175, 70, 30, 30);
 		}
 	}

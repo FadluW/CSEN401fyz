@@ -27,34 +27,36 @@ import controller.GameController;
 import engine.Game;
 import model.world.Champion;
 
-public class LeaderSelection extends JLayeredPane{
-	JLayeredPane panel=this;
-	JButton champion,forward,behind;
+public class LeaderTestingSelection extends JFrame{
+	JLayeredPane panel;
+	JButton champion,forward;
 	Move move;
-	Font font,font2,font3,font4,plain,font5,font5Big,font5Small;
+	Font font,font2,font3,font4,plain,font5,font5Small,font5Big;
 	JTextField field,field2;
 	JLabel label,label2,title,background1,leader,leader2,test;
 	Image image;
+	//JLayeredPane panel = this;
 	GameController control;
 	ImageIcon btn;
 	Border labelBorder;
 	ArrayList<Champion> team;
-	//JLayeredPane panel = this;
 	//GameController control;
 	
-	public LeaderSelection(GameController control, Game game ) throws FontFormatException, IOException {
-		//panel = new JLayeredPane();
-		//add(background);
-		//this.setBackground(new Color(103,0,0));
+	public LeaderTestingSelection(GameController control, Game game ) throws FontFormatException, IOException {
 		this.control = control;
-		panel.setBounds(0,0,1366,768);
+		panel = new JLayeredPane();
 		panel.setBackground(new Color(122,66,148));
+		panel.setBounds(0,0,1366,768);
+		//this.setBackground(new Color(103,0,0));
+		//add(background);
 		panel.setLayout(null);
 		panel.setVisible(true);
 		panel.setOpaque(true);
 		leader=new JLabel("");
+		leader2=new JLabel("");
 		move = new Move();
 		move.setBounds(0,0,1366, 768);
+		this.control = control;
 		
 		try {
 			font4 = Font.createFont(Font.TRUETYPE_FONT,new File( "assets/fonts/Super Webcomic Bros. Bold Italic.ttf"));
@@ -74,49 +76,42 @@ public class LeaderSelection extends JLayeredPane{
 		font = new Font("serif",Font.ITALIC + Font.BOLD,30);
 		font2 = new Font("serif", Font.BOLD,20);
 		font3 = new Font("serif", Font.BOLD,70);
-		font4 = new Font("serif", Font.BOLD,35);
 
         InputStream is = new BufferedInputStream(new FileInputStream("assets/fonts/BlackWidowMovie-d95Rg.ttf"));
         Font blackWidowFont = Font.createFont(Font.TRUETYPE_FONT,is);
         Font selectChamp = blackWidowFont.deriveFont(45f);
         Font player = blackWidowFont.deriveFont(20f);
-
-        leader2=new JLabel("");
-        leader.setFont(font4);
-        leader.setHorizontalAlignment((int) CENTER_ALIGNMENT);
-        leader.setForeground(new Color(0xf8df82));
-        leader2.setFont(font4);
-        leader2.setHorizontalAlignment((int) CENTER_ALIGNMENT);
-        leader2.setForeground(new Color(0xf8df82));
-        
+		
 		forward = new JButton();
-		forward.addActionListener(control.new ForwardListener());
+		forward.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.print("Button Worked");
+				JLayeredPane panel2 = new JLayeredPane();
+				panel2.setBackground(new Color(231,154,32));
+//				frame.getContentPane().remove(panel);
+//				frame.getContentPane().add(panel2);
+//				frame.revalidate();
+				//label.setText("HI");
+			}
+		});
+		//forward.addActionListener(new MyButtonListener());
 		forward.setOpaque(false);
-		forward.setFocusPainted(false);
 		forward.setContentAreaFilled(false);
+		
 		forward.setBackground(new Color(0x0d0f26));
+		//forward.setBorderPainted(false);
 		forward.setBorder(BorderFactory.createLineBorder(new Color(0xf8df82), 4, true));
+		forward.setFocusPainted(false);
 		forward.setFont(font);
 		forward.setBounds(1000,570,175,70);
 		forward.setText("Continue..");
-		forward.setForeground(new Color(0x1d916f));
+		//forword.setforeground()
+		//forward.disable();
 		forward.setEnabled(false);
-				
-				
-		behind = new JButton();
-		behind.addActionListener(control.new BehindListener());
-		behind.setOpaque(true);
-		behind.setBackground(new Color(0x0d0f26));
-		behind.setBorder(BorderFactory.createLineBorder(new Color(0xf8df82), 4, true));
-		behind.setFocusPainted(false);
-		behind.setFont(font);
-		behind.setBounds(30,20,135,50);
-		behind.setText("Back");
-		behind.setForeground(new Color(0x1d916f));
 		
 		test = new JLabel("");
         test.setFont(font3);
-        test.setForeground(/*Color.white*/new Color(0xf8df82));
+        test.setForeground(Color.white);
         test.setBackground(new Color(0x0d0f26)/*new Color(103,0,0)*/);
         labelBorder = test.getBorder();
         test.setBounds(1050,28,250,320);
@@ -124,14 +119,17 @@ public class LeaderSelection extends JLayeredPane{
         
 		int j = 438;
 		for (int ind = 0; ind < 6; ind++) {
+			
 			if (ind <3 && game.getFirstPlayer().getTeam().size()>0) 
-				btn = new ImageIcon("assets/ui/button_" + game.getFirstPlayer().getTeam().get(ind).getName() + ".png");
-			else if(game.getSecondPlayer().getTeam().size()>0) 
+             btn = new ImageIcon("assets/ui/button_" + game.getFirstPlayer().getTeam().get(ind).getName() + ".png");
+			else if(game.getSecondPlayer().getTeam().size()>0)
 				btn = new ImageIcon("assets/ui/button_" + game.getSecondPlayer().getTeam().get(ind-3).getName() + ".png");
 			j = (ind == 3? 438 : j);
 			champion = new JButton(btn);
 			if (ind<3)champion.setName(game.getFirstPlayer().getTeam().get(ind).getName());
 			else champion.setName(game.getSecondPlayer().getTeam().get(ind-3).getName());
+			
+			//champion.addActionListener(new MyPlayListener());
 			champion.setBackground(new Color(0x0d0f26)/*new Color(49,145,237)*/);
 			champion.addMouseListener(new MouseListener() {
 
@@ -156,8 +154,15 @@ public class LeaderSelection extends JLayeredPane{
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					// TODO Auto-generated method stub
+//					if ((!mouse || (e.getSource()==current)) && ((JButton)(e.getSource())).isEnabled() == true && counter != 6) {
+//						System.out.print("Enter");
+						
 					test.setOpaque(true);
 					test.setBorder(BorderFactory.createLineBorder(Color.black, 5));
+					
+//					if (counter%2==0) test.setBounds(40,28,250,320);
+//					else test.setBounds(1050,28,250,320);
+					//test.setText(getName());
 					if (((JButton) e.getSource()).getY()<500) {
 						team = game.getFirstPlayer().getTeam();
 					}else team= game.getSecondPlayer().getTeam();
@@ -198,10 +203,12 @@ public class LeaderSelection extends JLayeredPane{
 					System.out.print("Button Works");
 					champion = (JButton) e.getSource();
 					if (i==100) {
-					leader.setText(champion.getName());
-					leader.setBounds(95,i+80,300,50);}
-					else {leader2.setText(champion.getName() );
-					leader2.setBounds(95,i+80,300,50);}
+					leader.setText("Leader "+ champion.getLocation());
+					leader.setBounds(120,i+100,300,50);}
+					else {leader2.setText("Leader "+ champion.getLocation());
+					leader2.setBounds(120,i+100,300,50);}
+					//frame.getContentPane().add(panel2);
+					//frame.revalidate();
 					if(leader.getText()!="" && leader2.getText()!="") forward.setEnabled(true);
 				}
 			});
@@ -216,17 +223,19 @@ public class LeaderSelection extends JLayeredPane{
 		title.setFont(selectChamp);
 		title.setForeground(new Color(0xf8df82));
 		
-		label =  new JLabel(control.getCurrentGame().getFirstPlayer().getName()+"'s Leader:");
-		label.setBounds(100, 140, 300, 50);
-		label.setHorizontalAlignment((int) CENTER_ALIGNMENT);
+		label =  new JLabel("First Player's Leader");
+		label.setBounds(100, 150, 300, 50);
 		label.setForeground(/*new Color(103,0,0)*/new Color(0x1d916f));
+		//label.setOpaque(true);
+		//Stroke stroke = new Stroke();
+		
+		//.setBorder(BorderFactory.createLineBorder(new Color(0x050505), 5, true));
+		//label.setBackground(new Color(0x050505));
 		label.setFont(font5);
 		
-		label2 =  new JLabel(control.getCurrentGame().getSecondPlayer().getName()+"'s Leader:");
-		label2.setForeground(/*new Color(103,0,0)*/new Color(0x1d916f));
-		label2.setHorizontalAlignment((int) CENTER_ALIGNMENT);
-		label2.setBounds(100, 540, 300, 50);
-		label2.setFont(font5);
+		label2 =  new JLabel("Second Player's Leader");
+		label2.setBounds(100, 550, 350, 50);
+		label2.setFont(plain);
 		
 		panel.add(move,Integer.valueOf(0));
 		panel.add(title,Integer.valueOf(1));
@@ -236,12 +245,13 @@ public class LeaderSelection extends JLayeredPane{
 		panel.add(leader,Integer.valueOf(1));
 		panel.add(leader2,Integer.valueOf(1));
 		panel.add(test,Integer.valueOf(1));
-		panel.add(behind,Integer.valueOf(1));
-			
+		
+		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+		this.getContentPane().add(panel);	
 		this.setSize(1366,768);
 		this.setVisible(true);
+		this.setResizable(false);
 	}
-	
 //	public static void main(String[] args) {
 //		LeaderSelection leader = new LeaderSelection();
 //	}
@@ -270,20 +280,5 @@ public class LeaderSelection extends JLayeredPane{
 			//g2.fillRoundRect( 726, 570, 175, 70, 30, 30);
 		}
 	}
-
-	public JLabel getLeader() {
-		return leader;
-	}
-
-	public void setLeader(JLabel leader) {
-		this.leader = leader;
-	}
-
-	public JLabel getLeader2() {
-		return leader2;
-	}
-
-	public void setLeader2(JLabel leader2) {
-		this.leader2 = leader2;
-	}
 }
+
