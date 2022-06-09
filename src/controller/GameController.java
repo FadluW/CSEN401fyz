@@ -256,6 +256,21 @@ public class GameController {
 			try {
 				currentGame.move(direction);
 			} catch (UnallowedMovementException | NotEnoughResourcesException e1) {
+				board.getErrorPanel().setVisible(true);
+				board.repaint();
+				board.revalidate();
+
+				if(e1 instanceof UnallowedMovementException)board.getErrorLabel().setText("You Can't Move Here");
+				else board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources");
+
+				new Timer().schedule(new TimerTask() {
+					@Override
+					public void run() {
+						board.getErrorPanel().setVisible(false);
+						board.repaint();
+						board.revalidate();
+					}
+				}, 1500);
 				e1.printStackTrace();
 			}
 		}
@@ -292,6 +307,21 @@ public class GameController {
 					try {
 						currentGame.castAbility(chosenAbility);
 					} catch (AbilityUseException | NotEnoughResourcesException | CloneNotSupportedException e1) {
+						board.getErrorPanel().setVisible(true);
+						board.repaint();
+						board.revalidate();
+
+						if(e1 instanceof AbilityUseException)board.getErrorLabel().setText("You Can't Use this Ability");
+						else if(e1 instanceof NotEnoughResourcesException) board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources");
+
+						new Timer().schedule(new TimerTask() {
+							@Override
+							public void run() {
+								board.getErrorPanel().setVisible(false);
+								board.repaint();
+								board.revalidate();
+							}
+						}, 1500);
 						e1.printStackTrace();
 					}
 
@@ -326,6 +356,7 @@ public class GameController {
 			
 		}	
 	}
+
 	public class SelectListener implements ActionListener{
 
 		@Override
