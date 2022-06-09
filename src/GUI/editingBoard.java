@@ -23,9 +23,9 @@ import model.world.Cover;
 
 public class editingBoard extends JLayeredPane {
 
-    JLabel champion, player1Label, player2Label, info, ability1Used, ability2Used;
-    JTextArea queue, abilitiesInfo, effectsInfo;
-    JPanel abilitiesPanel, effectsPanel, queuePanel, player1Panel, player2panel, leader1Ability, leader2Ability, allButtonsPanel;
+    JLabel champion, player1Label, player2Label, info, ability1Used, ability2Used, errorLabel;
+    JTextArea queue, abilities1Info, abilities2Info, effectsInfo;
+    JPanel abilities1Panel, abilities2Panel , effectsPanel, queuePanel, player1Panel, player2panel, leader1Ability, leader2Ability, allButtonsPanel, errorPanel;
     JLayeredPane panel = this;
     JLayeredPane panel2;
     JButton endTurn, move, attack, castAbility, useLeaderAbility;
@@ -73,11 +73,13 @@ public class editingBoard extends JLayeredPane {
         panel.add(leader2Ability,Integer.valueOf(1));
         panel.add(ability2Used,Integer.valueOf(2));
         panel.add(info,Integer.valueOf(1));
-        panel.add(abilitiesPanel, Integer.valueOf(1));
+        panel.add(abilities1Panel, Integer.valueOf(1));
+        panel.add(abilities2Panel, Integer.valueOf(1));
         panel.add(effectsPanel,Integer.valueOf(1));
         panel.add(queuePanel, Integer.valueOf(1));
         panel.add(grass,Integer.valueOf(0));
         panel.add(allButtonsPanel, Integer.valueOf(1));
+        panel.add(errorPanel, Integer.valueOf(5));
 
 
 //        this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
@@ -109,7 +111,10 @@ public class editingBoard extends JLayeredPane {
 
                 else if (board[i][j] instanceof Cover) {
 //					add cover to board
+                    Cover actualCover = (Cover) board[i][j];
+                    int maxHP = actualCover.getCurrentHP();
                     button.setIcon(cover);
+                    button.setToolTipText("<html> HP:" + actualCover.getCurrentHP() + "/" + maxHP + "</html>");
                     panel2.add(button);
                     button.addMouseMotionListener(new MouseMotionListener() {
                         @Override
@@ -119,6 +124,7 @@ public class editingBoard extends JLayeredPane {
 
                         @Override
                         public void mouseMoved(MouseEvent e) {
+
                             displayQueue(queue,info);
                         }
                     });
@@ -183,9 +189,10 @@ public class editingBoard extends JLayeredPane {
                 c.getCurrentHP() + "/" + c.getMaxHP() + "<br>Mana: " + c.getMana() + "<br>Action Points: " + c.getCurrentActionPoints() +
                 "<br>Attack Damage: " + c.getAttackDamage() + "<br>Attack Range: " + c.getAttackRange() + "<br>Leader? " +
                 isLeader(c) + "</html>");
-        abilitiesInfo.setText("");
+        abilities1Info.setText("");
+        abilities2Info.setText("");
         effectsInfo.setText("");
-        displayAbilitiesAndEffects(c,abilitiesInfo,effectsInfo);
+        displayAbilitiesAndEffects(c, abilities1Info, abilities2Info, effectsInfo);
 
         PriorityQueue temp = new PriorityQueue(6);
         queue.setText("");
@@ -210,33 +217,56 @@ public class editingBoard extends JLayeredPane {
         return type;
     }
 
-    public void displayAbilitiesAndEffects(Champion c, JTextArea aInfo, JTextArea eInfo){
+    public void displayAbilitiesAndEffects(Champion c, JTextArea a1Info, JTextArea a2Info, JTextArea eInfo){
         abilities = c.getAbilities();
         appliedEffects = c.getAppliedEffects();
         String type;
+        int counter = 0;
 
         for(Ability a : abilities){
             type = a.getClass().getName();
-            //aInfo.setText("");
-            aInfo.append("Name: " + a.getName() + "\nType: " + getType(type) + "\nArea of Effect: " + a.getCastArea() +
-                    "\nCast Range: " + a.getCastRange() + "\nMana: " + a.getManaCost() + "\nAction cost: " + a.getRequiredActionPoints() +
-                    "\nBase Cooldown: " + a.getBaseCooldown() + "\nCurrent Cooldown: " + a.getCurrentCooldown());
-            switch (getType(type)){
-                case "Healing":
-                    HealingAbility healingAbility = (HealingAbility) a;
-                    aInfo.append("\nHealing Amount: " + healingAbility.getHealAmount() + "\n\n");
-                    break;
-                case "Damaging":
-                    DamagingAbility damagingAbility = (DamagingAbility) a;
-                    aInfo.append("\nDamaging Amount: " + damagingAbility.getDamageAmount() + "\n\n");
-                    break;
-                case "Crowd Control":
-                    CrowdControlAbility crowdControlAbility = (CrowdControlAbility) a;
-                    aInfo.append("\nEffect: " + crowdControlAbility.getEffect().getName() + "\n\n");
-                    break;
-                default: break;
+            if(counter < 2){
+                a1Info.append("Name: " + a.getName() + "\nType: " + getType(type) + "\nArea: " + a.getCastArea() +
+                        "\nCast Range: " + a.getCastRange() + "\nMana: " + a.getManaCost() + "\nAction cost: " + a.getRequiredActionPoints() +
+                        "\nBase Cooldown: " + a.getBaseCooldown() + "\nCurrent Cooldown: " + a.getCurrentCooldown());
+                switch (getType(type)){
+                    case "Healing":
+                        HealingAbility healingAbility = (HealingAbility) a;
+                        a1Info.append("\nHealing Amount: " + healingAbility.getHealAmount() + "\n\n");
+                        break;
+                    case "Damaging":
+                        DamagingAbility damagingAbility = (DamagingAbility) a;
+                        a1Info.append("\nDamaging Amount: " + damagingAbility.getDamageAmount() + "\n\n");
+                        break;
+                    case "Crowd Control":
+                        CrowdControlAbility crowdControlAbility = (CrowdControlAbility) a;
+                        a1Info.append("\nEffect: " + crowdControlAbility.getEffect().getName() + "\n\n");
+                        break;
+                    default: break;
+                }
             }
-            //frame.revalidate();
+            else{
+                a2Info.append("Name: " + a.getName() + "\nType: " + getType(type) + "\nArea: " + a.getCastArea() +
+                        "\nCast Range: " + a.getCastRange() + "\nMana: " + a.getManaCost() + "\nAction cost: " + a.getRequiredActionPoints() +
+                        "\nBase Cooldown: " + a.getBaseCooldown() + "\nCurrent Cooldown: " + a.getCurrentCooldown());
+                switch (getType(type)){
+                    case "Healing":
+                        HealingAbility healingAbility = (HealingAbility) a;
+                        a2Info.append("\nHealing Amount: " + healingAbility.getHealAmount() + "\n\n");
+                        break;
+                    case "Damaging":
+                        DamagingAbility damagingAbility = (DamagingAbility) a;
+                        a2Info.append("\nDamaging Amount: " + damagingAbility.getDamageAmount() + "\n\n");
+                        break;
+                    case "Crowd Control":
+                        CrowdControlAbility crowdControlAbility = (CrowdControlAbility) a;
+                        a2Info.append("\nEffect: " + crowdControlAbility.getEffect().getName() + "\n\n");
+                        break;
+                    default: break;
+                }
+            }
+
+            counter++;
         }
         if(appliedEffects.size() == 0) eInfo.append("There is no applied effects yet");
         else{
@@ -285,9 +315,10 @@ public class editingBoard extends JLayeredPane {
                             + realChampion.getCurrentHP() + "/" + realChampion.getMaxHP() + "<br>Mana: " + realChampion.getMana() + "<br>Action Points: " +
                             realChampion.getCurrentActionPoints() + "<br>Attack Damage: " + realChampion.getAttackDamage() +
                             "<br>Attack Range: " + realChampion.getAttackRange() + "<br>Leader? " + isLeader(realChampion) + "</html>");
-                    abilitiesInfo.setText("");
+                    abilities1Info.setText("");
+                    abilities2Info.setText("");
                     effectsInfo.setText("");
-                    displayAbilitiesAndEffects(realChampion,abilitiesInfo,effectsInfo);
+                    displayAbilitiesAndEffects(realChampion, abilities1Info, abilities2Info, effectsInfo);
 //                    frame.revalidate();
 //                    frame.repaint();
 
@@ -300,19 +331,31 @@ public class editingBoard extends JLayeredPane {
     }
 
     private void PlaceAbilitiesAndEffects() {
-        abilitiesPanel = new JPanel();
-        abilitiesPanel.setBounds(30, 195,225,500);
-        abilitiesPanel.setBackground(Color.white);
-        abilitiesPanel.setOpaque(true);
+        abilities1Panel = new JPanel();
+        abilities1Panel.setBounds(5, 195,160,370);
+        abilities1Panel.setBackground(Color.white);
+        abilities1Panel.setOpaque(true);
 
-        JLabel abilitiesLabel = new JLabel("<html><p style=\"font-size:14pt\">Abilities: </p></html>");
+        JLabel abilities1Label = new JLabel("<html><p style=\"font-size:14pt\">Abilities: </p></html>");
 
-        abilitiesInfo = new JTextArea();
-        abilitiesInfo.setEditable(false);
+        abilities1Info = new JTextArea();
+        abilities1Info.setEditable(false);
 
-        abilitiesPanel.add(abilitiesLabel);
-        abilitiesPanel.add(abilitiesInfo);
+        abilities1Panel.add(abilities1Label);
+        abilities1Panel.add(abilities1Info);
 
+        abilities2Panel = new JPanel();
+        abilities2Panel.setBounds(170, 195,160,370);
+        abilities2Panel.setBackground(Color.white);
+        abilities2Panel.setOpaque(true);
+
+        JLabel abilities2Label = new JLabel("<html><p style=\"font-size:14pt\">Abilities: </p></html>");
+
+        abilities2Info = new JTextArea();
+        abilities2Info.setEditable(false);
+
+        abilities2Panel.add(abilities2Label);
+        abilities2Panel.add(abilities2Info);
 
         effectsPanel = new JPanel();
         effectsPanel.setBounds(1080,300,225,220);
@@ -420,6 +463,25 @@ public class editingBoard extends JLayeredPane {
 //        allButtonsPanel.add(endTurn);
     }
 
+    public JPanel getErrorPanel() {
+        return errorPanel;
+    }
+
+    public JLabel getErrorLabel() {
+        return errorLabel;
+    }
+
+    private void PlaceErrorMessages(){
+        errorPanel = new JPanel();
+        errorPanel.setBounds(333,395,700,50);
+        errorPanel.setBackground(Color.black);
+        errorPanel.setVisible(false);
+
+        errorLabel = new JLabel();
+
+        errorPanel.add(errorLabel);
+    }
+
     private void EndTurnButtonListener(JButton btn){
         btn.addActionListener(new ActionListener() {
             @Override
@@ -428,7 +490,10 @@ public class editingBoard extends JLayeredPane {
                 turnOrder = game.getTurnOrder();
                 Champion curr = (Champion) turnOrder.peekMin();
                 displayQueue(queue, info);
-                displayAbilitiesAndEffects(curr, abilitiesInfo, effectsInfo);
+                displayAbilitiesAndEffects(curr, abilities1Info, abilities2Info, effectsInfo);
+                abilities1Info.setText("");
+                abilities2Info.setText("");
+                effectsInfo.setText("");
                 if(game.getCurrentChampion() == controller.getPlayer1().getLeader() || game.getCurrentChampion() == controller.getPlayer2().getLeader()) useLeaderAbility.setEnabled(true);
                 else useLeaderAbility.setEnabled(false);
             }
