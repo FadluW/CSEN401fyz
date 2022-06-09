@@ -17,6 +17,20 @@ public enum Direction {
                 return "";
         }
     }
+    public String toArrow() {
+        switch (this) {
+            case DOWN:
+                return "⮟";
+            case LEFT:
+                return "⮜";
+            case RIGHT:
+                return "⮞";
+            case UP:
+                return "⮝";
+            default:
+                return "";
+        }
+    }
 
     
     public static Direction directionOf(String d) {

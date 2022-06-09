@@ -256,7 +256,7 @@ public class Game {
 		if (vertical < 0 || vertical > 4) throw new UnallowedMovementException("Out of vertical board borders"); 
 		if (horizontal < 0 || horizontal > 4) throw new UnallowedMovementException("Out of horizontal board borders"); 
 
-		if (!board[vertical][horizontal].equals(null)) throw new UnallowedMovementException();
+		if (board[vertical][horizontal] != null) throw new UnallowedMovementException();
 
 		c.setLocation(new Point(vertical, horizontal));
 

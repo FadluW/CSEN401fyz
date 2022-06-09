@@ -445,36 +445,36 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
 				public void mouseEntered(MouseEvent e) {
 					// TODO Auto-generated method stub
 					if ((!mouse || (e.getSource()==current)) && ((JButton)(e.getSource())).isEnabled() == true && counter != 6) {
-						System.out.print("Enter");
+						// System.out.print("Enter");
+							
+						test.setOpaque(true);
+						test.setBorder(BorderFactory.createLineBorder(Color.black, 5));
 						
-					test.setOpaque(true);
-					test.setBorder(BorderFactory.createLineBorder(Color.black, 5));
-					
-					if (counter%2==0) test.setBounds(40,28,250,320);
-					else test.setBounds(1050,28,250,320);
-					//test.setText(getName());
-					
-					for(int i = 0; i < Champions.size(); i++){
-						if (Champions.get(i).getName().equals(((JButton) (e.getSource())).getName())){
-							test.setText("<html><h1>"
-							+"<div style='text-indent:15px; font-size:24; margin-top :-40;'>"
-							+Champions.get(i).getName()
-							+"</div></h1><h2><div style='font-size:18;margin-left:35;margin-top :-32;'>"+"Type: "
-							+Champions.get(i).getClass().getSimpleName()+"<br>Mana: "
-							+Champions.get(i).getCurrentHP()+"<br>Health Points: "
-							+Champions.get(i).getMana()+"<br>Action Points: "
-							+Champions.get(i).getCurrentActionPoints()+"<br>Attack Points: "
-							+Champions.get(i).getAttackDamage()+"<br> Attack Range: "
-							+Champions.get(i).getAttackRange()+"<br>Abilities:"		
-							+"</div><div style='font-size:14; margin-left:50; margin-top:8;'>"
-							+Champions.get(i).getAbilities().get(0).getName()+"<br>"
-							+Champions.get(i).getAbilities().get(1).getName()+"<br>"
-							+Champions.get(i).getAbilities().get(2).getName()+"</div>"
-							+"</div></h2><html>");
-            			}
+						if (counter%2==0) test.setBounds(40,28,250,320);
+						else test.setBounds(1050,28,250,320);
+						//test.setText(getName());
+						
+						for(int i = 0; i < Champions.size(); i++){
+							if (Champions.get(i).getName().equals(((JButton) (e.getSource())).getName())){
+								test.setText("<html><h1>"
+								+"<div style='text-indent:15px; font-size:24; margin-top :-40;'>"
+								+Champions.get(i).getName()
+								+"</div></h1><h2><div style='font-size:18;margin-left:35;margin-top :-32;'>"+"Type: "
+								+Champions.get(i).getClass().getSimpleName()+"<br>Mana: "
+								+Champions.get(i).getCurrentHP()+"<br>Health Points: "
+								+Champions.get(i).getMana()+"<br>Action Points: "
+								+Champions.get(i).getCurrentActionPoints()+"<br>Attack Points: "
+								+Champions.get(i).getAttackDamage()+"<br> Attack Range: "
+								+Champions.get(i).getAttackRange()+"<br>Abilities:"		
+								+"</div><div style='font-size:14; margin-left:50; margin-top:8;'>"
+								+Champions.get(i).getAbilities().get(0).getName()+"<br>"
+								+Champions.get(i).getAbilities().get(1).getName()+"<br>"
+								+Champions.get(i).getAbilities().get(2).getName()+"</div>"
+								+"</div></h2><html>");
+							}
+						}
 					}
 				}
-			}
 				@Override
 				public void mouseExited(MouseEvent e) {
 					if(e.getSource()!=current &&  !mouse) {

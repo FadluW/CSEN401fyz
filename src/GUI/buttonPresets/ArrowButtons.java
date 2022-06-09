@@ -4,12 +4,13 @@ import java.beans.ConstructorProperties;
 import java.time.OffsetDateTime;
 import java.util.*;
 import javax.swing.*;
+import java.awt.event.*;
 import controller.GameController;
 import model.world.Direction;
 
 public class ArrowButtons {
-    private final int BUTTON_WIDTH = 110;
-    private final int BUTTON_HEIGHT = 70;
+    private final int BUTTON_WIDTH = 60;
+    private final int BUTTON_HEIGHT = 25;
     private final int OFFSET = 5;
     private final int GRID_WIDTH = 2 * BUTTON_WIDTH + BUTTON_HEIGHT + 2 * OFFSET;
     private final int GRID_HEIGHT = 2 * BUTTON_WIDTH + BUTTON_HEIGHT + 2 * OFFSET;
@@ -77,17 +78,17 @@ public class ArrowButtons {
         // Iterate over different directions and create a button for each
         int i = 0;
         for (Direction direction : Direction.values()) {
-            JButton btn = new JButton(((icons == null) ? direction.toString() : null), ((icons == null) ? null : icons.get(i)));
+            JButton btn = new JButton(((icons == null) ? direction.toArrow() : null), ((icons == null) ? null : icons.get(i)));
             
             // Attach appropriate listener and name
             switch (type) {
                 case ATTACK: {
                     btn.setName("attack|" + direction.toString());
-                    // btn.addActionListener(controller.new AttackListener());
+                    btn.addActionListener(controller.new AttackListener());
                     break;
                 }
                 case CAST_ABILITY: {
-                    btn.setName("cast|" + abilityIndex + direction.toString());
+                    btn.setName("cast|" + abilityIndex + "|" + direction.toString());
                     btn.addActionListener(controller.new CastListener());
                     break;
                 }
@@ -206,6 +207,12 @@ public class ArrowButtons {
             btn.setBounds(xPos, yPos, width, height);
             btn.setVisible(true);
             panel.add(btn);
+        }
+    }
+
+    public void addListener(ActionListener lsn) {
+        for (JButton btn : buttonGrid) {
+            btn.addActionListener(lsn);
         }
     }
 

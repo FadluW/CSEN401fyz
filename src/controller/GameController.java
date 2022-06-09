@@ -240,18 +240,12 @@ public class GameController {
 		public void actionPerformed(ActionEvent e) {
 			String[] buttonID = ((JButton) e.getSource()).getName().split("\\|");
 			// Ensure it was a move button
-			if (buttonID[0] != "move") {
+			if (!buttonID[0].equals("move")) {
 				System.out.println(ANSI_RED + "[ERROR] MoveListener - given incorrect button of type " + buttonID[0] + ANSI_RESET);
 				return;
 			}
 
-			Direction direction = null;
-			switch (buttonID[1].toLowerCase()) {
-				case "up": direction = Direction.UP; break;
-				case "down": direction = Direction.DOWN; break;
-				case "left": direction = Direction.LEFT; break;
-				case "right": direction = Direction.RIGHT; break;
-			}
+			Direction direction = Direction.directionOf(buttonID[1].toLowerCase());
 
 			try {
 				currentGame.move(direction);
@@ -275,7 +269,30 @@ public class GameController {
 			}
 		}
 	}
+	
+	// Listener to handle movement
+	/* ButtonID = attack|direction */
+	public class AttackListener implements ActionListener {
 
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String[] buttonID = ((JButton) e.getSource()).getName().split("\\|");
+			// Ensure it was a move button
+			if (!buttonID[0].equals("attack")) {
+				System.out.println(ANSI_RED + "[ERROR] AttackListener - given incorrect button of type " + buttonID[0] + ANSI_RESET);
+				return;
+			}
+
+			Direction direction = Direction.directionOf(buttonID[1].toLowerCase());
+
+			try {
+				currentGame.attack(direction);
+			} catch (NotEnoughResourcesException | InvalidTargetException | ChampionDisarmedException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+	
 	// Listener to handle casting abilities
 	/* ButtonID = cast| (abilityIndex inside of champion ability arrayList) |direction*/
 	public class CastListener implements ActionListener {
@@ -284,7 +301,7 @@ public class GameController {
 		public void actionPerformed(ActionEvent e) {
 			String[] buttonID = ((JButton) e.getSource()).getName().split("\\|");
 			// Ensure it was a move button
-			if (buttonID[0] != "cast") {
+			if (!buttonID[0].equals("cast")) {
 				System.out.println(ANSI_RED + "[ERROR] CastListener - given incorrect button of type " + buttonID[0] + ANSI_RESET);
 				return;
 			}
@@ -356,7 +373,6 @@ public class GameController {
 			
 		}	
 	}
-
 	public class SelectListener implements ActionListener{
 
 		@Override

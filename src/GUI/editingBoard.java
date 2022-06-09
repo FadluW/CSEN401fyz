@@ -12,6 +12,7 @@ import engine.PriorityQueue;
 
 import javax.swing.*;
 
+import GUI.buttonPresets.*;
 import controller.GameController;
 import model.abilities.Ability;
 import model.abilities.CrowdControlAbility;
@@ -26,8 +27,10 @@ public class editingBoard extends JLayeredPane {
     JLabel champion, player1Label, player2Label, info, ability1Used, ability2Used, errorLabel;
     JTextArea queue, abilities1Info, abilities2Info, effectsInfo;
     JPanel abilities1Panel, abilities2Panel , effectsPanel, queuePanel, player1Panel, player2panel, leader1Ability, leader2Ability, allButtonsPanel, errorPanel;
+    JPanel abilityListPanel = new JPanel(new GridLayout(2, 1, 0, 10));
+    JPanel arrowPanel = new JPanel(new GridLayout(2, 1, 0, 10));
+    JLayeredPane boardPanel = new JLayeredPane();
     JLayeredPane panel = this;
-    JLayeredPane panel2;
     JButton endTurn, move, attack, castAbility, useLeaderAbility;
     baseBackground grass = new baseBackground();
     ArrayList<Champion> team1,team2;
@@ -63,7 +66,7 @@ public class editingBoard extends JLayeredPane {
 
         displayQueue(queue, info);
 
-        panel.add(panel2,Integer.valueOf(1));
+        panel.add(boardPanel,Integer.valueOf(1));
         panel.add(player1Label,Integer.valueOf(2));
         panel.add(player2Label,Integer.valueOf(2));
         panel.add(player1Panel,Integer.valueOf(1));
@@ -90,9 +93,9 @@ public class editingBoard extends JLayeredPane {
     }
 
     public void drawBoard(Object[][] board) {
-        panel2 = new JLayeredPane();
-        panel2.setLayout(new GridLayout(board.length, board[0].length, 5, 5));
-        panel2.setBounds(333, 16, 700, 700);
+        boardPanel.removeAll();
+        boardPanel.setLayout(new GridLayout(board.length, board[0].length, 5, 5));
+        boardPanel.setBounds(333, 16, 700, 700);
 
         // Iterate over game board, rows and columns, generating buttons
         for (int i = 0; i < board.length; i++) {
@@ -106,7 +109,7 @@ public class editingBoard extends JLayeredPane {
                 //button.setBorderPainted(false);
 
                 if (board[i][j] == null) {
-                    panel2.add(button);
+                    boardPanel.add(button);
                 }
 
                 else if (board[i][j] instanceof Cover) {
@@ -115,7 +118,7 @@ public class editingBoard extends JLayeredPane {
                     int maxHP = actualCover.getCurrentHP();
                     button.setIcon(cover);
                     button.setToolTipText("<html> HP:" + actualCover.getCurrentHP() + "/" + maxHP + "</html>");
-                    panel2.add(button);
+                    boardPanel.add(button);
                     button.addMouseMotionListener(new MouseMotionListener() {
                         @Override
                         public void mouseDragged(MouseEvent e) {
@@ -124,7 +127,6 @@ public class editingBoard extends JLayeredPane {
 
                         @Override
                         public void mouseMoved(MouseEvent e) {
-
                             displayQueue(queue,info);
                         }
                     });
@@ -135,7 +137,7 @@ public class editingBoard extends JLayeredPane {
                     Champion curr = (Champion) board[i][j];
                     ImageIcon champIcon = new ImageIcon("assets/characters/128/" + curr.getName() + ".png", curr.getName());
                     button.setIcon(champIcon);
-                    panel2.add(button);
+                    boardPanel.add(button);
                 }
             }
         }
@@ -452,6 +454,14 @@ public class editingBoard extends JLayeredPane {
         else useLeaderAbility.setEnabled(false);
 
         EndTurnButtonListener(endTurn);
+        castAbility.addActionListener(new AbilityPanelListener());
+        castAbility.setName("open");
+
+        move.addActionListener(new ArrowPanelListener());
+        move.setName("open|move");
+
+        attack.addActionListener(new ArrowPanelListener());
+        attack.setName("open|attack");
 
         allButtonsPanel.add(move);
         allButtonsPanel.add(attack);
@@ -498,6 +508,142 @@ public class editingBoard extends JLayeredPane {
                 else useLeaderAbility.setEnabled(false);
             }
         });
+    }
+
+    // Button listener that updates the board
+    private class boardUpdateListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new java.util.Timer().schedule(new java.util.TimerTask() {
+                @Override
+                public void run() {
+                    drawBoard(controller.getCurrentGame().getBoard());
+                    panel.revalidate();
+                    panel.repaint();
+                }
+            }, 50);
+        }
+        
+    }
+
+    // Button listener that opens/closes D-Pad panel for directional actions
+    /* ButtonID = (open / close)|(move/cast/attack)|(abilityIndex) */
+    private class ArrowPanelListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String[] buttonID = ((JButton) e.getSource()).getName().split("\\|");
+            
+            if (buttonID[0].equals("close")) {
+                System.out.println("Closing arrow panel");
+                panel.remove(arrowPanel);
+                panel.repaint();
+                panel.revalidate();
+            } else {
+                arrowPanel.setBounds(1080,540,225,160);
+                arrowPanel.setBackground(Color.WHITE);
+                arrowPanel.removeAll();
+                System.out.println("Making new arrow panel of " + buttonID[1]);
+
+                switch (buttonID[1].toLowerCase()) {
+                    case "move": {
+                        ArrowButtons arrows = new ArrowButtons(controller, ArrowButtonTypes.MOVE);
+                        arrows.placeButtons(arrowPanel);
+                        arrows.addListener(new boardUpdateListener());
+                        break;
+                    }
+                    case "cast": {
+                        ArrowButtons arrows = new ArrowButtons(controller, ArrowButtonTypes.CAST_ABILITY, Integer.parseInt(buttonID[2]));
+                        arrows.placeButtons(arrowPanel);
+                        arrows.addListener(new boardUpdateListener());
+                        break;
+                    }
+                    case "attack": {
+                        ArrowButtons arrows = new ArrowButtons(controller, ArrowButtonTypes.ATTACK);
+                        arrows.placeButtons(arrowPanel);
+                        arrows.addListener(new boardUpdateListener());
+                        break;
+                    }
+                }
+
+                JButton back = new JButton("Back");
+                back.addActionListener(new ArrowPanelListener());
+                back.setName("close");
+
+                arrowPanel.add(back);
+
+                panel.add(arrowPanel, Integer.valueOf(4));
+                panel.revalidate();
+            }
+        }
+    }
+
+    // Button listener that opens/closes the abilities panel
+    private class AbilityPanelListener implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String buttonID = ((JButton) e.getSource()).getName().toLowerCase();
+
+            if (buttonID == "close") {
+                panel.remove(abilityListPanel);
+                panel.repaint();
+                panel.revalidate();
+            } else {
+                abilityListPanel = generateAbilityList(abilityListPanel);
+                abilityListPanel.setBounds(1080,540,225,160);
+                abilityListPanel.setBackground(Color.WHITE);
+                panel.add(abilityListPanel, Integer.valueOf(3));
+                panel.revalidate();
+            }
+        }
+    }
+
+    private JPanel generateAbilityList (JPanel p) {
+
+        Champion c = controller.getCurrentGame().getCurrentChampion();
+        JPanel buttons = new JPanel(new GridLayout(c.getAbilities().size(), 1));
+
+        // Iterate over abilities adding buttons to panel
+        int i = 0;
+        for (Ability a : c.getAbilities()) {
+            JButton btn = new JButton(a.getName());
+
+            switch (a.getCastArea()) {
+                // Cast ability
+                case SELFTARGET:
+                case SURROUND:
+                case TEAMTARGET: {
+                    btn.setName("cast|" + i);
+                    btn.addActionListener(controller.new CastListener());
+                    break;
+                }
+                // Set controller casting ability flag to true
+                case SINGLETARGET:{
+
+                    break;
+                }
+                // Display arrows to select direction
+                case DIRECTIONAL:{
+                    btn.setName("open|cast|" + i);
+                    btn.addActionListener(new ArrowPanelListener());
+                    break;
+                }
+                default:
+                    break;
+            }
+            buttons.add(btn);
+            i++;
+        }
+
+        JButton backbtn = new JButton("Back");
+        backbtn.addActionListener(new AbilityPanelListener());
+        backbtn.setName("close");
+
+        p.removeAll();
+        p.add(buttons);
+        p.add(backbtn);
+        return p;
     }
 }
 
