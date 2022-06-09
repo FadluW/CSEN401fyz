@@ -39,8 +39,8 @@ public class GameController {
     private Player player1, player2;
     private StartScreen startScreen;
 	private ArrayList<Champion> team1, team2;
-	private Boolean isBoardCasting;
-	private int abilityIndex;
+	private Boolean isBoardCasting = false;
+	private int abilityIndex = -1;
 	private	JFrame frame = new JFrame();
 
 	public Game getCurrentGame() {
@@ -343,7 +343,15 @@ public class GameController {
 					}
 
 					break;
-				case SINGLETARGET:
+				case SINGLETARGET: {
+					System.out.println("Board Casting - SINGLETARGET");
+					// Set casting true
+					isBoardCasting = true;
+
+					// Set ability index
+					abilityIndex = Integer.parseInt(buttonID[1]);
+					break;
+				}
 				default:
 					// Throw error
 					break;
@@ -366,11 +374,36 @@ public class GameController {
 		}	
 	}
 	
+	/* ButtonID = board|x|y */
 	public class BoardListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			String[] buttonID = ((JButton) e.getSource()).getName().split("\\|");
+
+			if (!buttonID[0].equals("board")) {
+				System.out.println("[ERROR] BoardListener - Invalid ID of " + buttonID[0]);
+				return;
+			}
+
+			if (isBoardCasting) {
+				if (abilityIndex < 0 || abilityIndex > currentGame.getCurrentChampion().getAbilities().size() - 1) {
+					System.out.println("[ERROR] BoardListener - Invalid ability index of " + abilityIndex);
+					return;
+				}
+
+				try {
+					currentGame.castAbility(currentGame.getCurrentChampion().getAbilities().get(abilityIndex), Integer.parseInt(buttonID[1]), Integer.parseInt(buttonID[2]));
+				} catch (NumberFormatException | AbilityUseException | InvalidTargetException
+						| NotEnoughResourcesException | CloneNotSupportedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				abilityIndex = -1;
+				isBoardCasting = false;
+
+			}
 		}	
 	}
 	public class SelectListener implements ActionListener{

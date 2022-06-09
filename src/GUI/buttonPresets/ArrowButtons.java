@@ -10,7 +10,7 @@ import model.world.Direction;
 
 public class ArrowButtons {
     private final int BUTTON_WIDTH = 60;
-    private final int BUTTON_HEIGHT = 25;
+    private final int BUTTON_HEIGHT = 50;
     private final int OFFSET = 5;
     private final int GRID_WIDTH = 2 * BUTTON_WIDTH + BUTTON_HEIGHT + 2 * OFFSET;
     private final int GRID_HEIGHT = 2 * BUTTON_WIDTH + BUTTON_HEIGHT + 2 * OFFSET;
@@ -105,6 +105,10 @@ public class ArrowButtons {
             i++;
         }
 
+        JButton backBtn = new JButton("B");
+        backBtn.setName("close|back");
+        grid.add(backBtn);
+
         return grid;
     }
 
@@ -145,6 +149,13 @@ public class ArrowButtons {
                     height = BUTTON_HEIGHT;
                     break;
                 }
+                case "back": {
+                    xPos = dx + BUTTON_WIDTH + OFFSET;
+                    yPos = dy + BUTTON_WIDTH + OFFSET;
+                    width = BUTTON_HEIGHT;
+                    height = BUTTON_HEIGHT;
+                    break;
+                }
                 default: {
                     xPos = 0;
                     yPos = 0;
@@ -155,7 +166,7 @@ public class ArrowButtons {
 
             btn.setBounds(xPos, yPos, width, height);
             btn.setVisible(true);
-            screen.add(btn);
+            screen.add(btn, Integer.valueOf(6));
         }
     }
 
@@ -212,8 +223,13 @@ public class ArrowButtons {
 
     public void addListener(ActionListener lsn) {
         for (JButton btn : buttonGrid) {
+            if (btn.getText().equals("B")) continue;
             btn.addActionListener(lsn);
         }
+    }
+
+    public void addBackListener(ActionListener lsn) {
+        buttonGrid.get(buttonGrid.size() - 1).addActionListener(lsn);
     }
 
     public ArrayList<JButton> getGrid() {

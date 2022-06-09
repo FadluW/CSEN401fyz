@@ -395,7 +395,7 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
         background.add(icons);
         background.add(move,Integer.valueOf(0));
         background.add(ok,Integer.valueOf(1));
-        background.add(back,Integer.valueOf(1));
+        // background.add(back,Integer.valueOf(1));
         background.add(start,Integer.valueOf(1));
         background.add(test,Integer.valueOf(1));
         background.add(test2,Integer.valueOf(1));

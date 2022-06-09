@@ -28,7 +28,7 @@ public class editingBoard extends JLayeredPane {
     JTextArea queue, abilities1Info, abilities2Info, effectsInfo;
     JPanel abilities1Panel, abilities2Panel , effectsPanel, queuePanel, player1Panel, player2panel, leader1Ability, leader2Ability, allButtonsPanel, errorPanel;
     JPanel abilityListPanel = new JPanel(new GridLayout(2, 1, 0, 10));
-    JPanel arrowPanel = new JPanel(new GridLayout(2, 1, 0, 10));
+    JLayeredPane arrowPanel = new JLayeredPane();
     JLayeredPane boardPanel = new JLayeredPane();
     JLayeredPane panel = this;
     JButton endTurn, move, attack, castAbility, useLeaderAbility;
@@ -82,7 +82,7 @@ public class editingBoard extends JLayeredPane {
         panel.add(queuePanel, Integer.valueOf(1));
         panel.add(grass,Integer.valueOf(0));
         panel.add(allButtonsPanel, Integer.valueOf(1));
-        panel.add(errorPanel, Integer.valueOf(5));
+        // panel.add(errorPanel, Integer.valueOf(5));
 
 
 //        this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
@@ -98,11 +98,13 @@ public class editingBoard extends JLayeredPane {
         boardPanel.setBounds(333, 16, 700, 700);
 
         // Iterate over game board, rows and columns, generating buttons
-        for (int i = 0; i < board.length; i++) {
+        for (int i = board.length - 1; i >= 0; i--) {
 
             for (int j = 0; j < board[i].length; j++) {
 
                 JButton button = new JButton();
+                button.setName("board|" + i + "|" + j);
+                button.addActionListener(controller.new BoardListener());
                 button.setOpaque(false);
                 button.setContentAreaFilled(false);
                 ImageIcon cover = new ImageIcon("assets/characters/128/Cover_grass.png");
@@ -534,14 +536,18 @@ public class editingBoard extends JLayeredPane {
         @Override
         public void actionPerformed(ActionEvent e) {
             String[] buttonID = ((JButton) e.getSource()).getName().split("\\|");
+
             
             if (buttonID[0].equals("close")) {
                 System.out.println("Closing arrow panel");
                 panel.remove(arrowPanel);
+                PlaceButtons();
+                panel.add(allButtonsPanel, Integer.valueOf(1));
                 panel.repaint();
                 panel.revalidate();
             } else {
-                arrowPanel.setBounds(1080,540,225,160);
+                panel.remove(allButtonsPanel);
+                arrowPanel.setBounds(1080,540,225,180);
                 arrowPanel.setBackground(Color.WHITE);
                 arrowPanel.removeAll();
                 System.out.println("Making new arrow panel of " + buttonID[1]);
@@ -549,19 +555,22 @@ public class editingBoard extends JLayeredPane {
                 switch (buttonID[1].toLowerCase()) {
                     case "move": {
                         ArrowButtons arrows = new ArrowButtons(controller, ArrowButtonTypes.MOVE);
-                        arrows.placeButtons(arrowPanel);
+                        arrows.placeButtons(arrowPanel,26,0);
+                        arrows.addBackListener(new ArrowPanelListener());
                         arrows.addListener(new boardUpdateListener());
                         break;
                     }
                     case "cast": {
                         ArrowButtons arrows = new ArrowButtons(controller, ArrowButtonTypes.CAST_ABILITY, Integer.parseInt(buttonID[2]));
-                        arrows.placeButtons(arrowPanel);
+                        arrows.placeButtons(arrowPanel,26,0);
+                        arrows.addBackListener(new ArrowPanelListener());
                         arrows.addListener(new boardUpdateListener());
                         break;
                     }
                     case "attack": {
                         ArrowButtons arrows = new ArrowButtons(controller, ArrowButtonTypes.ATTACK);
-                        arrows.placeButtons(arrowPanel);
+                        arrows.placeButtons(arrowPanel,26,0);
+                        arrows.addBackListener(new ArrowPanelListener());
                         arrows.addListener(new boardUpdateListener());
                         break;
                     }
@@ -572,6 +581,7 @@ public class editingBoard extends JLayeredPane {
                 back.setName("close");
 
                 arrowPanel.add(back);
+                arrowPanel.setOpaque(true);
 
                 panel.add(arrowPanel, Integer.valueOf(4));
                 panel.revalidate();
@@ -613,14 +623,11 @@ public class editingBoard extends JLayeredPane {
                 // Cast ability
                 case SELFTARGET:
                 case SURROUND:
-                case TEAMTARGET: {
-                    btn.setName("cast|" + i);
-                    btn.addActionListener(controller.new CastListener());
-                    break;
-                }
+                case TEAMTARGET:
                 // Set controller casting ability flag to true
                 case SINGLETARGET:{
-
+                    btn.setName("cast|" + i);
+                    btn.addActionListener(controller.new CastListener());
                     break;
                 }
                 // Display arrows to select direction

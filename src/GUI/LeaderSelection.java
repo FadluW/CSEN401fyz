@@ -179,7 +179,7 @@ public class LeaderSelection extends JLayeredPane{
 			champion.setBounds(j,i,150,150);
 			champion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					System.out.print("Leader selected");
+					System.out.println("Leader selected");
 					champion = (JButton) e.getSource();
 					if (i==100) {
 					leader.setText(champion.getName());
@@ -220,7 +220,7 @@ public class LeaderSelection extends JLayeredPane{
 		panel.add(leader,Integer.valueOf(1));
 		panel.add(leader2,Integer.valueOf(1));
 		panel.add(test,Integer.valueOf(1));
-		panel.add(behind,Integer.valueOf(1));
+		// panel.add(behind,Integer.valueOf(1));
 			
 		this.setSize(1366,768);
 		this.setVisible(true);
