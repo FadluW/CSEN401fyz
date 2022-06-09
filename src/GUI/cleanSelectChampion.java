@@ -461,8 +461,8 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
 								+Champions.get(i).getName()
 								+"</div></h1><h2><div style='font-size:18;margin-left:35;margin-top :-32;'>"+"Type: "
 								+Champions.get(i).getClass().getSimpleName()+"<br>Mana: "
-								+Champions.get(i).getCurrentHP()+"<br>Health Points: "
-								+Champions.get(i).getMana()+"<br>Action Points: "
+								+Champions.get(i).getMana()+"<br>Health Points: "
+								+Champions.get(i).getCurrentHP()+"<br>Action Points: "
 								+Champions.get(i).getCurrentActionPoints()+"<br>Attack Points: "
 								+Champions.get(i).getAttackDamage()+"<br> Attack Range: "
 								+Champions.get(i).getAttackRange()+"<br>Abilities:"		
@@ -502,8 +502,8 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
 							+Champions.get(i).getName()
 							+"</div></h1><h2><div style='font-size:18;margin-left:35;margin-top :-32;'>"+"Type: "
 							+Champions.get(i).getClass().getSimpleName()+"<br>Mana: "
-							+Champions.get(i).getCurrentHP()+"<br>Health Points: "
-							+Champions.get(i).getMana()+"<br>Action Points: "
+							+Champions.get(i).getMana()+"<br>Health Points: "
+							+Champions.get(i).getCurrentHP()+"<br>Action Points: "
 							+Champions.get(i).getCurrentActionPoints()+"<br>Attack Points: "
 							+Champions.get(i).getAttackDamage()+"<br> Attack Range: "
 							+Champions.get(i).getAttackRange()+"<br>Abilities:"		

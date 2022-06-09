@@ -152,8 +152,8 @@ public class LeaderSelection extends JLayeredPane{
 							+team.get(i).getName()
 							+"</div></h1><h2><div style='font-size:18;margin-left:35;margin-top :-32;'>"+"Type: "
 							+team.get(i).getClass().getSimpleName()+"<br>Mana: "
-							+team.get(i).getCurrentHP()+"<br>Health Points: "
-							+team.get(i).getMana()+"<br>Action Points: "
+							+team.get(i).getMana()+"<br>Health Points: "
+							+team.get(i).getCurrentHP()+"<br>Action Points: "
 							+team.get(i).getCurrentActionPoints()+"<br>Attack Points: "
 							+team.get(i).getAttackDamage()+"<br> Attack Range: "
 							+team.get(i).getAttackRange()+"<br>Abilities:"		

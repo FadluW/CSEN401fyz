@@ -378,12 +378,14 @@ public class Game {
 			((Champion) target).setCondition(Condition.KNOCKEDOUT);
 			PriorityQueue temp = new PriorityQueue(MAXCHAMPS);
 			while (!turnOrder.isEmpty()) {
-				if (!(turnOrder.peekMin().equals(target))){
-					temp.insert(turnOrder.remove());
+				if (((Champion) turnOrder.peekMin()).equals(target)){
+					turnOrder.remove();
 				}
-				else turnOrder.remove();
+				else temp.insert(turnOrder.remove());
 			}
-			turnOrder = temp;
+			while (!temp.isEmpty()) {
+				turnOrder.insert(temp.remove());
+			}
 			board[(int)target.getLocation().getX()][(int)target.getLocation().getY()] = null;
 			
 			// Remove dead champion from team

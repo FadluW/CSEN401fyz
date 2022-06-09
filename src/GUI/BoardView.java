@@ -665,7 +665,7 @@ public class BoardView extends JLayeredPane {
 	}
 
 	public void drawBoard(Object[][] board) {
-		 panel2 = new JLayeredPane();
+		panel2 = new JLayeredPane();
 		panel2.setLayout(new GridLayout(board.length, board[0].length, 5, 5));
 		panel2.setBounds(333, 16, 700, 700);
 		panel.add(panel2,Integer.valueOf(1));

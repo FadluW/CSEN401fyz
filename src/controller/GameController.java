@@ -139,6 +139,35 @@ public class GameController {
 		frame.setResizable(false);
 	}
 
+	public class LeaderAbilityListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                currentGame.useLeaderAbility();
+            } catch (LeaderAbilityAlreadyUsedException | LeaderNotCurrentException e1) {
+                board.getErrorPanel().setVisible(true);
+				board.repaint();
+				board.revalidate();
+
+				if(e1 instanceof LeaderAbilityAlreadyUsedException)board.getErrorLabel().setText("Leader Ability Already Used");
+				else board.getErrorLabel().setText("Current Champion is not a leader");
+
+				new Timer().schedule(new TimerTask() {
+					@Override
+					public void run() {
+						board.getErrorPanel().setVisible(false);
+						board.repaint();
+						board.revalidate();
+					}
+				}, 1500);
+                e1.printStackTrace();
+            }
+            checkGame();
+        }
+
+    }
+
 	public class BeginListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -288,8 +317,26 @@ public class GameController {
 			try {
 				currentGame.attack(direction);
 			} catch (NotEnoughResourcesException | InvalidTargetException | ChampionDisarmedException e1) {
+				board.getErrorPanel().setVisible(true);
+						board.repaint();
+						board.revalidate();
+
+						if(e1 instanceof InvalidTargetException)board.getErrorLabel().setText("You Can't Attack There");
+						else if(e1 instanceof NotEnoughResourcesException) board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources");
+						else if (e1 instanceof ChampionDisarmedException) board.getErrorLabel().setText("Your Champion is Disarmed");
+
+						new Timer().schedule(new TimerTask() {
+							@Override
+							public void run() {
+								board.getErrorPanel().setVisible(false);
+								board.repaint();
+								board.revalidate();
+							}
+						}, 1500);
+						e1.printStackTrace();
 				e1.printStackTrace();
 			}
+			checkGame();
 		}
 	}
 	
@@ -314,6 +361,21 @@ public class GameController {
 					try {
 						currentGame.castAbility(chosenAbility, Direction.directionOf(buttonID[2]));
 					} catch (AbilityUseException | NotEnoughResourcesException | CloneNotSupportedException e1) {
+						board.getErrorPanel().setVisible(true);
+						board.repaint();
+						board.revalidate();
+
+						if(e1 instanceof AbilityUseException)board.getErrorLabel().setText("You Can't Use this Ability");
+						else if(e1 instanceof NotEnoughResourcesException) board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources");
+
+						new Timer().schedule(new TimerTask() {
+							@Override
+							public void run() {
+								board.getErrorPanel().setVisible(false);
+								board.repaint();
+								board.revalidate();
+							}
+						}, 1500);
 						e1.printStackTrace();
 					}
 					break;
@@ -355,8 +417,8 @@ public class GameController {
 				default:
 					// Throw error
 					break;
-
 			}
+			checkGame();
 		}
 	}
 
@@ -368,7 +430,6 @@ public class GameController {
 				lead = new LeaderSelection(control, currentGame);
 				changeScreen(select, lead);
 			} catch (FontFormatException | IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}	
@@ -396,13 +457,26 @@ public class GameController {
 					currentGame.castAbility(currentGame.getCurrentChampion().getAbilities().get(abilityIndex), Integer.parseInt(buttonID[1]), Integer.parseInt(buttonID[2]));
 				} catch (NumberFormatException | AbilityUseException | InvalidTargetException
 						| NotEnoughResourcesException | CloneNotSupportedException e1) {
-					// TODO Auto-generated catch block
+							board.getErrorPanel().setVisible(true);
+							board.repaint();
+							board.revalidate();
+	
+							if(e1 instanceof AbilityUseException)board.getErrorLabel().setText("You Can't Use this Ability");
+							else if(e1 instanceof NotEnoughResourcesException) board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources");
+							else if (e1 instanceof InvalidTargetException) board.getErrorLabel().setText("Invalid Target");
+	
+							new Timer().schedule(new TimerTask() {
+								@Override
+								public void run() {
+									board.getErrorPanel().setVisible(false);
+									board.repaint();
+									board.revalidate();
+								}
+							}, 1500);
+							e1.printStackTrace();
 					e1.printStackTrace();
 				}
-
-				abilityIndex = -1;
-				isBoardCasting = false;
-
+				checkGame();
 			}
 		}	
 	}
@@ -474,6 +548,20 @@ public class GameController {
 				e1.printStackTrace();
 			}
 			changeScreen(lead, select);
+		}
+	}
+
+	public void cancelSingleTarget() {
+		isBoardCasting = false;
+		abilityIndex = -1;
+	}
+
+	public void checkGame() {
+		Player winner = currentGame.checkGameOver();
+		System.out.println("Joey");
+
+		if (winner != null) {
+			board.printWinner(winner);
 		}
 	}
 //	public class TimeListener implements MouseMotionListener,MouseListener{

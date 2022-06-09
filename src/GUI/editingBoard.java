@@ -4,11 +4,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 import engine.Game;
+import engine.Player;
 import engine.PriorityQueue;
+import exceptions.LeaderAbilityAlreadyUsedException;
+import exceptions.LeaderNotCurrentException;
 
 import javax.swing.*;
 
@@ -24,10 +28,13 @@ import model.world.Cover;
 
 public class editingBoard extends JLayeredPane {
 
+    ArrayList<JProgressBar> coverBars = new ArrayList<JProgressBar>();
+    JProgressBar bar;
     JLabel champion, player1Label, player2Label, info, ability1Used, ability2Used, errorLabel;
     JTextArea queue, abilities1Info, abilities2Info, effectsInfo;
     JPanel abilities1Panel, abilities2Panel , effectsPanel, queuePanel, player1Panel, player2panel, leader1Ability, leader2Ability, allButtonsPanel, errorPanel;
-    JPanel abilityListPanel = new JPanel(new GridLayout(2, 1, 0, 10));
+    JPanel abilityListPanel = new JPanel(new BorderLayout());
+    JPanel abilitySinglePanel = new JPanel(new BorderLayout());
     JLayeredPane arrowPanel = new JLayeredPane();
     JLayeredPane boardPanel = new JLayeredPane();
     JLayeredPane panel = this;
@@ -40,7 +47,8 @@ public class editingBoard extends JLayeredPane {
     Object[][] board;
     PriorityQueue turnOrder;
     Game game;
-
+    Boolean firstBarDraw = true;
+    int barIndex;
 
     public editingBoard(GameController controller) {
         this.controller = controller;
@@ -62,6 +70,7 @@ public class editingBoard extends JLayeredPane {
         PlaceQueue();
         //PlaceEndTurnButton();
         PlaceButtons();
+        PlaceErrorMessages();
         drawBoard(board);
 
         displayQueue(queue, info);
@@ -82,7 +91,7 @@ public class editingBoard extends JLayeredPane {
         panel.add(queuePanel, Integer.valueOf(1));
         panel.add(grass,Integer.valueOf(0));
         panel.add(allButtonsPanel, Integer.valueOf(1));
-        // panel.add(errorPanel, Integer.valueOf(5));
+        panel.add(errorPanel, Integer.valueOf(5));
 
 
 //        this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
@@ -93,6 +102,7 @@ public class editingBoard extends JLayeredPane {
     }
 
     public void drawBoard(Object[][] board) {
+        barIndex = 0;
         boardPanel.removeAll();
         boardPanel.setLayout(new GridLayout(board.length, board[0].length, 5, 5));
         boardPanel.setBounds(333, 16, 700, 700);
@@ -105,6 +115,7 @@ public class editingBoard extends JLayeredPane {
                 JButton button = new JButton();
                 button.setName("board|" + i + "|" + j);
                 button.addActionListener(controller.new BoardListener());
+                button.addActionListener(new boardUpdateListener());
                 button.setOpaque(false);
                 button.setContentAreaFilled(false);
                 ImageIcon cover = new ImageIcon("assets/characters/128/Cover_grass.png");
@@ -115,23 +126,61 @@ public class editingBoard extends JLayeredPane {
                 }
 
                 else if (board[i][j] instanceof Cover) {
+                    button.setText("Cover");
 //					add cover to board
-                    Cover actualCover = (Cover) board[i][j];
-                    int maxHP = actualCover.getCurrentHP();
+                    if (firstBarDraw) {
+                        bar = new JProgressBar(-((Cover) board[i][j]).getCurrentHP(),0);
+                        coverBars.add(bar);
+                    } 
+                    coverBars.get(barIndex).setString(((Cover) (board[i][j])).getCurrentHP()+"");
+                    coverBars.get(barIndex).setValue(-((Cover) (board[i][j])).getCurrentHP());
+                    coverBars.get(barIndex).setBackground(Color.green);
+                    //bar.setOpaque(true);
+                    coverBars.get(barIndex).setStringPainted(true);
+                    coverBars.get(barIndex).setVisible(false);
+                    coverBars.get(barIndex).setForeground(Color.red);
+                    coverBars.get(barIndex).setBorder(BorderFactory.createLineBorder(Color.black, 3));
+                    //bar.setBorderPainted(false);
+                    coverBars.get(barIndex).setBounds(j*141+333,Math.abs(i - 4)*141+122 , 136,30 );
                     button.setIcon(cover);
-                    button.setToolTipText("<html> HP:" + actualCover.getCurrentHP() + "/" + maxHP + "</html>");
-                    boardPanel.add(button);
-                    button.addMouseMotionListener(new MouseMotionListener() {
-                        @Override
-                        public void mouseDragged(MouseEvent e) {
+                    button.setActionCommand("" + barIndex);
+                    button.addMouseListener(new MouseListener() {
 
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            // TODO Auto-generated method stub
+                            
                         }
 
                         @Override
-                        public void mouseMoved(MouseEvent e) {
-                            displayQueue(queue,info);
+                        public void mousePressed(MouseEvent e) {
+                            // TODO Auto-generated method stub
+                            
                         }
+
+                        @Override
+                        public void mouseReleased(MouseEvent e) {
+                            // TODO Auto-generated method stub
+                            
+                        }
+
+                        @Override
+                        public void mouseEntered(MouseEvent e) {
+                            // TODO Auto-generated method stub
+                            (coverBars.get(Integer.parseInt(((JButton) e.getSource()).getActionCommand()))).setVisible(true);
+                            //bar.setVisible(true);
+                        }
+
+                        @Override
+                        public void mouseExited(MouseEvent e) {
+                            // TODO Auto-generated method stub
+                            (coverBars.get(Integer.parseInt(((JButton) e.getSource()).getActionCommand()))).setVisible(false);
+                        }
+                        
                     });
+                    panel.add(coverBars.get(barIndex),Integer.valueOf(2));
+                    boardPanel.add(button);   
+                    barIndex++;                                
                 }
 
                 else if (board[i][j] instanceof Champion) {
@@ -139,10 +188,12 @@ public class editingBoard extends JLayeredPane {
                     Champion curr = (Champion) board[i][j];
                     ImageIcon champIcon = new ImageIcon("assets/characters/128/" + curr.getName() + ".png", curr.getName());
                     button.setIcon(champIcon);
+                    button.setText(curr.getName());
                     boardPanel.add(button);
                 }
             }
         }
+        firstBarDraw = false;
 
         // Listen for mouse over alive champ
         panel.addMouseMotionListener(
@@ -181,6 +232,21 @@ public class editingBoard extends JLayeredPane {
             ///g2.fillRoundRect(  465, 600, 175, 70, 30, 30);
             //g2.fillRoundRect( 726, 600, 175, 70, 30, 30);
         }
+    }
+    public void printWinner(Player p){
+        // JLayeredPane win = new JLayeredPane();
+        panel.remove(allButtonsPanel);
+        panel.remove(arrowPanel);
+        panel.remove(abilitySinglePanel);
+        JLabel win = new JLabel("<html>WINNER!<br>"+p.getName()+"</html>");
+        win.setOpaque(true);
+		win.setBackground(Color.black);
+		win.setBounds(380,250, 580, 300);
+		win.setForeground(Color.red);
+		//win.setFont(plain);
+		win.setHorizontalAlignment(0);
+		win.setVisible(true);
+        panel.add(win,Integer.valueOf(6));
     }
 
     public void displayQueue(JTextArea queue, JLabel info){
@@ -454,6 +520,7 @@ public class editingBoard extends JLayeredPane {
 
         if(game.getCurrentChampion() == controller.getPlayer1().getLeader() || game.getCurrentChampion() == controller.getPlayer2().getLeader()) useLeaderAbility.setEnabled(true);
         else useLeaderAbility.setEnabled(false);
+        useLeaderAbility.addActionListener(controller.new LeaderAbilityListener());
 
         EndTurnButtonListener(endTurn);
         castAbility.addActionListener(new AbilityPanelListener());
@@ -490,6 +557,7 @@ public class editingBoard extends JLayeredPane {
         errorPanel.setVisible(false);
 
         errorLabel = new JLabel();
+        errorLabel.setForeground(Color.white);
 
         errorPanel.add(errorLabel);
     }
@@ -609,6 +677,40 @@ public class editingBoard extends JLayeredPane {
         }
     }
 
+    private class SingleTargetPanelListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String action = ((JButton) e.getSource()).getActionCommand();
+            if (action.equals("close")) {
+                panel.remove(abilitySinglePanel);
+                PlaceButtons();
+                panel.add(allButtonsPanel, Integer.valueOf(1));
+                panel.repaint();
+                panel.revalidate();
+                controller.cancelSingleTarget();
+            } else if (action.equals("open")) {
+                panel.remove(allButtonsPanel);
+                abilitySinglePanel.removeAll();
+
+                JLabel infoText = new JLabel("Select target on the board!");
+                JButton backButton = new JButton("Back");
+                backButton.addActionListener(new SingleTargetPanelListener());
+                backButton.setActionCommand("close");
+
+                abilitySinglePanel.add(infoText, BorderLayout.CENTER);
+                abilitySinglePanel.add(backButton, BorderLayout.SOUTH);
+                abilitySinglePanel.setBounds(1080,540,225,160);
+                abilitySinglePanel.setBackground(Color.WHITE);
+                panel.add(abilitySinglePanel, Integer.valueOf(5));
+                panel.repaint();
+                panel.revalidate();
+            }
+            
+        }
+        
+    }
+
     private JPanel generateAbilityList (JPanel p) {
 
         Champion c = controller.getCurrentGame().getCurrentChampion();
@@ -623,11 +725,18 @@ public class editingBoard extends JLayeredPane {
                 // Cast ability
                 case SELFTARGET:
                 case SURROUND:
-                case TEAMTARGET:
+                case TEAMTARGET: {
+                    btn.setName("cast|" + i);
+                    btn.addActionListener(controller.new CastListener());
+                    btn.addActionListener(new boardUpdateListener());
+                    break;
+                }
                 // Set controller casting ability flag to true
                 case SINGLETARGET:{
                     btn.setName("cast|" + i);
                     btn.addActionListener(controller.new CastListener());
+                    btn.setActionCommand("open");
+                    btn.addActionListener(new SingleTargetPanelListener());
                     break;
                 }
                 // Display arrows to select direction
@@ -648,8 +757,8 @@ public class editingBoard extends JLayeredPane {
         backbtn.setName("close");
 
         p.removeAll();
-        p.add(buttons);
-        p.add(backbtn);
+        p.add(buttons, BorderLayout.CENTER);
+        p.add(backbtn, BorderLayout.SOUTH);
         return p;
     }
 }
