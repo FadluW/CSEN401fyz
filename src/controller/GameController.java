@@ -71,40 +71,6 @@ public class GameController {
     	controller = this;
 		startScreen = new StartScreen(this);
 		initializeFrame();
-//    	player1 = new Player("Joey");
-//		player2 = new Player("Fadl");
-//		currentGame = new Game(player1, player2);
-//		Champion champ = new Hero("Loki",88,88,88,88,88,88);
-//		Champion champ2 = new AntiHero("Thor",14,14,14,14,14,14);
-//		Champion champ3 = new Villain("Hela",2,2,2,2,2,2);
-//		Champion champ4 = new Hero("Spiderman",88,88,88,88,88,88);
-//		Champion champ5 = new AntiHero("Venom",14,14,14,14,14,14);
-//		Champion champ6 = new Villain("Deadpool",2,2,2,2,2,2);
-//		currentGame.getFirstPlayer().getTeam().add(champ);
-//		currentGame.getFirstPlayer().getTeam().add(champ2);
-//		currentGame.getFirstPlayer().getTeam().add(champ3);
-//		currentGame.getSecondPlayer().getTeam().add(champ4);
-//		currentGame.getSecondPlayer().getTeam().add(champ5);
-//		currentGame.getSecondPlayer().getTeam().add(champ6);
-		
-//    	selectTest = new cleanSelectChampions(this, currentGame.getAvailableChampions(), currentGame);
-//    	leadTest = new LeaderTestingSelection(this,currentGame);
-//    	testBoard = new BoardTest(this);
-
-//		ArrayList<Champion> availableChamps = Game.getAvailableChampions();
-//		player1.getTeam().add(availableChamps.get(2));
-//		player1.getTeam().add(availableChamps.get(1));
-//		player1.getTeam().add(availableChamps.get(6));
-//		player2.getTeam().add(availableChamps.get(9));
-//		player2.getTeam().add(availableChamps.get(12));
-//		player2.getTeam().add(availableChamps.get(7));
-
-		//currentGame = new Game(player1, player2);
-
-//		team1 = player1.getTeam();
-//		team2 = player2.getTeam();
-		//    	new cleanSelectChampions(currentGame.getAvailableChampions());
-		//new editingBoard(controller);
     }
 
     public void setGame(Game game) {
@@ -161,7 +127,7 @@ public class GameController {
 						board.revalidate();
 					}
 				}, 1500);
-                e1.printStackTrace();
+                System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
             }
             checkGame();
         }
@@ -184,17 +150,11 @@ public class GameController {
 						startScreen.revalidate();
 					}
 				}, 1500);
-				//setTimeout(screen.getError().setVisible(false),3000);
-					
 			}
 			else {
 				System.out.println(ANSI_GREEN + "Names selected: " + ANSI_RESET + startScreen.getField() + ", " + startScreen.getField2());
 				player1 = new Player(startScreen.getField());
 				player2 = new Player(startScreen.getField2());
-//				try {
-//					currentGame = new Game(player1, player2);
-//				} catch (Exception e1) {
-//				}
 				try {
 					currentGame = new Game(player1,player2);
 				} catch (Exception ex) {
@@ -262,7 +222,7 @@ public class GameController {
 	}
 
 	// Listener to handle movement
-	/* ButtonID = move|direction */
+	/* ButtonID = move|null|direction */
 	public class MoveListener implements ActionListener {
 
 		@Override
@@ -274,7 +234,7 @@ public class GameController {
 				return;
 			}
 
-			Direction direction = Direction.directionOf(buttonID[1].toLowerCase());
+			Direction direction = Direction.directionOf(buttonID[2].toLowerCase());
 
 			try {
 				currentGame.move(direction);
@@ -294,13 +254,13 @@ public class GameController {
 						board.revalidate();
 					}
 				}, 1500);
-				e1.printStackTrace();
+				System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
 			}
 		}
 	}
 	
 	// Listener to handle movement
-	/* ButtonID = attack|direction */
+	/* ButtonID = attack|null|direction */
 	public class AttackListener implements ActionListener {
 
 		@Override
@@ -312,7 +272,7 @@ public class GameController {
 				return;
 			}
 
-			Direction direction = Direction.directionOf(buttonID[1].toLowerCase());
+			Direction direction = Direction.directionOf(buttonID[2].toLowerCase());
 
 			try {
 				currentGame.attack(direction);
@@ -321,8 +281,9 @@ public class GameController {
 						board.repaint();
 						board.revalidate();
 
-						if(e1 instanceof InvalidTargetException)board.getErrorLabel().setText("You Can't Attack There");
-						else if(e1 instanceof NotEnoughResourcesException) board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources");
+						String msg = (e1.getMessage() != null) ? e1.getMessage() : "";
+						if(e1 instanceof InvalidTargetException)board.getErrorLabel().setText("You Can't Attack There\n" + msg);
+						else if(e1 instanceof NotEnoughResourcesException) board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources\n" + msg);
 						else if (e1 instanceof ChampionDisarmedException) board.getErrorLabel().setText("Your Champion is Disarmed");
 
 						new Timer().schedule(new TimerTask() {
@@ -333,8 +294,8 @@ public class GameController {
 								board.revalidate();
 							}
 						}, 1500);
-						e1.printStackTrace();
-				e1.printStackTrace();
+						System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
+				System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
 			}
 			checkGame();
 		}
@@ -365,8 +326,9 @@ public class GameController {
 						board.repaint();
 						board.revalidate();
 
-						if(e1 instanceof AbilityUseException)board.getErrorLabel().setText("You Can't Use this Ability");
-						else if(e1 instanceof NotEnoughResourcesException) board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources");
+						String msg = (e1.getMessage() != null) ? e1.getMessage() : "";
+						if(e1 instanceof AbilityUseException)board.getErrorLabel().setText("You Can't Use this Ability\n" + msg);
+						else if(e1 instanceof NotEnoughResourcesException) board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources\n" + msg);
 
 						new Timer().schedule(new TimerTask() {
 							@Override
@@ -376,7 +338,7 @@ public class GameController {
 								board.revalidate();
 							}
 						}, 1500);
-						e1.printStackTrace();
+						System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
 					}
 					break;
 				case SELFTARGET:
@@ -390,8 +352,9 @@ public class GameController {
 						board.repaint();
 						board.revalidate();
 
-						if(e1 instanceof AbilityUseException)board.getErrorLabel().setText("You Can't Use this Ability");
-						else if(e1 instanceof NotEnoughResourcesException) board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources");
+						String msg = (e1.getMessage() != null) ? e1.getMessage() : "";
+						if(e1 instanceof AbilityUseException)board.getErrorLabel().setText("You Can't Use this Ability\n" + msg);
+						else if(e1 instanceof NotEnoughResourcesException) board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources\n" + msg);
 
 						new Timer().schedule(new TimerTask() {
 							@Override
@@ -401,7 +364,7 @@ public class GameController {
 								board.revalidate();
 							}
 						}, 1500);
-						e1.printStackTrace();
+						System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
 					}
 
 					break;
@@ -430,7 +393,7 @@ public class GameController {
 				lead = new LeaderSelection(control, currentGame);
 				changeScreen(select, lead);
 			} catch (FontFormatException | IOException e1) {
-				e1.printStackTrace();
+				System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
 			}
 		}	
 	}
@@ -460,9 +423,10 @@ public class GameController {
 							board.getErrorPanel().setVisible(true);
 							board.repaint();
 							board.revalidate();
-	
-							if(e1 instanceof AbilityUseException)board.getErrorLabel().setText("You Can't Use this Ability");
-							else if(e1 instanceof NotEnoughResourcesException) board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources");
+							
+							String msg = (e1.getMessage() != null) ? e1.getMessage() : "";
+							if(e1 instanceof AbilityUseException)board.getErrorLabel().setText("You Can't Use this Ability\n" + msg);
+							else if(e1 instanceof NotEnoughResourcesException) board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources\n" + msg);
 							else if (e1 instanceof InvalidTargetException) board.getErrorLabel().setText("Invalid Target");
 	
 							new Timer().schedule(new TimerTask() {
@@ -473,8 +437,8 @@ public class GameController {
 									board.revalidate();
 								}
 							}, 1500);
-							e1.printStackTrace();
-					e1.printStackTrace();
+							System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
+					System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
 				}
 				checkGame();
 			}
@@ -491,7 +455,7 @@ public class GameController {
 						else {currentGame.getSecondPlayer().getTeam().add(Game.getAvailableChampions().get(i));break;}
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
 					}
 			
 				}
@@ -545,7 +509,7 @@ public class GameController {
 				select = new cleanSelectChampion(control);
 			} catch (IOException | FontFormatException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
 			}
 			changeScreen(lead, select);
 		}
@@ -558,7 +522,6 @@ public class GameController {
 
 	public void checkGame() {
 		Player winner = currentGame.checkGameOver();
-		System.out.println("Joey");
 
 		if (winner != null) {
 			board.printWinner(winner);

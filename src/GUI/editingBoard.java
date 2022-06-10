@@ -127,7 +127,7 @@ public class editingBoard extends JLayeredPane {
 
                 else if (board[i][j] instanceof Cover) {
                     button.setText("Cover");
-//					add cover to board
+					// add cover to board
                     if (firstBarDraw) {
                         bar = new JProgressBar(-((Cover) board[i][j]).getCurrentHP(),0);
                         coverBars.add(bar);
@@ -616,28 +616,27 @@ public class editingBoard extends JLayeredPane {
             } else {
                 panel.remove(allButtonsPanel);
                 arrowPanel.setBounds(1080,540,225,180);
-                arrowPanel.setBackground(Color.WHITE);
                 arrowPanel.removeAll();
                 System.out.println("Making new arrow panel of " + buttonID[1]);
 
                 switch (buttonID[1].toLowerCase()) {
                     case "move": {
                         ArrowButtons arrows = new ArrowButtons(controller, ArrowButtonTypes.MOVE);
-                        arrows.placeButtons(arrowPanel,26,0);
+                        arrows.placeButtons(arrowPanel,22,0);
                         arrows.addBackListener(new ArrowPanelListener());
                         arrows.addListener(new boardUpdateListener());
                         break;
                     }
                     case "cast": {
                         ArrowButtons arrows = new ArrowButtons(controller, ArrowButtonTypes.CAST_ABILITY, Integer.parseInt(buttonID[2]));
-                        arrows.placeButtons(arrowPanel,26,0);
+                        arrows.placeButtons(arrowPanel,22,0);
                         arrows.addBackListener(new ArrowPanelListener());
                         arrows.addListener(new boardUpdateListener());
                         break;
                     }
                     case "attack": {
                         ArrowButtons arrows = new ArrowButtons(controller, ArrowButtonTypes.ATTACK);
-                        arrows.placeButtons(arrowPanel,26,0);
+                        arrows.placeButtons(arrowPanel,22,0);
                         arrows.addBackListener(new ArrowPanelListener());
                         arrows.addListener(new boardUpdateListener());
                         break;
@@ -649,7 +648,6 @@ public class editingBoard extends JLayeredPane {
                 back.setName("close");
 
                 arrowPanel.add(back);
-                arrowPanel.setOpaque(true);
 
                 panel.add(arrowPanel, Integer.valueOf(4));
                 panel.revalidate();

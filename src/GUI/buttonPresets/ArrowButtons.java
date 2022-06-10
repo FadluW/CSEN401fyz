@@ -82,7 +82,7 @@ public class ArrowButtons {
             // Attach appropriate listener and name
             switch (type) {
                 case ATTACK: {
-                    btn.setName("attack|" + direction.toString());
+                    btn.setName("attack|" + "null|" + direction.toString());
                     btn.addActionListener(controller.new AttackListener());
                     break;
                 }
@@ -92,7 +92,7 @@ public class ArrowButtons {
                     break;
                 }
                 case MOVE: {
-                    btn.setName("move|" + direction.toString());
+                    btn.setName("move|" + "null|" + direction.toString());
                     btn.addActionListener(controller.new MoveListener());
                     break;
                 }
@@ -105,7 +105,7 @@ public class ArrowButtons {
         }
 
         JButton backBtn = new JButton("B");
-        backBtn.setName("close|back");
+        backBtn.setName("close|null|back");
         grid.add(backBtn);
 
         return grid;
@@ -119,7 +119,7 @@ public class ArrowButtons {
 
         for (JButton btn : buttonGrid) {
             int xPos, yPos, width, height;
-            switch (btn.getName().split("\\|")[1].toLowerCase()) {
+            switch (btn.getName().split("\\|")[2].toLowerCase()) {
                 case "up": {
                     xPos = dx + BUTTON_WIDTH + OFFSET;
                     yPos = dy;

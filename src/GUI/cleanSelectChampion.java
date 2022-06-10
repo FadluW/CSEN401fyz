@@ -83,8 +83,7 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
 		font2 = new Font("serif", Font.BOLD,20);
 		font3 = new Font("serif", Font.BOLD,70);
 
-        InputStream is = new BufferedInputStream(new FileInputStream("assets/fonts/BlackWidowMovie-d95Rg.ttf"));
-        Font blackWidowFont = Font.createFont(Font.TRUETYPE_FONT,is);
+        Font blackWidowFont = Font.createFont(Font.TRUETYPE_FONT,new File("assets/fonts/BlackWidowMovie-d95Rg.ttf"));
         Font selectChamp = blackWidowFont.deriveFont(45f);
         Font player = blackWidowFont.deriveFont(20f);
 
