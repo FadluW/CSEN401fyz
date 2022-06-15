@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
+//import javax.swing.Timer;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,14 +27,17 @@ public class GameController {
 	GameController control = this;
     JLayeredPane panel, panel2;
     cleanSelectChampions selectTest;
+    boolean moving=false;
     cleanSelectChampion select;
     LeaderSelection lead;
     LeaderTestingSelection leadTest;
-    editingBoard board;
+    //editingBoard board;
     BoardTest testBoard;
+    BoardView board;
     
     TimerTask tt;
-    Timer t;
+  //  Timer t;
+    javax.swing.Timer timer = null;
 	private GameController controller;
     private Game currentGame;
     private Player player1, player2;
@@ -73,7 +77,15 @@ public class GameController {
 		initializeFrame();
     }
 
-    public void setGame(Game game) {
+    public BoardView getBoard() {
+		return board;
+	}
+
+	public void setBoard(BoardView board) {
+		this.board = board;
+	}
+
+	public void setGame(Game game) {
     	this.currentGame = game;
     }
     
@@ -111,6 +123,10 @@ public class GameController {
         public void actionPerformed(ActionEvent e) {
             try {
                 currentGame.useLeaderAbility();
+                 board.getUseLeaderAbility().setEnabled(false);
+                 board.getUseLeaderAbility().setBackground(new Color(0xb6b884));
+                 board.getUseLeaderAbility().setForeground(Color.black);
+                 
             } catch (LeaderAbilityAlreadyUsedException | LeaderNotCurrentException e1) {
                 board.getErrorPanel().setVisible(true);
 				board.repaint();
@@ -224,20 +240,61 @@ public class GameController {
 	// Listener to handle movement
 	/* ButtonID = move|null|direction */
 	public class MoveListener implements ActionListener {
+		
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if(moving)return;
 			String[] buttonID = ((JButton) e.getSource()).getName().split("\\|");
 			// Ensure it was a move button
 			if (!buttonID[0].equals("move")) {
 				System.out.println(ANSI_RED + "[ERROR] MoveListener - given incorrect button of type " + buttonID[0] + ANSI_RESET);
 				return;
 			}
-
+			
 			Direction direction = Direction.directionOf(buttonID[2].toLowerCase());
-
-			try {
-				currentGame.move(direction);
+			
+//			controller.getBoard().setxPos(controller.getCurrentGame().getCurrentChampion().getLocation().y*141+337);
+//			controller.getBoard().setyPos(controller.getCurrentGame().getCurrentChampion().getLocation().x*141+16);
+//			controller.getBoard().setChampImage(new ImageIcon("assets/characters/128/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+			switch(direction.toString()) {
+			case "Up":
+				controller.getBoard().setxPos(controller.getCurrentGame().getCurrentChampion().getLocation().y*141+337);
+				controller.getBoard().setyPos((4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*141+17);
+				controller.getBoard().setChampImage(new ImageIcon("assets/characters/128/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+				controller.getBoard().setFinalY(controller.getBoard().getyPos()-141);
+				try {
+//					try {
+//						Thread.sleep(100);
+//					} catch (InterruptedException e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					}
+					
+					currentGame.move(direction);
+				moving=true;
+				controller.getBoard().getLeader().setText(controller.getBoard().putText(control.getCurrentGame().getCurrentChampion()));
+				 timer = new javax.swing.Timer(2,new ActionListener() {
+				
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							// TODO Auto-generated method stub
+					
+						
+						controller.getBoard().setyPos(controller.getBoard().getyPos()-1);
+						controller.getBoard().getMove().repaint();
+						
+						//testBoard.setCount(testBoard.getCount()+1);
+						if (controller.getBoard().getyPos() <= controller.getBoard().getFinalY()) { timer.stop(); moving=false;}
+						//testBoard.getMove().repaint();
+						
+						
+						}
+				});
+				 ((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x+1)*5)).setIcon(null);
+				((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(null);
+					//((JButton) panel2.getComponent(game.getCurrentChampion().getLocation().y+game.getCurrentChampion().getLocation().x*5)).setIcon(null);
+					timer.start();
 			} catch (UnallowedMovementException | NotEnoughResourcesException e1) {
 				board.getErrorPanel().setVisible(true);
 				board.repaint();
@@ -256,6 +313,203 @@ public class GameController {
 				}, 1500);
 				System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
 			}
+					break;
+			
+				case "Down":
+					controller.getBoard().setxPos(controller.getCurrentGame().getCurrentChampion().getLocation().y*141+337);
+					controller.getBoard().setyPos((4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*141+17);
+					controller.getBoard().setChampImage(new ImageIcon("assets/characters/128/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+					controller.getBoard().setFinalY(controller.getBoard().getyPos()+141);
+					try {
+//						try {
+//							Thread.sleep(100);
+//						} catch (InterruptedException e1) {
+//							// TODO Auto-generated catch block
+//							e1.printStackTrace();
+//						}
+						currentGame.move(direction);
+					moving=true;
+					controller.getBoard().getLeader().setText(controller.getBoard().putText(control.getCurrentGame().getCurrentChampion()));
+					timer = new javax.swing.Timer(2,new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							// TODO Auto-generated method stub
+							
+							
+							controller.getBoard().setyPos(controller.getBoard().getyPos()+1);
+							controller.getBoard().getMove().repaint();
+							
+							//testBoard.setCount(testBoard.getCount()+1);
+							if (controller.getBoard().getyPos() >= controller.getBoard().getFinalY()) {timer.stop();moving=false;}
+							//testBoard.getMove().repaint();
+							
+							
+						}
+					});
+					((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x-1)*5)).setIcon(null);
+					((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(null);
+					//((JButton) panel2.getComponent(game.getCurrentChampion().getLocation().y+game.getCurrentChampion().getLocation().x*5)).setIcon(null);
+					timer.start();
+			} catch (UnallowedMovementException | NotEnoughResourcesException e1) {
+				board.getErrorPanel().setVisible(true);
+				board.repaint();
+				board.revalidate();
+
+				if(e1 instanceof UnallowedMovementException)board.getErrorLabel().setText("You Can't Move Here");
+				else board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources");
+
+				new Timer().schedule(new TimerTask() {
+					@Override
+					public void run() {
+						board.getErrorPanel().setVisible(false);
+						board.repaint();
+						board.revalidate();
+					}
+				}, 1500);
+				System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
+			}
+					break;
+				
+			case "Left":
+				controller.getBoard().setxPos(controller.getCurrentGame().getCurrentChampion().getLocation().y*141+337);
+				controller.getBoard().setyPos((4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*141+18);
+				controller.getBoard().setChampImage(new ImageIcon("assets/characters/128/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+				controller.getBoard().setFinalX(controller.getBoard().getxPos()-141);
+				try {
+//			try {
+//				Thread.sleep(100);
+//			} catch (InterruptedException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+			currentGame.move(direction);
+				moving=true;
+				controller.getBoard().getLeader().setText(controller.getBoard().putText(control.getCurrentGame().getCurrentChampion()));
+				timer = new javax.swing.Timer(2,new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						
+						
+						controller.getBoard().setxPos(controller.getBoard().getxPos()-1);
+						controller.getBoard().getMove().repaint();
+						
+						//testBoard.setCount(testBoard.getCount()+1);
+						if (controller.getBoard().getxPos() <= controller.getBoard().getFinalX()) {timer.stop();moving=false;}
+						//testBoard.getMove().repaint();
+						
+						
+					}
+				});
+				((JButton) controller.getBoard().getPanel2().getComponent((controller.getCurrentGame().getCurrentChampion().getLocation().y+1)+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(null);
+				((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(null);
+				//((JButton) panel2.getComponent(game.getCurrentChampion().getLocation().y+game.getCurrentChampion().getLocation().x*5)).setIcon(null);
+				timer.start();
+				} catch (UnallowedMovementException | NotEnoughResourcesException e1) {
+					board.getErrorPanel().setVisible(true);
+					board.repaint();
+					board.revalidate();
+
+					if(e1 instanceof UnallowedMovementException)board.getErrorLabel().setText("You Can't Move Here");
+					else board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources");
+
+					new Timer().schedule(new TimerTask() {
+						@Override
+						public void run() {
+							board.getErrorPanel().setVisible(false);
+							board.repaint();
+							board.revalidate();
+						}
+					}, 1500);
+					System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
+				}
+				break;
+			
+			case "Right":
+				controller.getBoard().setxPos(controller.getCurrentGame().getCurrentChampion().getLocation().y*141+337);
+				controller.getBoard().setyPos((4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*141+17);
+				controller.getBoard().setChampImage(new ImageIcon("assets/characters/128/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+				controller.getBoard().setFinalX(controller.getBoard().getxPos()+141);
+				try {
+//					try {
+//						Thread.sleep(100);
+//					} catch (InterruptedException e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					}
+					currentGame.move(direction);
+				moving=true;
+				controller.getBoard().getLeader().setText(controller.getBoard().putText(control.getCurrentGame().getCurrentChampion()));
+				timer = new javax.swing.Timer(2,new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						
+						
+						controller.getBoard().setxPos(controller.getBoard().getxPos()+1);
+						controller.getBoard().getMove().repaint();
+						
+						//testBoard.setCount(testBoard.getCount()+1);
+						if (controller.getBoard().getxPos() >= controller.getBoard().getFinalX()) {timer.stop();moving=false;}
+						//testBoard.getMove().repaint();
+						
+						
+					}
+				});
+				((JButton) controller.getBoard().getPanel2().getComponent((controller.getCurrentGame().getCurrentChampion().getLocation().y-1)+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(null);
+				((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(null);
+				//((JButton) panel2.getComponent(game.getCurrentChampion().getLocation().y+game.getCurrentChampion().getLocation().x*5)).setIcon(null);
+				timer.start();
+				} catch (UnallowedMovementException | NotEnoughResourcesException e1) {
+					board.getErrorPanel().setVisible(true);
+					board.repaint();
+					board.revalidate();
+
+					if(e1 instanceof UnallowedMovementException)board.getErrorLabel().setText("You Can't Move Here");
+					else board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources");
+
+					new Timer().schedule(new TimerTask() {
+						@Override
+						public void run() {
+							board.getErrorPanel().setVisible(false);
+							board.repaint();
+							board.revalidate();
+						}
+					}, 1500);
+					System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
+				}
+				break;
+			}
+			
+//			try {
+////				try {
+////					Thread.sleep(100);
+////				} catch (InterruptedException e1) {
+////					// TODO Auto-generated catch block
+////					e1.printStackTrace();
+////				}
+//				currentGame.move(direction);
+//			} catch (UnallowedMovementException | NotEnoughResourcesException e1) {
+//				board.getErrorPanel().setVisible(true);
+//				board.repaint();
+//				board.revalidate();
+//
+//				if(e1 instanceof UnallowedMovementException)board.getErrorLabel().setText("You Can't Move Here");
+//				else board.getErrorLabel().setText("Your Champion Doesn't Have the Enough Resources");
+//
+//				new Timer().schedule(new TimerTask() {
+//					@Override
+//					public void run() {
+//						board.getErrorPanel().setVisible(false);
+//						board.repaint();
+//						board.revalidate();
+//					}
+//				}, 1500);
+//				System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
+//			}
 		}
 	}
 	
@@ -489,7 +743,9 @@ public class GameController {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			board = new editingBoard(control);
+//			board = new editingBoard(control);
+//			changeScreen(lead, board);
+			 board = new BoardView(control);
 			changeScreen(lead, board);
 		}
 		

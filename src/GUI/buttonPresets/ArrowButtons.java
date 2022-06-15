@@ -3,6 +3,10 @@ package GUI.buttonPresets;
 import java.beans.ConstructorProperties;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.Timer;
+
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.*;
 import controller.GameController;
 import model.world.Direction;
@@ -99,13 +103,22 @@ public class ArrowButtons {
                 default:
                     break;
             }
-
+            btn.setOpaque(true);
+            btn.setFocusPainted(false);
+            btn.setBackground(new Color(0x20390e));
+            btn.setForeground(new Color(0xb6b884));
+            btn.setBorder(BorderFactory.createLineBorder(Color.black,5));
             grid.add(btn);
             i++;
         }
 
         JButton backBtn = new JButton("B");
+        //backBtn.setFont(backBtn.getFont().deriveFont(Font.BOLD, 12));
         backBtn.setName("close|null|back");
+        backBtn.setOpaque(true);
+        backBtn.setBackground(new Color(0x20390e));
+        backBtn.setForeground(new Color(0xb6b884));
+        backBtn.setBorder(BorderFactory.createLineBorder(Color.black,5));
         grid.add(backBtn);
 
         return grid;

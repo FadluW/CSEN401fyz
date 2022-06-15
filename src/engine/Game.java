@@ -691,7 +691,7 @@ public class Game {
 		current.setCurrentActionPoints(current.getMaxActionPointsPerTurn());
 	}
 
-	private void prepareChampionTurns() {
+	public void prepareChampionTurns() {
 		ArrayList<Champion> firstTeam = firstPlayer.getTeam();
 		ArrayList<Champion> secondTeam = secondPlayer.getTeam();
 
