@@ -168,6 +168,12 @@ public class GameController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+			try {
+				playAudio("button_click.wav");
+			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e3) {
+				// TODO Auto-generated catch block
+				e3.printStackTrace();
+			}
             try {
                 currentGame.useLeaderAbility();
                  board.getUseLeaderAbility().setEnabled(false);
@@ -299,6 +305,12 @@ public class GameController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			try {
+				playAudio("button_click.wav");
+			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e3) {
+				// TODO Auto-generated catch block
+				e3.printStackTrace();
+			}
 			System.out.println("Back button pressed going to " + previousScreen.getClass().getSimpleName());
 			if (previousScreen instanceof StartScreen) {
 				resetTeams();
@@ -324,6 +336,12 @@ public class GameController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(moving)return;
+			try {
+				playAudio("button_click.wav");
+			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e3) {
+				// TODO Auto-generated catch block
+				e3.printStackTrace();
+			}
 			String[] buttonID = ((JButton) e.getSource()).getName().split("\\|");
 			// Ensure it was a move button
 			if (!buttonID[0].equals("move")) {
@@ -625,6 +643,12 @@ public class GameController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(moving)return;
+			try {
+				playAudio("button_click.wav");
+			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e3) {
+				// TODO Auto-generated catch block
+				e3.printStackTrace();
+			}
 			String[] buttonID = ((JButton) e.getSource()).getName().split("\\|");
 			// Ensure it was a move button
 			if (!buttonID[0].equals("attack")) {
@@ -1151,6 +1175,12 @@ public class GameController {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			try {
+				playAudio("button_click.wav");
+			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e3) {
+				// TODO Auto-generated catch block
+				e3.printStackTrace();
+			}
 			String[] buttonID = ((JButton) e.getSource()).getName().split("\\|");
 			// Ensure it was a move button
 			if (!buttonID[0].equals("cast")) {
@@ -1159,7 +1189,7 @@ public class GameController {
 			}
 
 
-Champion currentChamp = currentGame.getCurrentChampion();
+			Champion currentChamp = currentGame.getCurrentChampion();
 			Ability chosenAbility = currentChamp.getAbilities().get(Integer.parseInt(buttonID[1]));
 			
 			switch (chosenAbility.getCastArea()) {

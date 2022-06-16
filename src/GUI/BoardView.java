@@ -877,6 +877,12 @@ public class BoardView extends JLayeredPane {
     }
     
     public void printWinner(Player p){
+		try {
+			control.playAudio("winner.wav");
+		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
         // JLayeredPane win = new JLayeredPane();
         panel.remove(panel4);
         panel.remove(arrowPanel);
@@ -945,8 +951,8 @@ public class BoardView extends JLayeredPane {
         panelWin.add(winner,Integer.valueOf(6));
         panelWin.add(quit,Integer.valueOf(7));
         panelWin.add(begin,Integer.valueOf(7));
-        
         panel.add(panelWin,Integer.valueOf(7));
+        
     }
     
     private void PlaceErrorMessages(){
@@ -976,12 +982,24 @@ public class BoardView extends JLayeredPane {
 
             
             if (buttonID[0].equals("close")) {
+				try {
+					control.playAudio("button_click.wav");
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e3) {
+					// TODO Auto-generated catch block
+					e3.printStackTrace();
+				}
                 System.out.println("Closing arrow panel");
                 panel.remove(arrowPanel);
                 panel.add(panel4, Integer.valueOf(3));
                 panel.repaint();
                 panel.revalidate();
             } else {
+				try {
+					control.playAudio("button_click.wav");
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e3) {
+					// TODO Auto-generated catch block
+					e3.printStackTrace();
+				}
                 panel.remove(panel4);
                 arrowPanel.setBounds(1100,500,225,180);
                 arrowPanel.removeAll();
@@ -1030,6 +1048,12 @@ public class BoardView extends JLayeredPane {
     	
         @Override
         public void actionPerformed(ActionEvent e) {
+			try {
+				control.playAudio("button_click.wav");
+			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e3) {
+				// TODO Auto-generated catch block
+				e3.printStackTrace();
+			}
         	panel6.setBounds(0, 0, 1366, 768);
         	//panel6.removeAll();
             String action = ((JButton) e.getSource()).getActionCommand();
@@ -1242,6 +1266,11 @@ public class BoardView extends JLayeredPane {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+			try {
+				control.playAudio("button_click.wav");
+			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+				e1.printStackTrace();
+			}
             new java.util.Timer().schedule(new java.util.TimerTask() {
                 @Override
                 public void run() {
