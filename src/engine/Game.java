@@ -716,7 +716,7 @@ public class Game {
 		return distance;
 	}
 
-	private Point calcDirection(Point p, Direction d, int step) {
+	public Point calcDirection(Point p, Direction d, int step) {
 		int x = (int) p.getX();
 		int y = (int) p.getY();
 
