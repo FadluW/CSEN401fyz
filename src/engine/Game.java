@@ -692,7 +692,7 @@ public class Game {
 		current.setCurrentActionPoints(current.getMaxActionPointsPerTurn());
 	}
 
-	private void prepareChampionTurns() {
+	public void prepareChampionTurns() {
 		ArrayList<Champion> firstTeam = firstPlayer.getTeam();
 		ArrayList<Champion> secondTeam = secondPlayer.getTeam();
 
@@ -713,7 +713,7 @@ public class Game {
 		return distance;
 	}
 
-	private Point calcDirection(Point p, Direction d, int step) {
+	public Point calcDirection(Point p, Direction d, int step) {
 		int x = (int) p.getX();
 		int y = (int) p.getY();
 

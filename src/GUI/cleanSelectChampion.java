@@ -305,6 +305,7 @@ public class cleanSelectChampion extends JLayeredPane {
         JButton back = new JButton("Back");
         back.setForeground(Color.red/*new Color(0xeeff00)*/);
         back.setBackground(new Color(0x440931));
+        
         back.setBounds(412,635,100,30);
         back.setFocusPainted(false);
         back.setBorder(BorderFactory.createLineBorder(new Color(/*0x8a8a8a*/0xeeff00),3));
