@@ -1205,7 +1205,7 @@ public class BoardView extends JLayeredPane {
 						+"</div></h1><h2><div style='font-size:18;margin-left:35;margin-top :-32;'>"+"Type: "
 						+curr.getClass().getSimpleName()+"<br>Mana: "
 						+curr.getMana()+"<br>Health Points: "
-						+curr.getCurrentHP()+"<br>Action Points: "
+						+curr.getCurrentHP()+"/"+curr.getMaxHP()+"<br>Action Points: "
 						+curr.getCurrentActionPoints()+"<br>Attack Points: "
 						+curr.getAttackDamage()+"<br> Attack Range: "
 						+curr.getAttackRange()+"<br>Abilities:"		
@@ -1224,7 +1224,7 @@ public class BoardView extends JLayeredPane {
 						+"</div></h1><h2><div style='font-size:18;margin-left:35;margin-top :-32;'>"+"Type: "
 						+curr.getClass().getSimpleName()+"<br>Mana: "
 						+curr.getMana()+"<br>Health Points: "
-						+curr.getCurrentHP()+"<br>Action Points: "
+						+curr.getCurrentHP()+"/"+curr.getMaxHP()+"<br>Action Points: "
 						+curr.getCurrentActionPoints()+"<br>Attack Points: "
 						+curr.getAttackDamage()+"<br> Attack Range: "
 						+curr.getAttackRange()+"<br>Abilities:"		
@@ -1510,7 +1510,7 @@ public class BoardView extends JLayeredPane {
 			AlphaComposite alpha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER , 0.5f);
 			g2.setComposite(alpha);
 			//g2.fillRoundRect(  xPos, yPos, 175, 70, 30, 30);
-			g2.fillRect( 30, transparent, 230, transparent2);
+			g2.fillRect( 30, transparent, 270, transparent2);
 			g2.fillRect( 1100, 45, 215, 220);
 			if (goAhead) {
 			g2.fillRect( 15, 480, 320, 235);}
