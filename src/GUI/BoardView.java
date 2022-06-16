@@ -530,7 +530,7 @@ public class BoardView extends JLayeredPane {
 						ability = "Damaging Amount: "+((((DamagingAbility) game.getCurrentChampion().getAbilities().get(1)).getDamageAmount())) + "";
 					else if (game.getCurrentChampion().getAbilities().get(1) instanceof HealingAbility) 
 						ability = "Healing Amount: "+((((HealingAbility) game.getCurrentChampion().getAbilities().get(1)).getHealAmount())) + "";
-					else { if (game.getCurrentChampion().getAbilities().get(0) instanceof CrowdControlAbility) { 
+					else { if (game.getCurrentChampion().getAbilities().get(1) instanceof CrowdControlAbility) { 
 						ability = "<html>Effect: "+((((CrowdControlAbility) game.getCurrentChampion().getAbilities().get(1)).getEffect().getName())) + "<br> Duration: "+
 								((((CrowdControlAbility) game.getCurrentChampion().getAbilities().get(1)).getEffect().getDuration()))+"</html>";
 //						if (counter%2==0) { test2.setBounds(1015,28,330,270);}
@@ -566,7 +566,7 @@ public class BoardView extends JLayeredPane {
 						ability = "Damaging Amount: "+((((DamagingAbility) game.getCurrentChampion().getAbilities().get(2)).getDamageAmount())) + "";
 					else if (game.getCurrentChampion().getAbilities().get(2) instanceof HealingAbility) 
 						ability = "Healing Amount: "+((((HealingAbility) game.getCurrentChampion().getAbilities().get(2)).getHealAmount())) + "";
-					else { if (game.getCurrentChampion().getAbilities().get(0) instanceof CrowdControlAbility) { 
+					else { if (game.getCurrentChampion().getAbilities().get(2) instanceof CrowdControlAbility) { 
 						ability = "<html>Effect: "+((((CrowdControlAbility) game.getCurrentChampion().getAbilities().get(2)).getEffect().getName())) + "<br> Duration: "+
 								((((CrowdControlAbility) game.getCurrentChampion().getAbilities().get(2)).getEffect().getDuration()))+"</html>";
 //						if (counter%2==0) { test2.setBounds(1015,28,330,270);}
@@ -969,6 +969,7 @@ public class BoardView extends JLayeredPane {
                         break;
                     }
                     case "cast": {
+                    	panel.remove(panel5);
                         ArrowButtons arrows = new ArrowButtons(control, ArrowButtonTypes.CAST_ABILITY, Integer.parseInt(buttonID[2]));
                         arrows.placeButtons(arrowPanel,22,0);
                         arrows.addBackListener(new ArrowPanelListener());
@@ -979,7 +980,7 @@ public class BoardView extends JLayeredPane {
                         ArrowButtons arrows = new ArrowButtons(control, ArrowButtonTypes.ATTACK);
                         arrows.placeButtons(arrowPanel,22,0);
                         arrows.addBackListener(new ArrowPanelListener());
-                        arrows.addListener(new boardUpdateListener());
+                        //arrows.addListener(new boardUpdateListener());
                         break;
                     }
                 }
@@ -1093,6 +1094,8 @@ public class BoardView extends JLayeredPane {
 //        			//if(f==1) next = (Champion) turnOrder.peekMin();
 //        			turnOrder.insert(temp.remove());
 //        		}}
+            	 drawBoard(control.getCurrentGame().getBoard());
+                 leader.setText(putText(control.getCurrentGame().getCurrentChampion()));
                 game.endTurn();
                 turnOrder = game.getTurnOrder();
                 int f = 0;
@@ -1208,13 +1211,14 @@ public class BoardView extends JLayeredPane {
 		return text;
 	}
 	
-	private class boardUpdateListener implements ActionListener {
+	public class boardUpdateListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             new java.util.Timer().schedule(new java.util.TimerTask() {
                 @Override
                 public void run() {
+                	System.out.println("Called..");
                     drawBoard(control.getCurrentGame().getBoard());
                     leader.setText(putText(control.getCurrentGame().getCurrentChampion()));
                     panel.revalidate();
@@ -1378,7 +1382,7 @@ public class BoardView extends JLayeredPane {
 					// add that champion to this place
 					
 					Champion curr = (Champion) board[i][j];
-					ImageIcon champIcon = new ImageIcon("assets/characters/128/" + curr.getName() + ".png", curr.getName());
+					ImageIcon champIcon = new ImageIcon("assets/characters/new64/" + curr.getName() + ".png", curr.getName());
 					button.setIcon(champIcon);
 					button.addMouseListener(new MouseListener() {
 
