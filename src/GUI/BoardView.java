@@ -1000,7 +1000,7 @@ public class BoardView extends JLayeredPane {
                         ArrowButtons arrows = new ArrowButtons(control, ArrowButtonTypes.CAST_ABILITY, Integer.parseInt(buttonID[2]));
                         arrows.placeButtons(arrowPanel,22,0);
                         arrows.addBackListener(new ArrowPanelListener());
-                        arrows.addListener(new boardUpdateListener());
+                        //arrows.addListener(new boardUpdateListener());
                         break;
                     }
                     case "attack": {
