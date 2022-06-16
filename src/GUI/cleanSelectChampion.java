@@ -242,9 +242,9 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
 						ability = "Damaging Amount: "+((((DamagingAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1)).getDamageAmount())) + "";
 					else if (control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1) instanceof HealingAbility) 
 						ability = "Healing Amount: "+((((HealingAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1)).getHealAmount())) + "";
-					else { if (control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0) instanceof CrowdControlAbility) { 
-						ability = "<html>Effect: "+((((CrowdControlAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0)).getEffect().getName())) + "<br> Duration: "+
-								((((CrowdControlAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0)).getEffect().getDuration()))+"</html>";
+					else { if (control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1) instanceof CrowdControlAbility) { 
+						ability = "<html>Effect: "+((((CrowdControlAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1)).getEffect().getName())) + "<br> Duration: "+
+								((((CrowdControlAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1)).getEffect().getDuration()))+"</html>";
 						if (counter%2==0) { test2.setBounds(1015,28,330,270);}
 						else {test2.setBounds(15,28,330,270);}}}
 					test2.setText("<html><h1>"
@@ -272,9 +272,9 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
 						ability = "Damaging Amount: "+((((DamagingAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2)).getDamageAmount())) + "";
 					else if (control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2) instanceof HealingAbility) 
 						ability = "Healing Amount: "+((((HealingAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2)).getHealAmount())) + "";
-					else { if (control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0) instanceof CrowdControlAbility) { 
-						ability = "<html>Effect: "+((((CrowdControlAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0)).getEffect().getName())) + "<br> Duration: "+
-								((((CrowdControlAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0)).getEffect().getDuration()))+"</html>";
+					else { if (control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2) instanceof CrowdControlAbility) { 
+						ability = "<html>Effect: "+((((CrowdControlAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2)).getEffect().getName())) + "<br> Duration: "+
+								((((CrowdControlAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2)).getEffect().getDuration()))+"</html>";
 						if (counter%2==0) { test2.setBounds(1015,28,330,270);}
 						else {test2.setBounds(15,28,330,270);}}}
 					test2.setText("<html><h1>"
