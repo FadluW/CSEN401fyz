@@ -62,6 +62,13 @@ public class BoardView extends JLayeredPane {
 	JLabel champion,label,label2,leader,leader2;
 	JProgressBar bar;
 	boolean haslead,america=false;
+	boolean silver = false;
+	public boolean isSilver() {
+		return silver;
+	}
+	public void setSilver(boolean silver) {
+		this.silver = silver;
+	}
 	Champion first;
 	//JLayeredPane panel = new JLayeredPane();
 	JLayeredPane panel = this;
@@ -1496,7 +1503,7 @@ public class BoardView extends JLayeredPane {
 //			g2.setPaint(gradient);
 //			g2.fillRect(0, 0, 1366, 768);
 			
-			//if(america) g2.drawImage(captain, xfpPos, yfPos, null);
+			if(silver) g2.drawImage(captain, xfpPos, yfPos, null);
 			//frame.pack();
 			g2.setColor(Color.black);
 			//g2.drawRoundRect( 465, 570, 175, 70, 10, 10);
@@ -1512,6 +1519,12 @@ public class BoardView extends JLayeredPane {
 		}
 	}
 
+	public Image getCaptain() {
+		return captain;
+	}
+	public void setCaptain(Image captain) {
+		this.captain = captain;
+	}
 	public JLabel getChampion() {
 		return champion;
 	}
