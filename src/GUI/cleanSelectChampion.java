@@ -1,5 +1,7 @@
 package GUI;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -27,7 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class cleanSelectChampion extends JLayeredPane implements ActionListener {
+public class cleanSelectChampion extends JLayeredPane {
     JLayeredPane background = this;
     GameController control;
 	Move move = new Move();
@@ -46,7 +48,7 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
 	boolean mouse = false;
     
     public cleanSelectChampion(GameController control) throws IOException, FontFormatException {
-
+		this.control = control;
     	background.setBounds(0,0,1366,768);
     	this.setBackground(new Color(103,0,0));
     	//add(background);
@@ -68,8 +70,8 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
 			font4 = Font.createFont(Font.TRUETYPE_FONT,new File( "assets/fonts/Super Webcomic Bros. Bold Italic.ttf"));
 			plain = font4.deriveFont(Font.PLAIN,20f);
 		} 
-		catch (FontFormatException e1) {} 
-		catch (IOException e1) {}
+		catch (FontFormatException e1) {e1.printStackTrace();} 
+		catch (IOException e1) {e1.printStackTrace();}
 		try {
 			font5 = Font.createFont(Font.TRUETYPE_FONT,new File( "assets/fonts/eight-bit-dragon.otf"));
 			font5Big = font5.deriveFont(Font.PLAIN, 32f);
@@ -77,8 +79,8 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
 			font5 = font5.deriveFont(Font.PLAIN,20f);
 			
 		} 
-		catch (FontFormatException e1) {} 
-		catch (IOException e1) {}
+		catch (FontFormatException e1) {e1.printStackTrace();} 
+		catch (IOException e1) {e1.printStackTrace();}
 		font = new Font("serif",Font.ITALIC + Font.BOLD,30);
 		font2 = new Font("serif", Font.BOLD,20);
 		font3 = new Font("serif", Font.BOLD,70);
@@ -92,7 +94,7 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
         icons.setLayout(new GridLayout(3,5));
         icons.setBounds(358,10,650,390);
         icons.setVisible(true);
-        placeButtons(icons, control.getCurrentGame().getAvailableChampions());
+        placeButtons(icons, Game.getAvailableChampions());
 
         JLabel p1 = new JLabel(control.getCurrentGame().getFirstPlayer().getName());
         p1.setHorizontalAlignment(JLabel.CENTER);
@@ -124,7 +126,7 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
 			Color color = (ind < 3? new Color(0x0d0f26) :  new Color(0x48142a));
 			JPanel one = (ind < 3? champs1/*new Color(0,56,98)*/ : champs2);
 			champion = new JButton();
-			if (ind==0) champion.setBorder(BorderFactory.createLineBorder(color.red, 3));
+			if (ind==0) champion.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
 			champion.setBackground(color);
 			one.add((champion));
         }
@@ -192,13 +194,13 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
 				int length2=0;
 				int length3=0;
 				FontRenderContext frc = new FontRenderContext(new AffineTransform(),true,true);
-				for(int i = 0; i < control.getCurrentGame().getAvailableChampions().size(); i++){
-					if (!(control.getCurrentGame().getAvailableChampions().get(i).getName().equals(currentName))) continue;
-					if (control.getCurrentGame().getAvailableChampions().get(i).getName().equals(currentName)){
+				for(int i = 0; i < Game.getAvailableChampions().size(); i++){
+					if (!(Game.getAvailableChampions().get(i).getName().equals(currentName))) continue;
+					if (Game.getAvailableChampions().get(i).getName().equals(currentName)){
 						Font fadl = test.getFont().deriveFont(14f);
-						length = (int) fadl.getStringBounds(control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0).getName(), frc).getWidth() +14;
-						length2 = (int) fadl.getStringBounds(control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1).getName(), frc).getWidth() +14;
-						length3 = (int) fadl.getStringBounds(control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2).getName(), frc).getWidth() +14;	
+						length = (int) fadl.getStringBounds(Game.getAvailableChampions().get(i).getAbilities().get(0).getName(), frc).getWidth() +14;
+						length2 = (int) fadl.getStringBounds(Game.getAvailableChampions().get(i).getAbilities().get(1).getName(), frc).getWidth() +14;
+						length3 = (int) fadl.getStringBounds(Game.getAvailableChampions().get(i).getAbilities().get(2).getName(), frc).getWidth() +14;	
 					}
 				
 				if (e.getX()<=44+length && e.getX()>=44 && e.getY()>=232 && e.getY()<252 && mouse){
@@ -208,25 +210,25 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
 					if (counter%2==0) { testing.setBounds(90, 266, length, 20);test2.setBounds(1015,28,330,250);}
 					else {testing.setBounds(1100, 266, length, 20);test2.setBounds(15,28,330,250);}
 					String ability = "";
-					if(control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0) instanceof DamagingAbility)
-						ability = "Damaging Amount: "+((((DamagingAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0)).getDamageAmount())) + "";
-					else if (control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0) instanceof HealingAbility) 
-						ability = "Healing Amount: "+((((HealingAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0)).getHealAmount())) + "";
-					else { if (control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0) instanceof CrowdControlAbility) { 
-						ability = "<html>Effect: "+((((CrowdControlAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0)).getEffect().getName())) + "<br> Duration: "+
-								((((CrowdControlAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0)).getEffect().getDuration()))+"</html>";
+					if(Game.getAvailableChampions().get(i).getAbilities().get(0) instanceof DamagingAbility)
+						ability = "Damaging Amount: "+((((DamagingAbility) Game.getAvailableChampions().get(i).getAbilities().get(0)).getDamageAmount())) + "";
+					else if (Game.getAvailableChampions().get(i).getAbilities().get(0) instanceof HealingAbility) 
+						ability = "Healing Amount: "+((((HealingAbility) Game.getAvailableChampions().get(i).getAbilities().get(0)).getHealAmount())) + "";
+					else { if (Game.getAvailableChampions().get(i).getAbilities().get(0) instanceof CrowdControlAbility) { 
+						ability = "<html>Effect: "+((((CrowdControlAbility) Game.getAvailableChampions().get(i).getAbilities().get(0)).getEffect().getName())) + "<br> Duration: "+
+								((((CrowdControlAbility) Game.getAvailableChampions().get(i).getAbilities().get(0)).getEffect().getDuration()))+"</html>";
 						if (counter%2==0) { test2.setBounds(1015,28,330,270);}
 						else {test2.setBounds(15,28,330,270);}}}
 					test2.setText("<html><h1>"
 							+"<div style='text-indent:15px; font-size:24; margin-top :-40;'>"
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0).getName()
+							+Game.getAvailableChampions().get(i).getAbilities().get(0).getName()
 							+"</div></h1><h2><div style='font-size:18;margin-left:35;margin-top :-32;'>"+"Type: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0).getClass().getSimpleName()+"<br>Area Of Effect: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0).getCastArea()+"<br>Cast Range: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0).getCastRange()+"<br>Mana Cost: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0).getManaCost()+"<br>Attack Points Required: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0).getRequiredActionPoints()+"<br>Base Cool Down: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0).getBaseCooldown()+"<br>" + ability		
+							+Game.getAvailableChampions().get(i).getAbilities().get(0).getClass().getSimpleName()+"<br>Area Of Effect: "
+							+Game.getAvailableChampions().get(i).getAbilities().get(0).getCastArea()+"<br>Cast Range: "
+							+Game.getAvailableChampions().get(i).getAbilities().get(0).getCastRange()+"<br>Mana Cost: "
+							+Game.getAvailableChampions().get(i).getAbilities().get(0).getManaCost()+"<br>Attack Points Required: "
+							+Game.getAvailableChampions().get(i).getAbilities().get(0).getRequiredActionPoints()+"<br>Base Cool Down: "
+							+Game.getAvailableChampions().get(i).getAbilities().get(0).getBaseCooldown()+"<br>" + ability		
 							+"</div></h2><html>");
 					testing.setVisible(true);
 					test2.setVisible(true);
@@ -238,25 +240,25 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
 					if (counter%2==0) {testing2.setBounds(90, 284, length2, 20);test2.setBounds(1015,28,330,250);}
 					else {testing2.setBounds(1100, 284, length2, 20);test2.setBounds(15,28,330,250);}
 					String ability = "";
-					if(control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1) instanceof DamagingAbility)
-						ability = "Damaging Amount: "+((((DamagingAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1)).getDamageAmount())) + "";
-					else if (control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1) instanceof HealingAbility) 
-						ability = "Healing Amount: "+((((HealingAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1)).getHealAmount())) + "";
-					else { if (control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0) instanceof CrowdControlAbility) { 
-						ability = "<html>Effect: "+((((CrowdControlAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0)).getEffect().getName())) + "<br> Duration: "+
-								((((CrowdControlAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0)).getEffect().getDuration()))+"</html>";
+					if(Game.getAvailableChampions().get(i).getAbilities().get(1) instanceof DamagingAbility)
+						ability = "Damaging Amount: "+((((DamagingAbility) Game.getAvailableChampions().get(i).getAbilities().get(1)).getDamageAmount())) + "";
+					else if (Game.getAvailableChampions().get(i).getAbilities().get(1) instanceof HealingAbility) 
+						ability = "Healing Amount: "+((((HealingAbility) Game.getAvailableChampions().get(i).getAbilities().get(1)).getHealAmount())) + "";
+					else { if (Game.getAvailableChampions().get(i).getAbilities().get(1) instanceof CrowdControlAbility) { 
+						ability = "<html>Effect: "+((((CrowdControlAbility) Game.getAvailableChampions().get(i).getAbilities().get(1)).getEffect().getName())) + "<br> Duration: "+
+								((((CrowdControlAbility) Game.getAvailableChampions().get(i).getAbilities().get(1)).getEffect().getDuration()))+"</html>";
 						if (counter%2==0) { test2.setBounds(1015,28,330,270);}
 						else {test2.setBounds(15,28,330,270);}}}
 					test2.setText("<html><h1>"
 							+"<div style='text-indent:15px; font-size:24; margin-top :-40;'>"
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1).getName()
+							+Game.getAvailableChampions().get(i).getAbilities().get(1).getName()
 							+"</div></h1><h2><div style='font-size:18;margin-left:35;margin-top :-32;'>"+"Type: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1).getClass().getSimpleName()+"<br>Area Of Effect: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1).getCastArea()+"<br>Cast Range: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1).getCastRange()+"<br>Mana Cost: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1).getManaCost()+"<br>Attack Points Required: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1).getRequiredActionPoints()+"<br>Base Cool Down: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(1).getBaseCooldown()+"<br>" + ability		
+							+Game.getAvailableChampions().get(i).getAbilities().get(1).getClass().getSimpleName()+"<br>Area Of Effect: "
+							+Game.getAvailableChampions().get(i).getAbilities().get(1).getCastArea()+"<br>Cast Range: "
+							+Game.getAvailableChampions().get(i).getAbilities().get(1).getCastRange()+"<br>Mana Cost: "
+							+Game.getAvailableChampions().get(i).getAbilities().get(1).getManaCost()+"<br>Attack Points Required: "
+							+Game.getAvailableChampions().get(i).getAbilities().get(1).getRequiredActionPoints()+"<br>Base Cool Down: "
+							+Game.getAvailableChampions().get(i).getAbilities().get(1).getBaseCooldown()+"<br>" + ability		
 							+"</div></h2><html>");
 					testing2.setVisible(true);
 					test2.setVisible(true);
@@ -268,25 +270,25 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
 					if (counter%2==0) { testing3.setBounds(90, 304, length3, 20);test2.setBounds(1015,28,330,250);}
 					else {testing3.setBounds(1100, 304, length3, 20);test2.setBounds(15,28,330,250);}
 					String ability = "";
-					if(control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2) instanceof DamagingAbility)
-						ability = "Damaging Amount: "+((((DamagingAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2)).getDamageAmount())) + "";
-					else if (control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2) instanceof HealingAbility) 
-						ability = "Healing Amount: "+((((HealingAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2)).getHealAmount())) + "";
-					else { if (control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0) instanceof CrowdControlAbility) { 
-						ability = "<html>Effect: "+((((CrowdControlAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0)).getEffect().getName())) + "<br> Duration: "+
-								((((CrowdControlAbility) control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(0)).getEffect().getDuration()))+"</html>";
+					if(Game.getAvailableChampions().get(i).getAbilities().get(2) instanceof DamagingAbility)
+						ability = "Damaging Amount: "+((((DamagingAbility) Game.getAvailableChampions().get(i).getAbilities().get(2)).getDamageAmount())) + "";
+					else if (Game.getAvailableChampions().get(i).getAbilities().get(2) instanceof HealingAbility) 
+						ability = "Healing Amount: "+((((HealingAbility) Game.getAvailableChampions().get(i).getAbilities().get(2)).getHealAmount())) + "";
+					else { if (Game.getAvailableChampions().get(i).getAbilities().get(1) instanceof CrowdControlAbility) { 
+						ability = "<html>Effect: "+((((CrowdControlAbility) Game.getAvailableChampions().get(i).getAbilities().get(1)).getEffect().getName())) + "<br> Duration: "+
+								((((CrowdControlAbility) Game.getAvailableChampions().get(i).getAbilities().get(2)).getEffect().getDuration()))+"</html>";
 						if (counter%2==0) { test2.setBounds(1015,28,330,270);}
 						else {test2.setBounds(15,28,330,270);}}}
 					test2.setText("<html><h1>"
 							+"<div style='text-indent:15px; font-size:24; margin-top :-40;'>"
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2).getName()
+							+Game.getAvailableChampions().get(i).getAbilities().get(2).getName()
 							+"</div></h1><h2><div style='font-size:18;margin-left:35;margin-top :-32;'>"+"Type: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2).getClass().getSimpleName()+"<br>Area Of Effect: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2).getCastArea()+"<br>Cast Range: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2).getCastRange()+"<br>Mana Cost: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2).getManaCost()+"<br>Attack Points Required: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2).getRequiredActionPoints()+"<br>Base Cool Down: "
-							+control.getCurrentGame().getAvailableChampions().get(i).getAbilities().get(2).getBaseCooldown()+"<br>" + ability		
+							+Game.getAvailableChampions().get(i).getAbilities().get(2).getClass().getSimpleName()+"<br>Area Of Effect: "
+							+Game.getAvailableChampions().get(i).getAbilities().get(2).getCastArea()+"<br>Cast Range: "
+							+Game.getAvailableChampions().get(i).getAbilities().get(2).getCastRange()+"<br>Mana Cost: "
+							+Game.getAvailableChampions().get(i).getAbilities().get(2).getManaCost()+"<br>Attack Points Required: "
+							+Game.getAvailableChampions().get(i).getAbilities().get(2).getRequiredActionPoints()+"<br>Base Cool Down: "
+							+Game.getAvailableChampions().get(i).getAbilities().get(2).getBaseCooldown()+"<br>" + ability		
 							+"</div></h2><html>");
 					testing3.setVisible(true);
 					test2.setVisible(true);
@@ -394,7 +396,7 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
         background.add(icons);
         background.add(move,Integer.valueOf(0));
         background.add(ok,Integer.valueOf(1));
-        // background.add(back,Integer.valueOf(1));
+        background.add(back,Integer.valueOf(1));
         background.add(start,Integer.valueOf(1));
         background.add(test,Integer.valueOf(1));
         background.add(test2,Integer.valueOf(1));
@@ -416,7 +418,9 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
     	
         for(int i = 0; i < 15; i++){
             ImageIcon btn = new ImageIcon("assets/ui/button_" + Champions.get(i).getName() + ".png");
+			ImageIcon btn_disabled = new ImageIcon("assets/characters/128/disabled_" + Champions.get(i).getName() + ".png");
             JButton button = new JButton(btn);
+			button.setDisabledIcon(btn_disabled);
             button.setName((Champions.get(i).getName()));
             noBorder = button.getBorder();
             button.setBackground(new Color(103,0,0));
@@ -445,6 +449,11 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
 					// TODO Auto-generated method stub
 					if ((!mouse || (e.getSource()==current)) && ((JButton)(e.getSource())).isEnabled() == true && counter != 6) {
 						// System.out.print("Enter");
+						try {
+							control.playAudio("button_hover.wav");
+						} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+							e1.printStackTrace();
+						}
 							
 						test.setOpaque(true);
 						test.setBorder(BorderFactory.createLineBorder(Color.black, 5));
@@ -772,15 +781,6 @@ public class cleanSelectChampion extends JLayeredPane implements ActionListener 
 	public void setBackground(JLayeredPane background) {
 		this.background = background;
 	}
-
-	public static void main(String[] args) throws IOException, FontFormatException {
-        // new cleanSelectChampions();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-    }
     
     public class Move extends JPanel{
 		public void paintComponent(Graphics g) {

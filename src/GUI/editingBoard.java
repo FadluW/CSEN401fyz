@@ -23,8 +23,7 @@ import model.abilities.CrowdControlAbility;
 import model.abilities.DamagingAbility;
 import model.abilities.HealingAbility;
 import model.effects.Effect;
-import model.world.Champion;
-import model.world.Cover;
+import model.world.*;
 
 public class editingBoard extends JLayeredPane {
 
@@ -238,6 +237,7 @@ public class editingBoard extends JLayeredPane {
         panel.remove(allButtonsPanel);
         panel.remove(arrowPanel);
         panel.remove(abilitySinglePanel);
+        panel.remove(abilityListPanel);
         JLabel win = new JLabel("<html>WINNER!<br>"+p.getName()+"</html>");
         win.setOpaque(true);
 		win.setBackground(Color.black);
@@ -268,8 +268,12 @@ public class editingBoard extends JLayeredPane {
         queue.setText("");
         while(!turnOrder.isEmpty()){
             c = (Champion) turnOrder.peekMin();
-            queue.append(c.getName() + "\n");
-            temp.insert(turnOrder.remove());
+            if(c.getCondition().equals(Condition.INACTIVE)) continue;
+            else{
+                queue.append(c.getName() + "\n");
+                temp.insert(turnOrder.remove());
+            }
+            
         }
         while(!temp.isEmpty()) turnOrder.insert(temp.remove());
     }
@@ -341,7 +345,7 @@ public class editingBoard extends JLayeredPane {
         if(appliedEffects.size() == 0) eInfo.append("There is no applied effects yet");
         else{
             for(Effect e: appliedEffects){
-                eInfo.append(e.getName() + " (" + e.getDuration() + " turns)");
+                eInfo.append("\n" + e.getName() + " (" + e.getDuration() + " turns)\n");
             }
         }
 
@@ -600,6 +604,7 @@ public class editingBoard extends JLayeredPane {
     // Button listener that opens/closes D-Pad panel for directional actions
     /* ButtonID = (open / close)|(move/cast/attack)|(abilityIndex) */
     private class ArrowPanelListener implements ActionListener {
+        private Boolean isDirCast = false;
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -610,7 +615,8 @@ public class editingBoard extends JLayeredPane {
                 System.out.println("Closing arrow panel");
                 panel.remove(arrowPanel);
                 PlaceButtons();
-                panel.add(allButtonsPanel, Integer.valueOf(1));
+                panel.add((isDirCast) ? abilityListPanel:allButtonsPanel, Integer.valueOf(1));
+                isDirCast = false;
                 panel.repaint();
                 panel.revalidate();
             } else {
@@ -632,6 +638,8 @@ public class editingBoard extends JLayeredPane {
                         arrows.placeButtons(arrowPanel,22,0);
                         arrows.addBackListener(new ArrowPanelListener());
                         arrows.addListener(new boardUpdateListener());
+                        panel.remove(abilityListPanel);
+                        isDirCast = true;
                         break;
                     }
                     case "attack": {
