@@ -740,6 +740,8 @@ public class GameController {
 											break;
 										}
 									break;
+								case "Dr Strange":
+								case "Venom":
 								case "Ironman":
 								
 									speed=1;
@@ -821,6 +823,17 @@ public class GameController {
 												}
 												
 									}else {
+										switch (controller.getCurrentGame().getCurrentChampion().getName()) {
+											case "Hela" :
+											case "Loki" :
+											case "Spiderman" :
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "_Left.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+												break;
+											case "Iceman" :
+											case "Yellow Jacket" :
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "2.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+												break;
+										}
 										if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ghost Rider"))
 											controller.getBoard().setChampImage(new ImageIcon(text+"_Left.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
 									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Thor"))
@@ -907,6 +920,17 @@ public class GameController {
 //											});
 //											timer.start();
 //										}
+									switch (controller.getCurrentGame().getCurrentChampion().getName()) {
+									case "Hela" :
+									case "Loki" :
+									case "Spiderman" :
+										controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "_Right.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+										break;
+									case "Iceman" :
+									case "Yellow Jacket" :
+										controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "2.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+										break;
+									}
 									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ghost Rider"))
 										controller.getBoard().setChampImage(new ImageIcon(text+"_Right.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
 									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Thor"))
@@ -992,6 +1016,17 @@ public class GameController {
 //											});
 //											timer.start();
 //										}
+									switch (controller.getCurrentGame().getCurrentChampion().getName()) {
+									case "Hela" :
+									case "Loki" :
+									case "Spiderman" :
+										controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "_Up.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+										break;
+									case "Iceman" :
+									case "Yellow Jacket" :
+										controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+										break;
+									}
 									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ghost Rider"))
 										controller.getBoard().setChampImage(new ImageIcon(text+"_Up.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
 									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Thor"))
@@ -1077,6 +1112,17 @@ public class GameController {
 //											});
 //											timer.start();
 //										}
+									switch (controller.getCurrentGame().getCurrentChampion().getName()) {
+									case "Hela" :
+									case "Loki" :
+									case "Spiderman" :
+										controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "_Down.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+										break;
+									case "Iceman" :
+									case "Yellow Jacket" :
+										controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+										break;
+									}
 									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ghost Rider"))
 										controller.getBoard().setChampImage(new ImageIcon(text+"_Down.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
 									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Thor"))
@@ -1255,6 +1301,7 @@ Champion currentChamp = currentGame.getCurrentChampion();
 												break;
 											}
 										break;
+										
 										case "Ghost Rider":
 											speed=1;
 											System.out.println("Enter..");
@@ -1273,6 +1320,7 @@ Champion currentChamp = currentGame.getCurrentChampion();
 													break;
 												}
 											break;
+										case "Dr Strange":
 										case "Ironman":
 										
 											speed=1;
@@ -1355,6 +1403,18 @@ Champion currentChamp = currentGame.getCurrentChampion();
 														
 											}else {
 												
+												switch (controller.getCurrentGame().getCurrentChampion().getName()) {
+												case "Hela" :
+												case "Loki" :
+												case "Venom" :
+												case "Spiderman" :
+													controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "_Left.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+													break;
+												case "Iceman" :
+												case "Yellow Jacket" :
+													controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "2.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+													break;
+												}
 											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Thor"))
 												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "6.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
 											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ghost Rider"))
@@ -1443,6 +1503,18 @@ Champion currentChamp = currentGame.getCurrentChampion();
 //													});
 //													timer.start();
 //												}
+											switch (controller.getCurrentGame().getCurrentChampion().getName()) {
+											case "Hela" :
+											case "Loki" :
+											case "Venom" :
+											case "Spiderman" :
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "_Right.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+												break;
+											case "Iceman" :
+											case "Yellow Jacket" :
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "2.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+												break;
+											}
 											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Thor"))
 												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "6.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
 											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ironman"))
@@ -1530,6 +1602,18 @@ Champion currentChamp = currentGame.getCurrentChampion();
 //													});
 //													timer.start();
 //												}
+											switch (controller.getCurrentGame().getCurrentChampion().getName()) {
+											case "Hela" :
+											case "Loki" :
+											case "Venom" :
+											case "Spiderman" :
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "_Up.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+												break;
+											case "Iceman" :
+											case "Yellow Jacket" :
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+												break;
+											}
 											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Thor"))
 												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "5.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
 											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ironman"))
@@ -1617,6 +1701,18 @@ Champion currentChamp = currentGame.getCurrentChampion();
 //													});
 //													timer.start();
 //												}
+											switch (controller.getCurrentGame().getCurrentChampion().getName()) {
+											case "Hela" :
+											case "Loki" :
+											case "Venom" :
+											case "Spiderman" :
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "_Down.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+												break;
+											case "Iceman" :
+											case "Yellow Jacket" :
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+												break;
+											}
 											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Thor"))
 												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "5.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
 											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Electro"))
