@@ -5,6 +5,8 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import javax.swing.border.Border;
 import controller.GameController;
@@ -139,6 +141,11 @@ public class LeaderSelection extends JLayeredPane{
 
 				@Override
 				public void mouseEntered(MouseEvent e) {
+					try {
+						control.playAudio("button_hover.wav");
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+						e1.printStackTrace();
+					}
 					// TODO Auto-generated method stub
 					test.setOpaque(true);
 					test.setBorder(BorderFactory.createLineBorder(Color.black, 5));
@@ -179,6 +186,11 @@ public class LeaderSelection extends JLayeredPane{
 			champion.setBounds(j,i,150,150);
 			champion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					try {
+						control.playAudio("button_click.wav");
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+						e1.printStackTrace();
+					}
 					System.out.println("Leader selected");
 					champion = (JButton) e.getSource();
 					if (i==100) {

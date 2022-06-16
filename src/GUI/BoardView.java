@@ -877,6 +877,7 @@ public class BoardView extends JLayeredPane {
     }
     
     public void printWinner(Player p){
+		control.stopAudioTheme();
 		try {
 			control.playAudio("winner.wav");
 		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e2) {
@@ -905,7 +906,7 @@ public class BoardView extends JLayeredPane {
 		JLabel winner = new JLabel(p.getName()+"!");
 		winner.setForeground(new Color(0x289baf));
 		//winner.setText("<html><div style='font-size:20;'>Joey!</div></html>");
-		winner.setBounds(175,90,150, 60);
+		winner.setBounds(125,90,250, 60);
 		winner.setHorizontalAlignment(0);
 		winner.setFont(font5);
 		winner.setVisible(true);

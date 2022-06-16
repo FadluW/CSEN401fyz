@@ -160,7 +160,7 @@ public class GameController {
 		  }).start();
 	}
 	
-	private void stopAudioTheme() {
+	public void stopAudioTheme() {
 		themeAudio.stop();
 	}
 
