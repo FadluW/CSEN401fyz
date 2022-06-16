@@ -88,7 +88,7 @@ public class LeaderSelection extends JLayeredPane{
 				
 				
 		behind = new JButton();
-		behind.addActionListener(control.new BehindListener());
+		behind.addActionListener(control.new BackListener("start", this));
 		behind.setOpaque(true);
 		behind.setBackground(new Color(0x0d0f26));
 		behind.setBorder(BorderFactory.createLineBorder(new Color(0xf8df82), 4, true));
@@ -220,7 +220,7 @@ public class LeaderSelection extends JLayeredPane{
 		panel.add(leader,Integer.valueOf(1));
 		panel.add(leader2,Integer.valueOf(1));
 		panel.add(test,Integer.valueOf(1));
-		// panel.add(behind,Integer.valueOf(1));
+		panel.add(behind,Integer.valueOf(1));
 			
 		this.setSize(1366,768);
 		this.setVisible(true);

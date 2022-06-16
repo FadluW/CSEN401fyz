@@ -640,10 +640,11 @@ public class Game {
 				a.setCurrentCooldown(a.getCurrentCooldown() - 1);
 			}
 
-			ArrayList<Integer> toRemoveIndex = new ArrayList<>();
+			ArrayList<Integer> toRemoveIndex = new ArrayList<Integer>();
 			int x = 0;
 			for (Effect e : c.getAppliedEffects()) {
 				e.setDuration(e.getDuration() - 1);
+				System.out.println(e.getName() + "decreased by one");
 				// If duration ran out, remove effect
 				if (e.getDuration() < 1) { toRemoveIndex.add(x);
 					// ((Champion)turnOrder.peekMin()).getAppliedEffects().remove(e);
@@ -668,7 +669,7 @@ public class Game {
 		for (Ability a : current.getAbilities()) {
 			a.setCurrentCooldown(a.getCurrentCooldown() - 1);
 		}
-		ArrayList<Integer> toRemoveIndex = new ArrayList<>();
+		ArrayList<Integer> toRemoveIndex = new ArrayList<Integer>();
 		int x = 0;
 		for (Effect e : current.getAppliedEffects()) {
 			e.setDuration(e.getDuration() - 1);
@@ -698,15 +699,11 @@ public class Game {
 		for (int i = 0; i < MAXCHAMPS / 2; i++) {
 
 			if (i < firstTeam.size()) {
-				if (firstTeam.get(i).getCondition() != Condition.INACTIVE) {
-					turnOrder.insert(firstTeam.get(i));
-				}
+				turnOrder.insert(firstTeam.get(i));
 			}
 			
 			if (i < secondTeam.size()) {
-				if (secondTeam.get(i).getCondition() != Condition.INACTIVE) {
-					turnOrder.insert(secondTeam.get(i));
-				}
+				turnOrder.insert(secondTeam.get(i));
 			}
 		}
 	}

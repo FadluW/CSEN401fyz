@@ -2,12 +2,15 @@ package controller;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 //import javax.swing.Timer;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 
 import GUI.*;
@@ -25,7 +28,6 @@ public class GameController {
 	public static final String ANSI_GREEN = "\u001B[32m";
 	public static final String ANSI_YELLOW = "\u001B[33m";
 
-	GameController control = this;
     JLayeredPane panel, panel2;
     int num;
     cleanSelectChampions selectTest;
@@ -38,6 +40,9 @@ public class GameController {
     BoardView board;
     
     TimerTask tt;
+    Timer t;
+	private Clip clip;
+	private Clip themeAudio;
   //  Timer t;
     javax.swing.Timer timer = null;
 	private GameController controller;
@@ -118,6 +123,41 @@ public class GameController {
 		frame.setSize(1366,768);
 		frame.setVisible(true);
 		frame.setResizable(false);
+		playAudioTheme();
+	}
+
+	private void playAudioTheme() {
+		new Thread(new Runnable() {
+			public void run() {
+			  try {
+				  AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File("assets/audio/theme.wav").getAbsoluteFile());
+				  themeAudio = AudioSystem.getClip();
+				  themeAudio.open(audioStream);
+				  themeAudio.start();
+			  } catch (Exception e) {
+				e.printStackTrace();
+			  }
+			}
+		  }).start();
+	}
+	
+	private void playAudioGame() {
+		new Thread(new Runnable() {
+			public void run() {
+			  try {
+				  AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File("assets/audio/game_theme.wav").getAbsoluteFile());
+				  themeAudio = AudioSystem.getClip();
+				  themeAudio.open(audioStream);
+				  themeAudio.start();
+			  } catch (Exception e) {
+				e.printStackTrace();
+			  }
+			}
+		  }).start();
+	}
+	
+	private void stopAudioTheme() {
+		themeAudio.stop();
 	}
 
 	public class LeaderAbilityListener implements ActionListener{
@@ -181,9 +221,16 @@ public class GameController {
 				}
 
 				try {
-					select= new cleanSelectChampion(controller);
-					changeScreen(startScreen,select );
-				} catch (IOException | FontFormatException e1) {}
+					try {
+						playAudio("button_click.wav");
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+						e1.printStackTrace();
+					}
+					select = new cleanSelectChampion(controller);
+					changeScreen(startScreen, select);
+				} catch (IOException | FontFormatException e1) {
+					e1.printStackTrace();
+				}
 			}
 		}
 	}
@@ -224,8 +271,10 @@ public class GameController {
 		public BackListener(String screenName, JLayeredPane currentScreen) {
 			this.currentScreen = currentScreen;
 			switch (screenName.toLowerCase()) {
-				case "start": previousScreen = startScreen;
+				case "start": previousScreen = startScreen; break;
+				case "champselect": previousScreen = select; break;
 			}
+			// System.out.println("initialised previous with " + previousScreen);
 		}
 
 		// Constructor for exact panel
@@ -236,6 +285,19 @@ public class GameController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			System.out.println("Back button pressed going to " + previousScreen.getClass().getSimpleName());
+			if (previousScreen instanceof StartScreen) {
+				resetTeams();
+			} else if (previousScreen instanceof cleanSelectChampion) {
+				resetTeams();
+				try {
+					select = new cleanSelectChampion(controller);
+					// System.out.println("Created new champselect");
+				} catch (IOException | FontFormatException e1) {
+					e1.printStackTrace();
+				}
+				this.previousScreen = select;
+			}
 			changeScreen(this.currentScreen, this.previousScreen);
 		}
 	}
@@ -277,7 +339,7 @@ public class GameController {
 					
 					currentGame.move(direction);
 				moving=true;
-				controller.getBoard().getLeader().setText(controller.getBoard().putText(control.getCurrentGame().getCurrentChampion()));
+				controller.getBoard().getLeader().setText(controller.getBoard().putText(controller.getCurrentGame().getCurrentChampion()));
 				 timer = new javax.swing.Timer(2,new ActionListener() {
 				
 						@Override
@@ -333,7 +395,7 @@ public class GameController {
 //						}
 						currentGame.move(direction);
 					moving=true;
-					controller.getBoard().getLeader().setText(controller.getBoard().putText(control.getCurrentGame().getCurrentChampion()));
+					controller.getBoard().getLeader().setText(controller.getBoard().putText(controller.getCurrentGame().getCurrentChampion()));
 					timer = new javax.swing.Timer(2,new ActionListener() {
 						
 						@Override
@@ -389,7 +451,7 @@ public class GameController {
 //			}
 			currentGame.move(direction);
 				moving=true;
-				controller.getBoard().getLeader().setText(controller.getBoard().putText(control.getCurrentGame().getCurrentChampion()));
+				controller.getBoard().getLeader().setText(controller.getBoard().putText(controller.getCurrentGame().getCurrentChampion()));
 				timer = new javax.swing.Timer(2,new ActionListener() {
 					
 					@Override
@@ -445,7 +507,7 @@ public class GameController {
 //					}
 					currentGame.move(direction);
 				moving=true;
-				controller.getBoard().getLeader().setText(controller.getBoard().putText(control.getCurrentGame().getCurrentChampion()));
+				controller.getBoard().getLeader().setText(controller.getBoard().putText(controller.getCurrentGame().getCurrentChampion()));
 				timer = new javax.swing.Timer(2,new ActionListener() {
 					
 					@Override
@@ -535,7 +597,7 @@ public class GameController {
 
 			try {
 				 controller.getBoard().drawBoard(controller.getCurrentGame().getBoard());
-				 controller.getBoard().getLeader().setText(controller.getBoard().putText(control.getCurrentGame().getCurrentChampion()));
+				 controller.getBoard().getLeader().setText(controller.getBoard().putText(controller.getCurrentGame().getCurrentChampion()));
 				
 				//controller.getBoard().new boardUpdateListener();
 				currentGame.attack(direction);
@@ -639,7 +701,7 @@ public class GameController {
 						break;}
 				} 
 				 controller.getBoard().drawBoard(controller.getCurrentGame().getBoard());
-				 controller.getBoard().getLeader().setText(controller.getBoard().putText(control.getCurrentGame().getCurrentChampion()));
+				 controller.getBoard().getLeader().setText(controller.getBoard().putText(controller.getCurrentGame().getCurrentChampion()));
 				} catch (NotEnoughResourcesException | InvalidTargetException | ChampionDisarmedException e1) {
 				board.getErrorPanel().setVisible(true);
 						board.repaint();
@@ -754,7 +816,12 @@ public class GameController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				lead = new LeaderSelection(control, currentGame);
+				try {
+					playAudio("button_click.wav");
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+					e1.printStackTrace();
+				}
+				lead = new LeaderSelection(controller, currentGame);
 				changeScreen(select, lead);
 			} catch (FontFormatException | IOException e1) {
 				System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
@@ -833,6 +900,13 @@ public class GameController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			try {
+				playAudio("button_click.wav");
+				stopAudioTheme();
+				playAudioGame();
+			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+				e1.printStackTrace();
+			}
 			//panel = screen.getPanel();
 //			player1 = currentGame.getFirstPlayer();
 //			player2 = currentGame.getSecondPlayer();
@@ -853,32 +927,41 @@ public class GameController {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-//			board = new editingBoard(control);
+//			board = new editingBoard(controller);
 //			changeScreen(lead, board);
-			 board = new BoardView(control);
+			 board = new BoardView(controller);
 			changeScreen(lead, board);
 		}
 		
 	}
 
-	public class BehindListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			for(int i = currentGame.getFirstPlayer().getTeam().size()-1; i >= 0; i--){
-					currentGame.getFirstPlayer().getTeam().remove(i);
-			}
-			for(int i = currentGame.getSecondPlayer().getTeam().size()-1; i >= 0; i--){
-				currentGame.getSecondPlayer().getTeam().remove(i);
-			}
-			try {
-				select = new cleanSelectChampion(control);
-			} catch (IOException | FontFormatException e1) {
-				// TODO Auto-generated catch block
-				System.out.println((e1.getMessage() == null) ? e1.getClass().getName() : e1.getMessage());
-			}
-			changeScreen(lead, select);
+	public void resetTeams() {
+		System.out.println("Resetting Teams...");
+		for(int i = currentGame.getFirstPlayer().getTeam().size()-1; i >= 0; i--){
+			currentGame.getFirstPlayer().getTeam().remove(i);
 		}
+		for(int i = currentGame.getSecondPlayer().getTeam().size()-1; i >= 0; i--){
+			currentGame.getSecondPlayer().getTeam().remove(i);
+		}
+	}
+
+	public void playAudio(String filename) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+		new Thread(new Runnable() {
+			  public void run() {
+				try {
+					AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File("assets/audio/" + filename).getAbsoluteFile());
+					clip = AudioSystem.getClip();
+					clip.open(audioStream);
+					clip.start();
+				} catch (Exception e) {
+				  e.printStackTrace();
+				}
+			  }
+			}).start();
+	}
+
+	public void stopAudio() {
+		clip.stop();
 	}
 
 	public void cancelSingleTarget() {
