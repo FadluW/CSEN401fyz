@@ -29,6 +29,7 @@ public class GameController {
 	public static final String ANSI_YELLOW = "\u001B[33m";
 	
 	boolean quick=false;
+	String text = "";
 	boolean faster=false;
     JLayeredPane panel, panel2;
     int num,count,speed;
@@ -721,8 +722,26 @@ public class GameController {
 										break;
 									}
 								break;
-								case "Ironman":
 								case "Ghost Rider":
+									speed=1;
+									System.out.println("Enter..");
+									switch(count) {
+										case 1:
+											text="assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() ;
+											count++;
+											break;
+										case 2:
+											text="assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() +count;
+											count++;
+											break;
+										case 3:
+											text="assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() +count;
+											count=1;
+											break;
+										}
+									break;
+								case "Ironman":
+								
 									speed=1;
 									System.out.println("Enter..");
 									switch(count) {
@@ -802,8 +821,12 @@ public class GameController {
 												}
 												
 									}else {
+										if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ghost Rider"))
+											controller.getBoard().setChampImage(new ImageIcon(text+"_Left.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
 									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Thor"))
 										controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "4.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Electro"))
+										controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "2.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
 									controller.getBoard().setxPos(controller.getBoard().getxPos()-speed);
 									controller.getBoard().getMove().repaint();
 									if (controller.getBoard().getxPos() <= controller.getBoard().getFinalX()) {
@@ -884,7 +907,11 @@ public class GameController {
 //											});
 //											timer.start();
 //										}
+									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ghost Rider"))
+										controller.getBoard().setChampImage(new ImageIcon(text+"_Right.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
 									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Thor"))
+										controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "2.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Electro"))
 										controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "2.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
 									controller.getBoard().setxPos(controller.getBoard().getxPos()+speed);
 									controller.getBoard().getMove().repaint();
@@ -965,7 +992,11 @@ public class GameController {
 //											});
 //											timer.start();
 //										}
+									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ghost Rider"))
+										controller.getBoard().setChampImage(new ImageIcon(text+"_Up.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
 									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Thor"))
+										controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Electro"))
 										controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
 									controller.getBoard().setyPos(controller.getBoard().getyPos()-speed);
 									controller.getBoard().getMove().repaint();
@@ -1046,8 +1077,12 @@ public class GameController {
 //											});
 //											timer.start();
 //										}
+									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ghost Rider"))
+										controller.getBoard().setChampImage(new ImageIcon(text+"_Down.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
 									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Thor"))
 										controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "3.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+									if (controller.getCurrentGame().getCurrentChampion().getName().equals("Electro"))
+										controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
 									controller.getBoard().setyPos(controller.getBoard().getyPos()+speed);
 									controller.getBoard().getMove().repaint();
 									if (controller.getBoard().getyPos() >= controller.getBoard().getFinalY()) {
@@ -1123,20 +1158,507 @@ public class GameController {
 				return;
 			}
 
-			Champion currentChamp = currentGame.getCurrentChampion();
+
+Champion currentChamp = currentGame.getCurrentChampion();
 			Ability chosenAbility = currentChamp.getAbilities().get(Integer.parseInt(buttonID[1]));
 			
 			switch (chosenAbility.getCastArea()) {
 				case DIRECTIONAL:
+					//if(moving)return;
+					Direction direction = Direction.directionOf(buttonID[2].toLowerCase());
 					try {
+						controller.getBoard().drawBoard(controller.getCurrentGame().getBoard());
+						 controller.getBoard().getLeader().setText(controller.getBoard().putText(controller.getCurrentGame().getCurrentChampion()));
+						
 						currentGame.castAbility(chosenAbility, Direction.directionOf(buttonID[2]));
-					} catch (AbilityUseException | NotEnoughResourcesException | CloneNotSupportedException e1) {
+						if (chosenAbility instanceof DamagingAbility) {
+						boardGame = controller.getCurrentGame().getBoard();
+						for (int i = 1; i <= chosenAbility.getCastRange(); i++) {
+							Point p = controller.getCurrentGame().calcDirection(controller.getCurrentGame().getCurrentChampion().getLocation(), direction, i);
+							
+							int x = (int) p.getLocation().getX();
+							int y = (int) p.getLocation().getY();
+							
+							//if (x < 0 || x >= 5) throw new InvalidTargetException("Target out of board bounds");
+							//if (y < 0 || y >= 5) throw new InvalidTargetException("Target out of board bounds");
+							
+							if (boardGame[x][y]!=null) {
+								System.out.println("Directional");
+								controller.getBoard().setxPos(controller.getCurrentGame().getCurrentChampion().getLocation().y*141+337+50);
+								controller.getBoard().setyPos((4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*141+17+50);
+								
+								controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+								//controller.getBoard().setChampImage(new ImageIcon("assets/characters/128/Untitled22_20220607135427.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+								//Rotate rotate = new Rotate(90);
+								//controller.getBoard().getChampImage().add(new Rotate(90));
+								controller.getBoard().setFinalX(y*141+337+50);
+								controller.getBoard().setFinalY((4-x)*141+17+50);
+								System.out.println("X Pos: "+controller.getBoard().getxPos());
+								System.out.println("Final x: "+controller.getBoard().getFinalX());
+								System.out.println("Y Pos: "+controller.getBoard().getyPos());
+								System.out.println("Final y: "+controller.getBoard().getFinalY());
+								
+								num = 0;
+								count = 1;
+								speed=2;
+								
+								if(controller.getBoard().getFinalX()<controller.getBoard().getxPos()) {
+									num=1;
+								}else
+									if(controller.getBoard().getFinalX()>controller.getBoard().getxPos()) {
+										num=2;
+								}else
+									if(controller.getBoard().getFinalY()<controller.getBoard().getyPos()) {
+										num=3;
+								}else
+									if(controller.getBoard().getFinalY()>controller.getBoard().getyPos()) {
+										num=4;
+								}
+								controller.getBoard().setXfpPos(controller.getCurrentGame().getCurrentChampion().getLocation().y*141+337);
+								controller.getBoard().setYfPos((4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*141+17);
+								timer = new javax.swing.Timer(2,new ActionListener() {
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										// TODO Auto-generated method stub
+										moving = true;
+										switch(controller.getCurrentGame().getCurrentChampion().getName()){
+										case "Deadpool":
+											speed=1;
+											switch(count) {
+											case 1:
+											case 2 :
+											case 3 :
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+												count++;
+												break;
+											case 4:
+											case 5:
+											case 6:
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "2.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+												count++;
+												break;
+											case 7:
+											case 8:
+											case 9:
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "3.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+												count++;
+												break;
+											case 10:
+											case 11:
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "4.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+												count++;
+												break;
+											case 12:
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "4.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+												count=1;
+												break;
+											}
+										break;
+										case "Ghost Rider":
+											speed=1;
+											System.out.println("Enter..");
+											switch(count) {
+												case 1:
+													text="assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() ;
+													count++;
+													break;
+												case 2:
+													text="assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() +count;
+													count++;
+													break;
+												case 3:
+													text="assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() +count;
+													count=1;
+													break;
+												}
+											break;
+										case "Ironman":
+										
+											speed=1;
+											System.out.println("Enter..");
+											switch(count) {
+												case 1:
+													controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+													count++;
+													break;
+												case 2:
+													controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() +count+ ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+													count++;
+													break;
+												case 3:
+													controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() +count+ ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+													count=1;
+													break;
+												}
+											break;
+										case "Captain America":
+											speed=1;
+											controller.getBoard().setAmerica(true);
+											//controller.getBoard().setXfpPos(controller.getCurrentGame().getCurrentChampion().getLocation().y);
+											//controller.getBoard().setYfPos((4-controller.getCurrentGame().getCurrentChampion().getLocation().x));
+											((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(null);
+											((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + "2.png"));
+											//((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon();
+											break;
+										case "Quicksilver":
+											controller.getBoard().setSilver(true);
+											speed=3;
+											controller.getBoard().setChampImage(null);
+											((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(null);
+											controller.getBoard().setCaptain((new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png")).getImage());
+											
+											break;
+										}
+										if(num==1) {
+											if(controller.getBoard().isSilver()) {
+												
+														
+														System.out.println("Quick");
+														if(!faster) {
+														controller.getBoard().setXfpPos(controller.getBoard().getXfpPos()-12);
+														controller.getBoard().getMove().repaint();
+														if (controller.getBoard().getXfpPos() <= 333 && !quick) {
+															quick = true;
+															controller.getBoard().setXfpPos(893);
+															System.out.println("Stop");
+															
+														}
+														if (controller.getBoard().getXfpPos() <= controller.getCurrentGame().getCurrentChampion().getLocation().y*141+337 && quick) {
+															
+															//controller.getBoard().setChampImage(null); 
+															faster = true;
+															controller.getBoard().setSilver(false);
+															((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+														}}else {
+															controller.getBoard().setxPos(controller.getBoard().getxPos()-speed);
+															controller.getBoard().getMove().repaint();
+															controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "_left.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+															if (controller.getBoard().getxPos() <= controller.getBoard().getFinalX()) {
+																timer.stop();
+																controller.getBoard().setChampImage(null); 
+																moving = false;
+																faster=false;
+																quick=false;
+																((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+																controller.getBoard().setCaptain(null);
+																controller.getBoard().setChampImage(null);
+																if(controller.getBoard().isAmerica()) {
+																	((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(null);
+																((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+																controller.getBoard().setAmerica(false);
+																}
+																
+																controller.getBoard().getMove().repaint();
+																}
+														}
+														
+											}else {
+												
+											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Thor"))
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "6.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ghost Rider"))
+												controller.getBoard().setChampImage(new ImageIcon(text+"_left.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ironman"))
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "5.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Electro"))
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "2.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+											controller.getBoard().setxPos(controller.getBoard().getxPos()-speed);
+											controller.getBoard().getMove().repaint();
+											if (controller.getBoard().getxPos() <= controller.getBoard().getFinalX()) {
+												timer.stop();
+												controller.getBoard().setChampImage(null); 
+												moving = false;
+												if(controller.getBoard().isAmerica()) {
+													((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(null);
+												((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+												controller.getBoard().setAmerica(false);
+												}
+												
+												controller.getBoard().getMove().repaint();
+												}
+											}
+										}else
+											if(num==2) {
+												if(controller.getBoard().isSilver()) {
+													
+													
+													System.out.println("Quick");
+													if(!faster) {
+													controller.getBoard().setXfpPos(controller.getBoard().getXfpPos()+12);
+													controller.getBoard().getMove().repaint();
+													if (controller.getBoard().getXfpPos() >= 893 && !quick) {
+														quick = true;
+														controller.getBoard().setXfpPos(333);
+														System.out.println("Stop");
+														
+													}
+													if (controller.getBoard().getXfpPos() >= controller.getCurrentGame().getCurrentChampion().getLocation().y*141+337 && quick) {
+														
+														//controller.getBoard().setChampImage(null); 
+														faster = true;
+														controller.getBoard().setSilver(false);
+														((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+													}}else {
+														controller.getBoard().setxPos(controller.getBoard().getxPos()+speed);
+														controller.getBoard().getMove().repaint();
+														controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "_right.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+														if (controller.getBoard().getxPos() >= controller.getBoard().getFinalX()) {
+															timer.stop();
+															controller.getBoard().setChampImage(null); 
+															moving = false;
+															faster=false;
+															quick=false;
+															((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+															controller.getBoard().setCaptain(null);
+															controller.getBoard().setChampImage(null);
+															if(controller.getBoard().isAmerica()) {
+																((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(null);
+															((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+															controller.getBoard().setAmerica(false);
+															}
+															
+															controller.getBoard().getMove().repaint();
+															}
+													}
+													
+										}else {
+//												if(controller.getBoard().isSilver()) {
+//													controller.getBoard().setXfpPos(controller.getCurrentGame().getCurrentChampion().getLocation().y*141+337);
+//													controller.getBoard().setYfPos((4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*141+17);
+//													timer = new javax.swing.Timer(2,new ActionListener() {
+//															
+//														@Override
+//														public void actionPerformed(ActionEvent e) {
+//															// TODO Auto-generated method stub
+//															controller.getBoard().setXfpPos(controller.getBoard().getXfpPos()+4);
+//															controller.getBoard().getMove().repaint();
+//															if (controller.getBoard().getXfpPos() >= 893) {
+//																timer.stop();
+//																controller.getBoard().setSilver(false);
+//																((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+//															}
+//														}
+//														
+//													});
+//													timer.start();
+//												}
+											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Thor"))
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "6.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ironman"))
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "5.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Electro"))
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "2.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ghost Rider"))
+												controller.getBoard().setChampImage(new ImageIcon(text+"_right.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+											controller.getBoard().setxPos(controller.getBoard().getxPos()+speed);
+											controller.getBoard().getMove().repaint();
+												if (controller.getBoard().getxPos() >= controller.getBoard().getFinalX()) {
+													timer.stop();
+													controller.getBoard().setChampImage(null); 
+													moving = false;
+													if(controller.getBoard().isAmerica()) {
+														((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(null);
+													((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+													controller.getBoard().setAmerica(false);
+													}
+													controller.getBoard().getMove().repaint();
+													}
+										}
+										}else
+											if(num==3) {
+												if(controller.getBoard().isSilver()) {
+													
+													
+													System.out.println("Quick");
+													if(!faster) {
+													controller.getBoard().setYfPos(controller.getBoard().getYfPos()-12);
+													controller.getBoard().getMove().repaint();
+													if (controller.getBoard().getYfPos() <= 16 && !quick) {
+														quick = true;
+														controller.getBoard().setYfPos(576);
+														System.out.println("Stop");
+														
+													}
+													if (controller.getBoard().getYfPos() <= (4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*141+17 && quick) {
+														
+														//controller.getBoard().setChampImage(null); 
+														faster = true;
+														controller.getBoard().setSilver(false);
+														((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+													}}else {
+														controller.getBoard().setyPos(controller.getBoard().getyPos()-speed);
+														controller.getBoard().getMove().repaint();
+														controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+														if (controller.getBoard().getyPos() <= controller.getBoard().getFinalY()) {
+															timer.stop();
+															controller.getBoard().setChampImage(null); 
+															moving = false;
+															faster=false;
+															quick=false;
+															((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+															controller.getBoard().setCaptain(null);
+															controller.getBoard().setChampImage(null);
+															if(controller.getBoard().isAmerica()) {
+																((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(null);
+															((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+															controller.getBoard().setAmerica(false);
+															}
+															
+															controller.getBoard().getMove().repaint();
+															}
+													}
+													
+										}else {
+//												if(controller.getBoard().isSilver()) {
+//													controller.getBoard().setXfpPos(controller.getCurrentGame().getCurrentChampion().getLocation().y*141+337);
+//													controller.getBoard().setYfPos((4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*141+17);
+//													timer = new javax.swing.Timer(2,new ActionListener() {
+//															
+//														@Override
+//														public void actionPerformed(ActionEvent e) {
+//															// TODO Auto-generated method stub
+//															controller.getBoard().setYfPos(controller.getBoard().getYfPos()-4);
+//															controller.getBoard().getMove().repaint();
+//															if (controller.getBoard().getYfPos() <= 576) {
+//																timer.stop();
+//																controller.getBoard().setSilver(false);
+//																((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+//															}
+//														}
+//														
+//													});
+//													timer.start();
+//												}
+											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Thor"))
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "5.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ironman"))
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "4.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Electro"))
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ghost Rider"))
+												controller.getBoard().setChampImage(new ImageIcon(text+"_Up.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+											controller.getBoard().setyPos(controller.getBoard().getyPos()-speed);
+											controller.getBoard().getMove().repaint();
+											if (controller.getBoard().getyPos() <= controller.getBoard().getFinalY()) {
+												timer.stop();
+												controller.getBoard().setChampImage(null); 
+												moving = false;
+												if(controller.getBoard().isAmerica()) {
+													((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(null);
+												((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+												controller.getBoard().setAmerica(false);
+												}
+												controller.getBoard().getMove().repaint();
+												}
+										}
+										}else
+											if(num==4) {
+												if(controller.getBoard().isSilver()) {
+													
+													
+													System.out.println("Quick");
+													if(!faster) {
+													controller.getBoard().setYfPos(controller.getBoard().getYfPos()+12);
+													controller.getBoard().getMove().repaint();
+													if (controller.getBoard().getYfPos() >= 576 && !quick) {
+														quick = true;
+														controller.getBoard().setYfPos(16);
+														System.out.println("Stop");
+														
+													}
+													if (controller.getBoard().getYfPos() >= (4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*141+17 && quick) {
+														
+														//controller.getBoard().setChampImage(null); 
+														faster = true;
+														controller.getBoard().setSilver(false);
+														((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+													}}else {
+														controller.getBoard().setyPos(controller.getBoard().getyPos()+speed);
+														controller.getBoard().getMove().repaint();
+														controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "_down.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+														if (controller.getBoard().getyPos() >= controller.getBoard().getFinalY()) {
+															timer.stop();
+															controller.getBoard().setChampImage(null); 
+															moving = false;
+															faster=false;
+															quick=false;
+															((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+															controller.getBoard().setCaptain(null);
+															controller.getBoard().setChampImage(null);
+															if(controller.getBoard().isAmerica()) {
+																((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(null);
+															((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+															controller.getBoard().setAmerica(false);
+															}
+															
+															controller.getBoard().getMove().repaint();
+															}
+													}
+													
+										}else {
+//												if(controller.getBoard().isSilver()) {
+//													controller.getBoard().setXfpPos(controller.getCurrentGame().getCurrentChampion().getLocation().y*141+337);
+//													controller.getBoard().setYfPos((4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*141+17);
+//													timer = new javax.swing.Timer(2,new ActionListener() {
+//															
+//														@Override
+//														public void actionPerformed(ActionEvent e) {
+//															// TODO Auto-generated method stub
+//															controller.getBoard().setYfPos(controller.getBoard().getYfPos()+4);
+//															controller.getBoard().getMove().repaint();
+//															if (controller.getBoard().getYfPos() >= 576) {
+//																timer.stop();
+//																controller.getBoard().setSilver(false);
+//																((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+//															}
+//														}
+//														
+//													});
+//													timer.start();
+//												}
+											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Thor"))
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "5.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Electro"))
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ironman"))
+												controller.getBoard().setChampImage(new ImageIcon("assets/characters/32/" + controller.getCurrentGame().getCurrentChampion().getName() + "4.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+											if (controller.getCurrentGame().getCurrentChampion().getName().equals("Ghost Rider"))
+												controller.getBoard().setChampImage(new ImageIcon(text+"_Down.png", controller.getCurrentGame().getCurrentChampion().getName()).getImage());
+											controller.getBoard().setyPos(controller.getBoard().getyPos()+speed);
+											controller.getBoard().getMove().repaint();
+											if (controller.getBoard().getyPos() >= controller.getBoard().getFinalY()) {
+												timer.stop();
+												controller.getBoard().setChampImage(null); 
+												moving = false;
+												if(controller.getBoard().isAmerica()) {
+												((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(null);
+												((JButton) controller.getBoard().getPanel2().getComponent(controller.getCurrentGame().getCurrentChampion().getLocation().y+(4-controller.getCurrentGame().getCurrentChampion().getLocation().x)*5)).setIcon(new ImageIcon("assets/characters/new64/" + controller.getCurrentGame().getCurrentChampion().getName() + ".png"));
+												controller.getBoard().setAmerica(false);
+												}
+												controller.getBoard().getMove().repaint();
+												}
+										}
+										
+										controller.getBoard().getMove().repaint();
+										
+										//testBoard.setCount(testBoard.getCount()+1);
+										
+//										if (controller.getBoard().getxPos() >= controller.getBoard().getFinalX()) {timer.stop();
+//										controller.getBoard().setChampImage(null); controller.getBoard().getMove().repaint();}
+										//testBoard.getMove().repaint();
+										
+										
+									}
+									}
+								});timer.start(); 
+								
+								break;}
+						} 
+						 controller.getBoard().drawBoard(controller.getCurrentGame().getBoard());
+						 controller.getBoard().getLeader().setText(controller.getBoard().putText(controller.getCurrentGame().getCurrentChampion()));
+						}} catch (AbilityUseException | NotEnoughResourcesException | CloneNotSupportedException e1) {
 						board.getErrorPanel().setVisible(true);
-				try {
-					playAudio("button_error.wav");
-				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e2) {
-					e2.printStackTrace();
-				}
 						board.repaint();
 						board.revalidate();
 
