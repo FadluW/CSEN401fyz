@@ -148,6 +148,7 @@ public class GameController {
 				  AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File("assets/audio/game_theme.wav").getAbsoluteFile());
 				  themeAudio = AudioSystem.getClip();
 				  themeAudio.open(audioStream);
+				  themeAudio.loop(Clip.LOOP_CONTINUOUSLY);
 				  themeAudio.start();
 			  } catch (Exception e) {
 				e.printStackTrace();
@@ -172,6 +173,11 @@ public class GameController {
                  
             } catch (LeaderAbilityAlreadyUsedException | LeaderNotCurrentException e1) {
                 board.getErrorPanel().setVisible(true);
+				try {
+					playAudio("button_error.wav");
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e2) {
+					e2.printStackTrace();
+				}
 				board.repaint();
 				board.revalidate();
 
@@ -199,6 +205,11 @@ public class GameController {
 			if(((startScreen.getField()).equals("") || startScreen.getField2().equals(""))){
 				System.out.println("Button Works");
 				startScreen.getError().setVisible(true);
+				try {
+					playAudio("button_error.wav");
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e2) {
+					e2.printStackTrace();
+				}
 				startScreen.repaint();
 				startScreen.revalidate();
 				new java.util.Timer().schedule(new java.util.TimerTask() {
@@ -363,6 +374,11 @@ public class GameController {
 					timer.start();
 			} catch (UnallowedMovementException | NotEnoughResourcesException e1) {
 				board.getErrorPanel().setVisible(true);
+				try {
+					playAudio("button_error.wav");
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e2) {
+					e2.printStackTrace();
+				}
 				board.repaint();
 				board.revalidate();
 
@@ -419,6 +435,11 @@ public class GameController {
 					timer.start();
 			} catch (UnallowedMovementException | NotEnoughResourcesException e1) {
 				board.getErrorPanel().setVisible(true);
+				try {
+					playAudio("button_error.wav");
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e2) {
+					e2.printStackTrace();
+				}
 				board.repaint();
 				board.revalidate();
 
@@ -475,6 +496,11 @@ public class GameController {
 				timer.start();
 				} catch (UnallowedMovementException | NotEnoughResourcesException e1) {
 					board.getErrorPanel().setVisible(true);
+				try {
+					playAudio("button_error.wav");
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e2) {
+					e2.printStackTrace();
+				}
 					board.repaint();
 					board.revalidate();
 
@@ -531,6 +557,11 @@ public class GameController {
 				timer.start();
 				} catch (UnallowedMovementException | NotEnoughResourcesException e1) {
 					board.getErrorPanel().setVisible(true);
+				try {
+					playAudio("button_error.wav");
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e2) {
+					e2.printStackTrace();
+				}
 					board.repaint();
 					board.revalidate();
 
@@ -560,6 +591,11 @@ public class GameController {
 //				currentGame.move(direction);
 //			} catch (UnallowedMovementException | NotEnoughResourcesException e1) {
 //				board.getErrorPanel().setVisible(true);
+				// try {
+				// 	playAudio("button_error.wav");
+				// } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e2) {
+				// 	e2.printStackTrace();
+				// }
 //				board.repaint();
 //				board.revalidate();
 //
@@ -704,6 +740,11 @@ public class GameController {
 				 controller.getBoard().getLeader().setText(controller.getBoard().putText(controller.getCurrentGame().getCurrentChampion()));
 				} catch (NotEnoughResourcesException | InvalidTargetException | ChampionDisarmedException e1) {
 				board.getErrorPanel().setVisible(true);
+				try {
+					playAudio("button_error.wav");
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e2) {
+					e2.printStackTrace();
+				}
 						board.repaint();
 						board.revalidate();
 
@@ -749,6 +790,11 @@ public class GameController {
 						currentGame.castAbility(chosenAbility, Direction.directionOf(buttonID[2]));
 					} catch (AbilityUseException | NotEnoughResourcesException | CloneNotSupportedException e1) {
 						board.getErrorPanel().setVisible(true);
+				try {
+					playAudio("button_error.wav");
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e2) {
+					e2.printStackTrace();
+				}
 						board.repaint();
 						board.revalidate();
 
@@ -775,6 +821,11 @@ public class GameController {
 						currentGame.castAbility(chosenAbility);
 					} catch (AbilityUseException | NotEnoughResourcesException | CloneNotSupportedException e1) {
 						board.getErrorPanel().setVisible(true);
+				try {
+					playAudio("button_error.wav");
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e2) {
+					e2.printStackTrace();
+				}
 						board.repaint();
 						board.revalidate();
 
@@ -852,6 +903,11 @@ public class GameController {
 				} catch (NumberFormatException | AbilityUseException | InvalidTargetException
 						| NotEnoughResourcesException | CloneNotSupportedException e1) {
 							board.getErrorPanel().setVisible(true);
+				try {
+					playAudio("button_error.wav");
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e2) {
+					e2.printStackTrace();
+				}
 							board.repaint();
 							board.revalidate();
 							
