@@ -61,7 +61,7 @@ public class BoardView extends JLayeredPane {
 	
 	JLabel champion,label,label2,leader,leader2;
 	JProgressBar bar;
-	boolean haslead;
+	boolean haslead,america=false;
 	Champion first;
 	//JLayeredPane panel = new JLayeredPane();
 	JLayeredPane panel = this;
@@ -82,7 +82,25 @@ public class BoardView extends JLayeredPane {
 	int barIndex;
 	Boolean firstBarDraw = true;
 	int xPos=500;
-	int finalY;
+	int finalY,xfpPos,yfPos;
+	public boolean isAmerica() {
+		return america;
+	}
+	public void setAmerica(boolean america) {
+		this.america = america;
+	}
+	public int getXfpPos() {
+		return xfpPos;
+	}
+	public void setXfpPos(int xfpPos) {
+		this.xfpPos = xfpPos;
+	}
+	public int getYfPos() {
+		return yfPos;
+	}
+	public void setYfPos(int yfPos) {
+		this.yfPos = yfPos;
+	}
 	int yPos =600;
 	int finalX;
 	Image champImage;
@@ -90,6 +108,8 @@ public class BoardView extends JLayeredPane {
 	int transparent,transparent2=360;
 	ImageIcon image = new ImageIcon("assets/characters/128/Untitled22_20220607135427.png");
 	Image Joey = image.getImage();
+	ImageIcon cap = new ImageIcon("assets/characters/new64/Captain America2.png");
+	Image captain = cap.getImage();
 	ImageIcon image2 = new ImageIcon("assets/characters/128/Untitled22_20220607135443.png");
 	Image Joey2 = image2.getImage();
 	ImageIcon image3 = new ImageIcon("assets/characters/128/Untitled22_20220607135453.png");
@@ -1475,6 +1495,8 @@ public class BoardView extends JLayeredPane {
 //			GradientPaint gradient = new GradientPaint(0,0,Color.cyan,1366,768,Color.blue);
 //			g2.setPaint(gradient);
 //			g2.fillRect(0, 0, 1366, 768);
+			
+			//if(america) g2.drawImage(captain, xfpPos, yfPos, null);
 			//frame.pack();
 			g2.setColor(Color.black);
 			//g2.drawRoundRect( 465, 570, 175, 70, 10, 10);
