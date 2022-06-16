@@ -60,7 +60,7 @@ public class StartScreen extends JLayeredPane{
 		
 		
 		field = new JTextField(11);
-		field.setText((control.getCurrentGame() == null) ? "Player 1" :control.getCurrentGame().getFirstPlayer().getName());
+		field.setText((control.getCurrentGame() == null) ? "Player One" :control.getCurrentGame().getFirstPlayer().getName());
 		field.setFocusable(false);
 		field.addMouseListener(new MouseListener(){
 
@@ -142,7 +142,7 @@ public class StartScreen extends JLayeredPane{
 		field.setHorizontalAlignment(JLabel.CENTER);
 		
 	
-		field2 = new JTextField((control.getCurrentGame() == null) ? "Player 2" :control.getCurrentGame().getSecondPlayer().getName());
+		field2 = new JTextField((control.getCurrentGame() == null) ? "Player Two" :control.getCurrentGame().getSecondPlayer().getName());
 		field2.setFocusable(false);
 		field2.addMouseListener(new MouseListener(){
 
